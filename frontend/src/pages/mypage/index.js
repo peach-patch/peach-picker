@@ -1,5 +1,5 @@
 import React from "react";
-import pick_line from "../images/pick_line.png";
+import pick_line from "../../images/pick_line.png";
 import Image from "next/image";
 
 export default function mypage() {
