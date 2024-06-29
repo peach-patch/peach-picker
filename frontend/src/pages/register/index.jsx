@@ -35,6 +35,17 @@ export default function register() {
   useEffect(() => {
     console.log(winnerCnt);
   }, [winnerCnt]);
+  const [selectedFile, setSelectedFile] = useState("파일을 등록해주세요.");
+  const handleFile = (event) => {
+    const file = event.target.files[0];
+    // if (!file) return;
+    // if (file.type !== "text/csv") {
+    //   alert("CSV 파일만 업로드 가능합니다.");
+    //   return;
+    // }
+    setSelectedFile(file.name);
+    console.log("선택된 파일:", file.name);
+  };
   return (
     <div className="relative w-full flex flex-col justify-center items-center">
       <div
@@ -83,7 +94,7 @@ export default function register() {
         <div className="absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
           <input
             type="text"
-            className="flex-1 text-[14px] leading-[140%] font-['Noto_Sans'] font-black text-[#828282] line-clamp-1"
+            className="flex-1 text-[14px] leading-[140%]  font-black text-[#828282] line-clamp-1"
             placeholder="당첨자 수를 입력하세요."
             onChange={handleWinnerCnt}
           />
@@ -134,14 +145,28 @@ export default function register() {
           <br />※ 아직 명단이 완성되지 않았다면 등록이후
           <br />
           수정란에서 명단을 등록해주세요.
-          <div className="absolute flex items-center justify-center mt-2 w-[89px] h-[44px] bg-[#d9d9d9] rounded-[5px]">
-            <div className="absolute  text-[16px] text-center whitespace-nowrap">
-              파일찾기
-              <br />
+          <div className="mt-1 absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
+            <div className=" flex-1 w-full text-[14px] leading-[140%] font-black text-[#828282] line-clamp-1">
+              {selectedFile}
             </div>
+          </div>
+          <div className="absolute flex items-center justify-center mt-2 w-[89px] h-[44px] bg-[#d9d9d9] rounded-[5px]">
+            <label style={{ cursor: "pointer" }} htmlFor="fileInput">
+              <div>
+                <input
+                  type="file"
+                  accept=".csv,.xlsx"
+                  id="fileInput"
+                  style={{ display: "none", cursor: "pointer" }}
+                  onChange={handleFile}
+                />
+                파일 찾기
+              </div>
+            </label>
           </div>
         </div>
       </div>
+
       <div className="z-1 relative w-1/2">
         <div className="absolute right-0 mt-20 w-[96px] h-[45px] flex flex-row items-center justify-center py-[6px] px-[16px] bg-[#000] rounded-[8px]">
           <div className="text-[20px] leading-[140%]  font-black text-[#fff] whitespace-nowrap">
