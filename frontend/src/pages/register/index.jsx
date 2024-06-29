@@ -32,6 +32,10 @@ export default function register() {
   const handleWinnerCnt = (event) => {
     setWinnerCnt(event.target.value);
   };
+  const [eventName, setEventName] = useState("");
+  const handleEventName = (event) => {
+    setEventName(event.target.value);
+  };
   useEffect(() => {
     console.log(winnerCnt);
   }, [winnerCnt]);
@@ -99,6 +103,19 @@ export default function register() {
             </div>
           )}
           <div className="ml-2">▼</div>
+        </div>
+      </div>
+      <div className="mt-10 w-1/2 flex justify-center items-center">
+        <div className="z-1 text-[20px] text-right mr-2 w-[150px] ">
+          이벤트 명 :{" "}
+        </div>
+        <div className="absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
+          <input
+            type="text"
+            className="flex-1 text-[14px] leading-[140%]  font-black text-[#828282] line-clamp-1"
+            placeholder="이벤트명을 입력하세요."
+            onChange={handleEventName}
+          />
         </div>
       </div>
       <div className="mt-10 w-1/2 flex justify-center items-center">
