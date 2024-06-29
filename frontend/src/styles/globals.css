@@ -3,3 +3,25 @@
 @tailwind utilities;
 @import "@fontsource/noto-sans"; /* 기본 글꼴 */
 @import "@fontsource/noto-sans/700.css"; /* 굵기 700 */
+
+* {
+  --rdp-accent-color: #f88787;
+  --rdp-background-color: #edc3c6;
+  /* Switch to dark colors for dark themes */
+  --rdp-accent-color-dark: #ed759d;
+  --rdp-background-color-dark: #180270;
+  /* Outline border for focused elements */
+  --rdp-outline: 2px solid var(--rdp-accent-color);
+  /* Outline border for focused and selected elements */
+  --rdp-outline-selected: 2px solid #e96a6a;
+}
+.DayPicker {
+  display: inline-block;
+  font-size: 2rem;
+  font-size: 2rem;
+  z-index: 1000;
+  background-color: rgb(255, 255, 255); /* 원하는 색상으로 변경 */
+}
+.rdp {
+  background-color: rgb(255, 255, 255); /* 원하는 색상으로 변경 */
+}
