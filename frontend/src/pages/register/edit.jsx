@@ -3,7 +3,7 @@ import { ko } from "date-fns/locale";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
-export default function register() {
+export default function edit() {
   const [isOpen, setIsOpen] = useState(false);
   const dropDown = () => {
     setIsOpen(!isOpen);
@@ -173,9 +173,6 @@ export default function register() {
         <div className="w-full text-[12px] whitespace-nowrap">
           ※ 휴대폰 번호가 있는 명단을 등록해주세요.
           <br />※ csv 파일만 등록할 수 있습니다.
-          <br />※ 아직 명단이 완성되지 않았다면 등록이후
-          <br />
-          수정란에서 명단을 등록해주세요.
           <div className="mt-1 absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
             <div className=" flex-1 w-full text-[14px] leading-[140%] font-black text-[#828282] line-clamp-1">
               {selectedFile}
@@ -198,10 +195,15 @@ export default function register() {
         </div>
       </div>
 
-      <div className="z-1 relative w-1/2">
-        <div className="absolute right-0 mt-20 w-[96px] h-[45px] flex flex-row items-center justify-center py-[6px] px-[16px] bg-[#000] rounded-[8px]">
-          <div className="text-[20px] leading-[140%]  font-black text-[#fff] whitespace-nowrap">
-            등록
+      <div className="z-1 relative flex justify-end w-1/2">
+        <div className="mr-5 mt-20 w-[96px] h-[45px] flex flex-row items-center justify-center py-[6px] px-[16px] bg-[#000] rounded-[8px]">
+          <div className="text-[18px] leading-[140%]  font-black text-[#fff] whitespace-nowrap">
+            수정 완료
+          </div>
+        </div>
+        <div className=" mt-20 w-[96px] h-[45px] flex flex-row items-center justify-center py-[6px] px-[16px] border-[1px] border-solid border-[#000] bg-[#fff] rounded-[8px]">
+          <div className="text-[18px] leading-[140%]  font-black text-[#000] whitespace-nowrap">
+            삭제
           </div>
         </div>
       </div>
