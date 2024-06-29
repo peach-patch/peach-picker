@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ko } from "date-fns/locale";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -46,6 +46,20 @@ export default function register() {
     setSelectedFile(file.name);
     console.log("선택된 파일:", file.name);
   };
+  const ref = useRef();
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     console.log(event.target);
+  //     if (isOpen && ref.current && !ref.current.contains(event.target)) {
+  //       setIsOpen(false);
+  //     }
+  //   };
+  //   document.addEventListener("click", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("click", handleClickOutside);
+  //   };
+  // }, [isOpen]);
+
   return (
     <div className="relative w-full flex flex-col justify-center items-center">
       <div
@@ -93,7 +107,7 @@ export default function register() {
         </div>
         <div className="absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
           <input
-            type="text"
+            type="number"
             className="flex-1 text-[14px] leading-[140%]  font-black text-[#828282] line-clamp-1"
             placeholder="당첨자 수를 입력하세요."
             onChange={handleWinnerCnt}
