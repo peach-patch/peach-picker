@@ -9,5 +9,7 @@ spring:
       ddl-auto: update
 
 jwt:
-  access-token-expire-time: 10000000000000
-  secret: b3V0c3RhZ3JhbS10ZWNoLXNwcmluZy1ib290LWp3dC1zZWNyZXQtd29vLXRlY2gtc3ByaW5nLWJvb3Qtand0LXRva2VuLXNlY3JldA==
+  header: Authorization
+  accessTime: 36000000000
+  prefix: Bearer
+  secretKey: b3V0c3RhZ3JhbS10ZWNoLXNwcmluZy1ib290LWp3dC1zZWNyZXQtd29vLXRlY2gtc3ByaW5nLWJvb3Qtand0LXRva2VuLXNlY3JldA==

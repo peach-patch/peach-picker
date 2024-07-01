@@ -3,6 +3,8 @@ package com.peach.backend.security;
 import com.peach.backend.domain.user.entity.User;
 import com.peach.backend.domain.user.enums.Role;
 import com.peach.backend.domain.user.repository.UserRepository;
+import com.peach.backend.global.security.service.JwtValidateService;
+import com.peach.backend.global.security.util.JwtProperties;
 import com.peach.backend.global.security.util.JwtTokenProvider;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,8 @@ public class SecurityTest {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+    @Autowired
+    private JwtValidateService jwtValidateService;
     @MockBean
     private UserRepository userRepository;
 
@@ -34,7 +38,7 @@ public class SecurityTest {
                 .role(Role.ADMIN)
                 .build();
 
-        String token = jwtTokenProvider.createJwt(user.getEmail());
+        String token = jwtTokenProvider.generateAccessToken(user.getEmail());
 
         assertThat(token).isNotNull();
         assertThat(token).isNotEmpty();
@@ -52,8 +56,8 @@ public class SecurityTest {
 
         Mockito.when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
-        String token = jwtTokenProvider.createJwt(user.getEmail());
-        String email = jwtTokenProvider.getUserByToken(token).getEmail();
+        String token = jwtTokenProvider.generateAccessToken(user.getEmail());
+        String email = jwtValidateService.getUserEmail(token);
 
         assertThat(email).isEqualTo(user.getEmail());
     }

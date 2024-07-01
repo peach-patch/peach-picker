@@ -2,7 +2,6 @@ package com.peach.backend.global.security.dto;
 
 import com.peach.backend.domain.user.entity.User;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @AllArgsConstructor
-@Builder
 @Getter
 public class CustomUserDetails implements UserDetails {
 

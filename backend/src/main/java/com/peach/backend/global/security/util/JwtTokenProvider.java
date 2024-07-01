@@ -1,68 +1,76 @@
 package com.peach.backend.global.security.util;
 
-import com.peach.backend.domain.user.entity.User;
-import com.peach.backend.domain.user.service.CustomUserDetailsService;
-import com.peach.backend.global.security.dto.CustomUserDetails;
+import com.peach.backend.global.security.exception.ExpiredTokenException;
+import com.peach.backend.global.security.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-    @Value("${jwt.access-token-expire-time}")
-    private Long expireTime;
-    @Value("${jwt.secret}")
-    private String secretKey;
-    private final CustomUserDetailsService customUserDetailsService;
+
+    private final JwtProperties jwtProperties;
+
+    private Key getSigningKey(String secretKey) {
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateAccessToken(String email) {
+        return generateToken(email, jwtProperties.getAccessTime());
+    }
 
 
-    public String createJwt(String email) {
+    public String generateToken(String email, Long time) {
         Claims claims = Jwts.claims();
         claims.put("email", email);
+        Date now = new Date();
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expireTime))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + time))
+                .signWith(SignatureAlgorithm.HS256, getSigningKey(jwtProperties.getSecretKey()))
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
-        String email = claims.get("email").toString();
-
-        UserDetails principal = customUserDetailsService.loadUserByUsername(email);
-
-        return new UsernamePasswordAuthenticationToken(principal, "", principal.getAuthorities());
-    }
-
-    public User getUserByToken(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
-        String email = claims.get("email").toString();
-
-        CustomUserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
-        return userDetails.getUser();
-    }
-
-    public int validateToken(String token) {
+    public Claims extractAllClaims(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
-            return 1;
+            return Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey(jwtProperties.getSecretKey()))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            throw ExpiredTokenException.EXCEPTION;
         } catch (Exception e) {
-            return -1;
+            throw InvalidTokenException.EXCEPTION;
         }
     }
+
+    public String resolveToken(HttpServletRequest request) {
+        String bearer = request.getHeader(jwtProperties.getHeader());
+        return parseToken(bearer);
+    }
+
+    public String parseToken(String bearerToken) {
+        if (bearerToken != null && bearerToken.startsWith(jwtProperties.getPrefix()))
+            return bearerToken.replace(jwtProperties.getPrefix(), "");
+        return null;
+    }
 }
+
+
+
+
 
