@@ -1,7 +1,7 @@
 package com.peach.backend.global.security.service;
 
 import com.peach.backend.domain.user.entity.User;
-import com.peach.backend.domain.user.repository.UserRepository;
+import com.peach.backend.domain.user.entity.repository.UserRepository;
 import com.peach.backend.global.security.dto.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
