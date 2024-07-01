@@ -39,6 +39,10 @@ dependencies {
     // security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // database
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'mysql:mysql-connector-java:8.0.32'
+
     // etc
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 

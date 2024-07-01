@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://maewakka123.iptime.org:30306/peach-peaker
+    username: peach-peaker
+    password: qhdks123!@
+  jpa:
+    hibernate:
+      ddl-auto: update
