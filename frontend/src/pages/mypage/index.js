@@ -1,6 +1,7 @@
 import React from "react";
 import pick_line from "../../images/pick_line.png";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function mypage() {
   return (
@@ -35,7 +36,7 @@ export default function mypage() {
       <div className="absolute left-[210px] top-[247px] w-[228px] h-[228px]"></div>
       <div className="relative mt-10 w-[379px] h-[77px] border-[1px] border-solid border-[#000] overflow-hidden">
         <div className="absolute left-[22px] top-[25px] w-[191px] text-[20px]  ">
-          회원 정보 수정
+          <Link href="/mypage/edit">회원 정보 수정</Link>
         </div>
       </div>
       <div className="relative w-[379px] h-[77px] border-[1px] border-solid border-[#000] overflow-hidden">

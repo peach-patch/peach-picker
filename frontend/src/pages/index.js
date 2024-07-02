@@ -5,9 +5,5 @@ import Menu from "../components/Menu";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  return (
-    <div>
-      <Menu /> 메인 페이지
-    </div>
-  );
+  return <div>메인 페이지</div>;
 }
