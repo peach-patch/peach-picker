@@ -1,4 +1,5 @@
 import { useState, EventHandler, ReactNode } from "react";
+import Link from "next/link";
 
 export default function edit() {
   return (
@@ -54,9 +55,11 @@ export default function edit() {
             <div className="text-[20px] text-center">탈퇴</div>
           </div>
         </div>
-        <div className="mt-4 flex flex-col justify-center items-center w-full h-[70px] bg-[#fff] border-[1px] border-solid border-[#808080] rounded-[5px]">
-          <div className=" text-[20px]">취소</div>
-        </div>
+        <Link href="/mypage">
+          <div className="mt-4 mb-10 flex flex-col justify-center items-center w-full h-[70px] bg-[#fff] border-[1px] border-solid border-[#808080] rounded-[5px]">
+            <div className=" text-[20px]">취소</div>
+          </div>
+        </Link>
       </div>
     </div>
   );
