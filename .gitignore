@@ -673,4 +673,12 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+# yaml, yml
+*.yaml
+*.yml
+!peach-picker-be-publish.yml
+<<<<<<< HEAD
+=======
+
+>>>>>>> e304154c9ded0577dc1fb0acb689beda7b0214c6
 # End of https://www.toptal.com/developers/gitignore/api/java,gradle,windows,macos,intellij,intellij+all,nextjs,vs
