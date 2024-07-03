@@ -39,23 +39,21 @@ const completedDrawings = () => {
       <div className="w-4/5 h-0 border-[1px] border-solid border-[#000]"></div>
       <div className="w-4/5">
         <div className="flex w-full p-3 text-[1.5vw]">
-          <div className="w-1/7 bg-sky-300 text-center">NO</div>
-          <div className=" w-1/4 bg-pink-300 text-center">추첨 일시</div>
-          <div className="w-1/5 bg-yellow-200 text-center">회사</div>
-          <div className=" w-1/5 bg-slate-400 text-center">이벤트명</div>
+          <div className="w-1/7  text-center">NO</div>
+          <div className=" w-1/4  text-center">추첨 일시</div>
+          <div className="w-1/5  text-center">회사</div>
+          <div className=" w-1/5  text-center">이벤트명</div>
           <div className="flex-grow text-right mr-2">당첨자 수</div>
         </div>
       </div>
       <div className=" w-4/5 h-0 border-[1px] border-solid border-[#000]"></div>
 
       {testData.map((data, index) => (
-        <div key={index} className="relative flex w-4/5 text-[1.5vw]">
-          <div className="w-1/7 bg-sky-300 ml-2 text-center">{data.no}번</div>
-          <div className=" w-1/4 bg-pink-300 text-center">
-            {formatDate(data.date)}
-          </div>
-          <div className="w-1/5 bg-yellow-200 text-center">{data.company}</div>
-          <div className=" w-1/5 bg-slate-400 text-center">{data.name}</div>
+        <div key={index} className="relative pt-2 pb-2 flex w-4/5 text-[1.5vw]">
+          <div className="w-1/7  ml-2 text-center">{data.no}번</div>
+          <div className=" w-1/4  text-center">{formatDate(data.date)}</div>
+          <div className="w-1/5  text-center">{data.company}</div>
+          <div className=" w-1/5  text-center">{data.name}</div>
           <div className="flex-grow text-right mr-8">{data.winner}명</div>
         </div>
       ))}
