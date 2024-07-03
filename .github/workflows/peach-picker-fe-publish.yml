@@ -1,0 +1,30 @@
+# "staging"에 push 할때 트리거 발동
+name: CD with frontend
+on:
+  push:
+    branches: [ "staging" ]
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+      - run: npm ci
+      - run: npm run build       
+  
+      - uses: actions/checkout@v4
+      - name: copy build result to nginx server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWD }}
+          port: ${{ secrets.SERVER_PORT }}
+          source: 'out/*'
+          target: '/home/woo/nginx/html/test'
