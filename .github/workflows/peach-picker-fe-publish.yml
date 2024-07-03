@@ -12,6 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: cd frontend
+      - run: pwd
+      - run: ls -al
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
