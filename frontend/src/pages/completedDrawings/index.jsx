@@ -32,18 +32,18 @@ const completedDrawings = () => {
       </div>
       <div className="w-4/5 h-0 border-[1px] border-solid border-[#000]"></div>
       <div className="w-4/5">
-        <div className="flex w-full p-3 text-[2vw]">
-          <div className="w-1/7 bg-sky-300 ">NO</div>
-          <div className=" w-1/4 bg-pink-300">추첨 일시</div>
-          <div className="w-1/5 bg-yellow-200">회사</div>
-          <div className=" w-1/5 bg-slate-400">이벤트명</div>
-          <div className="justify-end ">당첨자 수</div>
+        <div className="flex w-full p-3 text-[1.5vw]">
+          <div className="w-1/7 bg-sky-300 text-center">NO</div>
+          <div className=" w-1/4 bg-pink-300 text-center">추첨 일시</div>
+          <div className="w-1/5 bg-yellow-200 text-center">회사</div>
+          <div className=" w-1/5 bg-slate-400 text-center">이벤트명</div>
+          <div className="flex-grow text-right mr-2">당첨자 수</div>
         </div>
       </div>
       <div className=" w-4/5 h-0 border-[1px] border-solid border-[#000]"></div>
 
       {testData.map((data, index) => (
-        <div key={index} className="relative flex w-4/5 text-[2vw]">
+        <div key={index} className="relative flex w-4/5 text-[1.5vw]">
           <div className={`ml-1 p-2 top-${index * 10}`}>{data.no}번</div>
           <div className="absolute p-2 left-[10%]">{formatDate(data.date)}</div>
           <div className="absolute p-2 left-[45%]">{data.company}</div>
