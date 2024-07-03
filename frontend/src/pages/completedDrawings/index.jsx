@@ -3,7 +3,13 @@ const testData = [
   { no: 5, date: new Date(), company: "SOSO", name: "YOYO", winner: 5 },
   { no: 5, date: new Date(), company: "SOSO", name: "YOYO", winner: 5 },
   { no: 5, date: new Date(), company: "SOSO1234", name: "YOYO", winner: 5 },
-  { no: 5, date: new Date(), company: "SOSOYOYO", name: "YOYO", winner: 5 },
+  {
+    no: 5,
+    date: new Date(),
+    company: "SOSOYOYO이게 진짜 길면",
+    name: "YOYO",
+    winner: 5,
+  },
   { no: 6, date: new Date(), company: "TOTO로의 숲", name: "ZAZA", winner: 6 },
 ];
 
@@ -44,11 +50,13 @@ const completedDrawings = () => {
 
       {testData.map((data, index) => (
         <div key={index} className="relative flex w-4/5 text-[1.5vw]">
-          <div className={`ml-1 p-2 top-${index * 10}`}>{data.no}번</div>
-          <div className="absolute p-2 left-[10%]">{formatDate(data.date)}</div>
-          <div className="absolute p-2 left-[45%]">{data.company}</div>
-          <div className="absolute p-2 left-[55%]">{data.name}</div>
-          <div className="absolute p-2 left-[90%]">{data.winner}명</div>
+          <div className="w-1/7 bg-sky-300 ml-2 text-center">{data.no}번</div>
+          <div className=" w-1/4 bg-pink-300 text-center">
+            {formatDate(data.date)}
+          </div>
+          <div className="w-1/5 bg-yellow-200 text-center">{data.company}</div>
+          <div className=" w-1/5 bg-slate-400 text-center">{data.name}</div>
+          <div className="flex-grow text-right mr-8">{data.winner}명</div>
         </div>
       ))}
 
