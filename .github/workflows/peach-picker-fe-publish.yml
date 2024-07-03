@@ -19,6 +19,8 @@ jobs:
           cd frontend
           npm install
           npm run build
+
+      - run: ls -al frontend
   
       - uses: actions/checkout@v4
       - name: copy build result to nginx server
