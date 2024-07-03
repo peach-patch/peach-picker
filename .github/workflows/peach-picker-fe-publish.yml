@@ -30,5 +30,5 @@ jobs:
           password: ${{ secrets.SERVER_PASSWD }}
           port: ${{ secrets.SERVER_PORT }}
           local: './frontend/out'
-          remote: '/home/woo/nginx/html/test/'
+          remote: '/home/woo/nginx/html/peach-picker/'
           recursive: true
