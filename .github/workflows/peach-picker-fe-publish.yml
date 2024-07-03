@@ -11,14 +11,11 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
-      - run: pwd
-      - run: ls -al
+      - run: cd frontend
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-      - run: cd frontend
-      - run: pwd
       - run: npm i
       - run: npm run build       
   
