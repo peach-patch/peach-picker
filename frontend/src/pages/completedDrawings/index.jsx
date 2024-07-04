@@ -1,17 +1,17 @@
 import Link from "next/link";
 import { useState, EventHandler, ReactNode } from "react";
 const testData = [
-  { no: 5, date: new Date(), company: "SOSO", name: "YOYO", winner: 5 },
-  { no: 5, date: new Date(), company: "SOSO", name: "YOYO", winner: 5 },
-  { no: 5, date: new Date(), company: "SOSO1234", name: "YOYO", winner: 5 },
+  { no: 1, date: new Date(), company: "SOSO", name: "YOYO", winner: 5 },
+  { no: 2, date: new Date(), company: "SOSO", name: "YOYO", winner: 5 },
+  { no: 3, date: new Date(), company: "SOSO1234", name: "YOYO", winner: 5 },
   {
-    no: 5,
+    no: 4,
     date: new Date(),
     company: "SOSOYOYO이게 진짜 길면",
     name: "YOYO",
     winner: 5,
   },
-  { no: 6, date: new Date(), company: "TOTO로의 숲", name: "ZAZA", winner: 6 },
+  { no: 5, date: new Date(), company: "TOTO로의 숲", name: "ZAZA", winner: 6 },
 ];
 
 const formatDate = (date) => {
