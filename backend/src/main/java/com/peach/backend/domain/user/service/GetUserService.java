@@ -27,5 +27,4 @@ public class GetUserService {
 
         return user;
     }
-
 }

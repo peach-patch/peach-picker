@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 
 @NoArgsConstructor
@@ -22,16 +23,18 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String password;
     private String name;
-    private String phone;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private Boolean kakaoSignUp;
+    private String profileImgUrl;
 
     @Builder
-    public User(String email, String password, String name, String phone, Role role) {
+    public User(String email, String password, String name, Role role, Boolean kakaoSignUp, String profileImgUrl) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.phone = phone;
         this.role = role;
+        this.kakaoSignUp = kakaoSignUp;
+        this.profileImgUrl = profileImgUrl;
     }
 }
