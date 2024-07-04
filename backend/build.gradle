@@ -26,7 +26,12 @@ repositories {
 dependencies {
 
     // web
+    implementation 'org.springframework.boot:spring-boot-starter-parent:3.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // json
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'

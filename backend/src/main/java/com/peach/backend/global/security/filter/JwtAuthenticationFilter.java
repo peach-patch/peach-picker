@@ -26,12 +26,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtValidateService jwtValidateService;
 
-    private static final List<String> PERMIT_URL_ARRAY = List.of(
-            "auth", "vdi", "swagger-ui", "swagger-resources", "v2");
-
+    private final static List<String> PERMIT_URL = List.of("/users/sign-up", "/users/sign-in");
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(!PERMIT_URL_ARRAY.contains(request.getServletPath().split("/")[1])) {
+        if(!PERMIT_URL.contains(request.getServletPath())) {
             String accessToken = jwtTokenProvider.resolveToken(request);
             if (accessToken != null) setAuthentication(accessToken, request);
         }

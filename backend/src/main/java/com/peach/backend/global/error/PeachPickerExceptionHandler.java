@@ -18,7 +18,7 @@ public class PeachPickerExceptionHandler extends ResponseEntityExceptionHandler 
     @ExceptionHandler(PeachPickerException.class)
     public ResponseEntity<Object> handleCustomException(PeachPickerException e) {
         log.error("Peach Picker Exception : " + e.getErrorProperty().getMessage());
-        return handleExceptionInternal(e.getErrorProperty(), e.getMessage());
+        return handleExceptionInternal(e.getErrorProperty());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -59,12 +59,12 @@ public class PeachPickerExceptionHandler extends ResponseEntityExceptionHandler 
                 .build();
     }
 
-    private ResponseEntity<Object> handleExceptionInternal(BindException e, ErrorProperty errorProperty) {
+    private ResponseEntity<Object> handleExceptionInternal(ErrorProperty errorProperty) {
         return ResponseEntity.status(errorProperty.getStatus())
-                .body(makeErrorResponse(e, errorProperty));
+                .body(makeErrorResponse(errorProperty));
     }
 
-    private ErrorResponse makeErrorResponse(BindException e, ErrorProperty errorProperty) {
+    private ErrorResponse makeErrorResponse(ErrorProperty errorProperty) {
         return ErrorResponse.builder()
                 .status(errorProperty.getStatus())
                 .message(errorProperty.getMessage())

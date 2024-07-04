@@ -1,7 +1,7 @@
 package com.peach.backend.security;
 
 import com.peach.backend.domain.user.entity.User;
-import com.peach.backend.domain.user.dto.enums.Role;
+import com.peach.backend.domain.user.enums.Role;
 import com.peach.backend.domain.user.entity.repository.UserRepository;
 import com.peach.backend.global.security.service.JwtValidateService;
 import com.peach.backend.global.security.util.JwtTokenProvider;

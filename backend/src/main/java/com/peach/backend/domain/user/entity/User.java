@@ -1,6 +1,6 @@
 package com.peach.backend.domain.user.entity;
 
-import com.peach.backend.domain.user.dto.enums.Role;
+import com.peach.backend.domain.user.enums.Role;
 import com.peach.backend.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;

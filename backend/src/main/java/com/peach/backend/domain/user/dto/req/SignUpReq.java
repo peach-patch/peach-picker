@@ -1,7 +1,7 @@
 package com.peach.backend.domain.user.dto.req;
 
 import com.peach.backend.domain.user.entity.User;
-import com.peach.backend.domain.user.dto.enums.Role;
+import com.peach.backend.domain.user.enums.Role;
 import lombok.Data;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

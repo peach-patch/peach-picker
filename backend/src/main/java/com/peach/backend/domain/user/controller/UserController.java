@@ -1,6 +1,8 @@
 package com.peach.backend.domain.user.controller;
 
+import com.peach.backend.domain.user.dto.req.SignInReq;
 import com.peach.backend.domain.user.dto.req.SignUpReq;
+import com.peach.backend.domain.user.dto.resp.SignInResp;
 import com.peach.backend.domain.user.facade.UserFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,14 @@ public class UserController {
 
     @PostMapping("sign-up")
     public ResponseEntity<String> signUp(@RequestBody SignUpReq req) {
-        userFacade.createUser(req);
+        userFacade.signUp(req);
 
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
+    }
+
+    @PostMapping("sign-in")
+    public SignInResp signIn(@RequestBody SignInReq req) {
+        return userFacade.signIn(req);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.peach.backend.domain.user.dto.enums;
+package com.peach.backend.domain.user.enums;
 
 import lombok.Getter;
 
