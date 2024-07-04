@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useState, EventHandler, ReactNode } from "react";
+
 const testData = [
   { no: 1, date: new Date(), company: "SOSO", name: "YOYO", winner: 5 },
   { no: 2, date: new Date(), company: "SOSO", name: "YOYO", winner: 5 },
