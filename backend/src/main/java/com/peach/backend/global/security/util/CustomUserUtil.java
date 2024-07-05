@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
-import static com.peach.backend.global.config.CacheConfig.CACHE1;
+import static com.peach.backend.global.config.CacheConfig.USER_CACHE;
 
 @RequiredArgsConstructor
 @Component
@@ -15,7 +15,7 @@ public class CustomUserUtil {
 
     private final UserRepository userRepository;
 
-    @Cacheable(cacheNames = CACHE1, key = "'user:' + #p0")
+    @Cacheable(cacheNames = USER_CACHE, key = "'user:' + #p0")
     public User getUser(final String email) {
         return userRepository.findUserByEmail(email).orElseThrow(() -> UserNotFoundException.EXCEPTION);
     }

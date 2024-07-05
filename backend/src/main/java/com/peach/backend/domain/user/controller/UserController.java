@@ -4,14 +4,18 @@ import com.peach.backend.domain.user.dto.req.SignInReq;
 import com.peach.backend.domain.user.dto.req.SignUpReq;
 import com.peach.backend.domain.user.dto.resp.ProfileResp;
 import com.peach.backend.domain.user.dto.resp.SignInResp;
+import com.peach.backend.domain.user.entity.User;
 import com.peach.backend.domain.user.facade.UserFacade;
+import com.peach.backend.global.security.dto.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("users")
 public class UserController {
 
@@ -44,8 +48,8 @@ public class UserController {
 
     // TODO
     @GetMapping("/profile")
-    public ProfileResp getUserProfile() {
-        return null;
+    public ProfileResp getUserProfile(@CurrentUser User user) {
+        return userFacade.getUserProfile(user);
     }
 
 }

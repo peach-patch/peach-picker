@@ -2,6 +2,7 @@ package com.peach.backend.domain.user.facade;
 
 import com.peach.backend.domain.user.dto.req.SignInReq;
 import com.peach.backend.domain.user.dto.req.SignUpReq;
+import com.peach.backend.domain.user.dto.resp.ProfileResp;
 import com.peach.backend.domain.user.dto.resp.SignInResp;
 import com.peach.backend.domain.user.entity.User;
 import com.peach.backend.domain.user.service.CreateUserService;
@@ -28,6 +29,10 @@ public class UserFacade {
         return SignInResp.builder()
                 .accessToken(jwtTokenProvider.generateAccessToken(user.getEmail()))
                 .build();
+    }
+
+    public ProfileResp getUserProfile(User user) {
+        return getUserService.getUserProfileByJwtToken(user);
     }
 
 }

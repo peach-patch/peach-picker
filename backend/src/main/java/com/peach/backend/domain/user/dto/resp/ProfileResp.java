@@ -8,7 +8,6 @@ import lombok.Data;
 @Builder
 public class ProfileResp {
 
-    private Long id;
     private String name;
     private String email;
     private String profileUrl;

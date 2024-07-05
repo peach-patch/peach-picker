@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.redis.core.RedisHash;
 
 
 @NoArgsConstructor
 @Getter
+@ToString
 @Entity
 public class User extends BaseTimeEntity {
 
