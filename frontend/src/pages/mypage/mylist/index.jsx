@@ -4,11 +4,27 @@ import { usePagination, useTable } from "react-table";
 const TableComponent = () => {
   const columns = React.useMemo(
     () => [
-      { accessor: "no", Header: "No" },
+      {
+        accessor: "no",
+        Header: "No",
+        Cell: ({ value }) => <div>{value}번</div>,
+      },
       { accessor: "date", Header: "추첨 일시" },
       { accessor: "name", Header: "이벤트 명" },
-      { accessor: "winner", Header: "당첨자 수" },
-      { accessor: "state", Header: "진행 현황" },
+      {
+        accessor: "winner",
+        Header: () => <div className="text-right ">당첨자 수</div>,
+        Cell: ({ value }) => <div className="pr-4 text-right">{value}명</div>,
+      },
+      {
+        accessor: "state",
+        Header: "진행 현황",
+        Cell: ({ value }) => (
+          <div className={`${value === "예정" ? "text-red-500" : ""}`}>
+            {value}
+          </div>
+        ),
+      },
     ],
     []
   );
@@ -114,19 +130,20 @@ const TableComponent = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <table {...getTableProps()} className="w-full table-fixed">
+      <div className="w-4/5 pb-1 pl-1 text-left">나의 추첨 내역</div>
+      <table {...getTableProps()} className="w-4/5">
         <colgroup>
-          <col style={{ width: "5%", minWidth: "50px" }} />
-          <col style={{ width: "10%", minWidth: "300px" }} />
-          <col style={{ width: "15%", minWidth: "150px" }} />
-          <col style={{ width: "70%", minWidth: "100px" }} />
+          <col style={{ width: "5%", minWidth: "100px" }} />
           <col style={{ width: "10%", minWidth: "200px" }} />
+          <col style={{ width: "15%", minWidth: "150px" }} />
+          <col style={{ width: "60%", minWidth: "100px" }} />
+          <col style={{ width: "10%", minWidth: "150px" }} />
         </colgroup>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
-              className="border-b-2 border-black"
+              className="border-t-2 border-b-2 border-black"
             >
               {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps()} className="px-4 py-2">
@@ -137,12 +154,22 @@ const TableComponent = () => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
+          {page.map((row, rowIndex) => {
             prepareRow(row);
+            // 페이지의 마지막 행 확인
+            const isLastRow = rowIndex === page.length - 1;
             return (
-              <tr {...row.getRowProps()} className="border-b">
+              <tr
+                {...row.getRowProps()}
+                className={`border-b ${
+                  isLastRow ? "border-b-2 border-black" : ""
+                }`}
+              >
                 {row.cells.map((cell) => (
-                  <td {...cell.getCellProps()} className="px-4 py-2 text-left">
+                  <td
+                    {...cell.getCellProps()}
+                    className="px-4 py-2 text-center"
+                  >
                     {cell.render("Cell")}
                   </td>
                 ))}
@@ -151,7 +178,7 @@ const TableComponent = () => {
           })}
         </tbody>
       </table>
-      <div className="pagination">
+      <div className="mt-10">
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {"<<"}
         </button>{" "}
