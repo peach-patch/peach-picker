@@ -13,7 +13,7 @@ export default function menu() {
   const [login, setLogin] = useState(false);
   return (
     <div>
-      <div className=" bg-menuColor font-noto-sans flex p-2 justify-between hidden sm:flex">
+      <div className="flex justify-between hidden p-2  bg-menuColor font-noto-sans sm:flex">
         <div className="flex ml-5">
           <Link href="/">
             <Image
@@ -23,7 +23,7 @@ export default function menu() {
               alt="메뉴 로고"
             ></Image>
           </Link>
-          <div className="ml-5 p-2">
+          <div className="p-2 ml-5">
             <Link href="/drawings">실시간 추첨</Link>
           </div>
           <div className="p-2">
@@ -37,7 +37,7 @@ export default function menu() {
                 <Link href="/register">추첨 등록</Link>
               </div>
               <div className="p-2">
-                <Link href="mypage/mylist">추첨 목록</Link>
+                <Link href="/mypage/mylist">추첨 목록</Link>
               </div>
               <div className="p-2">
                 <Link href="/mypage">마이 페이지</Link>
@@ -54,7 +54,7 @@ export default function menu() {
         </div>
       </div>
       <div>
-        <div className="flex flex-col mt-10 items-center">
+        <div className="flex flex-col items-center mt-10">
           <Image
             className="sm:hidden "
             src={peach_logo}
@@ -63,7 +63,7 @@ export default function menu() {
             alt="피치피커 로고"
           ></Image>
         </div>
-        <div className="p-4 border-t-2 border-gray-500 sm:hidden fixed w-full bottom-0 flex justify-around items-center">
+        <div className="fixed bottom-0 flex items-center justify-around w-full p-4 border-t-2 border-gray-500 sm:hidden">
           <Link href="/">
             <Image
               className="flex"

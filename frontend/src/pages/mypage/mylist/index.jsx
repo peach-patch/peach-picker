@@ -1,83 +1,190 @@
-import LongButton from "@/components/button/LongBtn";
-import Link from "next/link";
 import React from "react";
+import { usePagination, useTable } from "react-table";
 
-export default function index() {
-  const testData = [
-    { no: 1, date: new Date(), state: "예정", name: "YOYO", winner: 5 },
-    { no: 2, date: new Date(), state: "완료", name: "YOYO", winner: 5 },
-    { no: 3, date: new Date(), state: "예정", name: "YOYO", winner: 5 },
-    {
-      no: 4,
-      date: new Date(),
-      state: "예정",
-      name: "YOYO",
-      winner: 5,
-    },
-    {
-      no: 5,
-      date: new Date(),
-      state: "완료",
-      name: "ZAZA",
-      winner: 6,
-    },
-  ];
+const TableComponent = () => {
+  const columns = React.useMemo(
+    () => [
+      { accessor: "no", Header: "No" },
+      { accessor: "date", Header: "추첨 일시" },
+      { accessor: "name", Header: "이벤트 명" },
+      { accessor: "winner", Header: "당첨자 수" },
+      { accessor: "state", Header: "진행 현황" },
+    ],
+    []
+  );
+  const data = React.useMemo(
+    () => [
+      { no: 12, name: "SOSO", date: "2024-07-05", winner: 5, state: "예정" },
+      {
+        no: 11,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 10,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 9,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 8,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "완료",
+      },
+      {
+        no: 7,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "완료",
+      },
+      {
+        no: 6,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 5,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 4,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 3,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 2,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 1,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+    ],
+    []
+  );
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page, // 현재 페이지의 행들
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable({ columns, data }, usePagination);
 
-  const formatDate = (date) => {
-    const options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-      timeZone: "Asia/Seoul",
-    };
-
-    return new Intl.DateTimeFormat("ko-KR", options).format(date);
-  };
   return (
-    <div className="flex flex-col items-center justify-center w-full overflow-hidden">
-      <div className="w-4/5">
-        <div className="ml-4 mb-3  mt-10 left-0 text-[2vw] ">
-          과거 추첨 내역
-          <br />
-        </div>
-      </div>
-      <div className="w-4/5 h-0 border-[1px] border-solid border-[#000]"></div>
-      <div className="w-4/5">
-        <div className="flex w-full p-3 text-[1.5vw]">
-          <div className="text-center w-1/7">NO</div>
-          <div className="w-1/4 text-center ">추첨 일시</div>
-          <div className="w-1/5 text-center ">이벤트명</div>
-          <div className="flex-grow text-right mr-1vw">당첨자 수</div>
-          <div className="text-center mr-2vw ">진행 현황</div>
-        </div>
-      </div>
-      <div className=" w-4/5 h-0 border-[1px] border-solid border-[#000]"></div>
-
-      {testData.map((data, index) => (
-        <Link
-          className="flex items-center justify-center w-full"
-          href={`/completedDrawings/${data.no}`}
+    <div className="flex flex-col items-center justify-center">
+      <table {...getTableProps()} className="w-full table-fixed">
+        <colgroup>
+          <col style={{ width: "5%", minWidth: "50px" }} />
+          <col style={{ width: "10%", minWidth: "300px" }} />
+          <col style={{ width: "15%", minWidth: "150px" }} />
+          <col style={{ width: "70%", minWidth: "100px" }} />
+          <col style={{ width: "10%", minWidth: "200px" }} />
+        </colgroup>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr
+              {...headerGroup.getHeaderGroupProps()}
+              className="border-b-2 border-black"
+            >
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()} className="px-4 py-2">
+                  {column.render("Header")}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()} className="border-b">
+                {row.cells.map((cell) => (
+                  <td {...cell.getCellProps()} className="px-4 py-2 text-left">
+                    {cell.render("Cell")}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {"<<"}
+        </button>{" "}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {"<"}
+        </button>{" "}
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{" "}
+        </span>
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {">"}
+        </button>{" "}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {">>"}
+        </button>{" "}
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
         >
-          <div
-            key={index}
-            className="relative pt-2 pb-2 flex w-4/5 text-[1.5vw]"
-          >
-            <div className="ml-2 text-center w-1/7">{data.no}번</div>
-            <div className="w-1/4 text-center ">{formatDate(data.date)}</div>
-            <div className="w-1/5 text-center ">{data.name}</div>
-            <div className="flex-grow text-right">{data.winner}명</div>
-            <div className="w-1/6 text-center">{data.state}</div>
-          </div>
-        </Link>
-      ))}
-
-      <div className=" w-4/5  border-[1px] border-solid border-[#000]"></div>
-      {/* <div className="absolute left-[661px] top-[869px] text-[24px]  whitespace-nowrap">
-        1 2 3 4 5
-      </div> */}
+          {[5, 10, 20].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              {pageSize}개씩 보기
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
-}
+};
+
+export default TableComponent;
