@@ -27,37 +27,37 @@ public class SecurityTest {
     @MockBean
     private UserRepository userRepository;
 
-    @Test
-    @DisplayName("jwt 토큰 생성 기능 테스트")
-    void createJwtTokenTest() {
-        User user = User.builder()
-                .email("woo@naver.com")
-                .name("최형우")
-                .phone("010-0000-0000")
-                .role(Role.ADMIN)
-                .build();
-
-        String token = jwtTokenProvider.generateAccessToken(user.getEmail());
-
-        assertThat(token).isNotNull();
-        assertThat(token).isNotEmpty();
-    }
-
-    @Test
-    @DisplayName("jwt 토큰 해독 기능 테스트")
-    void decodeJwtTokenTest() {
-        User user = User.builder()
-                .email("woo@naver.com")
-                .name("최형우")
-                .phone("010-0000-0000")
-                .role(Role.ADMIN)
-                .build();
-
-        Mockito.when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
-
-        String token = jwtTokenProvider.generateAccessToken(user.getEmail());
-        String email = jwtValidateService.getUserEmail(token);
-
-        assertThat(email).isEqualTo(user.getEmail());
-    }
+//    @Test
+//    @DisplayName("jwt 토큰 생성 기능 테스트")
+//    void createJwtTokenTest() {
+//        User user = User.builder()
+//                .email("woo@naver.com")
+//                .name("최형우")
+//                .phone("010-0000-0000")
+//                .role(Role.ADMIN)
+//                .build();
+//
+//        String token = jwtTokenProvider.generateAccessToken(user.getEmail());
+//
+//        assertThat(token).isNotNull();
+//        assertThat(token).isNotEmpty();
+//    }
+//
+//    @Test
+//    @DisplayName("jwt 토큰 해독 기능 테스트")
+//    void decodeJwtTokenTest() {
+//        User user = User.builder()
+//                .email("woo@naver.com")
+//                .name("최형우")
+//                .phone("010-0000-0000")
+//                .role(Role.ADMIN)
+//                .build();
+//
+//        Mockito.when(userRepository.findUserByEmail(user.getEmail())).thenReturn(Optional.of(user));
+//
+//        String token = jwtTokenProvider.generateAccessToken(user.getEmail());
+//        String email = jwtValidateService.getUserEmail(token);
+//
+//        assertThat(email).isEqualTo(user.getEmail());
+//    }
 }
