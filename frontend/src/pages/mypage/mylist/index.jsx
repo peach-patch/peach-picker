@@ -1,6 +1,11 @@
 import Link from "next/link";
 import React from "react";
 import { usePagination, useTable } from "react-table";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import base64Font from "../../../fonts/base64font";
+import ShortButton from "@/components/button/ShortBtn";
+import ShortWhite from "@/components/button/ShortWhite";
 
 const TableComponent = () => {
   const columns = React.useMemo(
@@ -136,10 +141,44 @@ const TableComponent = () => {
     setPageSize,
     state: { pageIndex, pageSize },
   } = useTable({ columns, data }, usePagination);
+  const downloadPdf = () => {
+    const doc = new jsPDF();
+    doc.addFileToVFS("NotoSansKR-Regular.ttf", base64Font);
+    doc.addFont("NotoSansKR-Regular.ttf", "NotoSansKR", "normal");
+    doc.setFont("NotoSansKR");
+
+    doc.text("나의 추첨 내역", 14, 10);
+    doc.autoTable({
+      startY: 20,
+      head: [
+        columns.map((col) =>
+          typeof col.Header === "function"
+            ? col.Header().props.children
+            : col.Header
+        ),
+      ],
+      body: data.map((row) => columns.map((col) => row[col.accessor])),
+      styles: {
+        font: "NotoSansKR",
+      },
+      headStyles: {
+        fillColor: [0, 0, 0], // 헤더 배경색 (검정색)
+        textColor: [255, 255, 255], // 헤더 글자색 (흰색)
+        fontStyle: "bold",
+      },
+    });
+    doc.save("나의 추첨 내역.pdf");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-4/5 pb-1 pl-1 text-left">나의 추첨 내역</div>
+      <div className="flex items-center content-end justify-between w-4/5">
+        <div className="pb-1 pl-1 text-left ">나의 추첨 내역</div>
+        <div onClick={downloadPdf} className="cursor-pointer ">
+          <ShortWhite text={"출력"} />
+        </div>
+      </div>
+
       <table {...getTableProps()} className="w-4/5">
         <colgroup>
           <col style={{ width: "5%", minWidth: "100px" }} />
@@ -165,7 +204,7 @@ const TableComponent = () => {
         <tbody {...getTableBodyProps()}>
           {page.map((row, rowIndex) => {
             prepareRow(row);
-            // 페이지의 마지막 행 확인
+
             const isLastRow = rowIndex === page.length - 1;
             return (
               <tr
