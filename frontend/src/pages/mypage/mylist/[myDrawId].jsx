@@ -1,79 +1,86 @@
-import React from "react";
+import ShortButton from "@/components/button/ShortBtn";
+import ShortWhite from "@/components/button/ShortWhite";
+import { Linefont } from "next/font/google";
+import Link from "next/link";
+import { useState, EventHandler, ReactNode } from "react";
 
-const myDrawId = () => {
-  return <div>[myDrawId]</div>;
+const myEventDetail = () => {
+  const formatDate = (date) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Seoul",
+    };
+
+    return new Intl.DateTimeFormat("ko-KR", options).format(date);
+  };
+  const data = {
+    no: 11,
+    company: "고양이도 우유먹어",
+    name: "SOSO",
+    date: new Date(),
+    winner: 5,
+    state: "예정",
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center w-full overflow-hidden">
+      <div className="w-4/5 ">
+        <div className="ml-4 mb-3  mt-10 left-0 text-[2vw] ">
+          과거 추첨 내역
+          <br />
+        </div>
+
+        <div className=" h-0 border-[1px] border-solid border-[#000]"></div>
+        <section className="w-5/7 flex justify-around m-10 min-w-[450px] bg-[#f6f5f5]">
+          <article className="p-20 ">
+            <dd className="w-full p-1 pt-10">일시 : {formatDate(data.date)}</dd>
+            <dd className="p-1">주최자 : {data.company}</dd>
+            <dd className="p-1">이벤트 이름 : {data.name}</dd>
+            <dd className="flex p-1">
+              진행 현황 :
+              <p className={`${data.state === "예정" ? "text-red-500" : ""}`}>
+                &nbsp; {data.state}
+              </p>
+            </dd>
+            <dd className="p-1">당첨자 수 : {data.winner}명</dd>
+          </article>
+          {data.state === "완료" && (
+            <article className="w-2/5 p-20 m-16 overflow-y-auto bg-white max-h-72">
+              <dt>&lt;당첨자 목록&gt;</dt>
+              <dd className="w-full m-2">김한모 (010-****-6971)</dd>
+              <dd className="m-2">김한모 (010-****-6971)</dd>
+              <dd className="m-2">김한모 (010-****-6971)</dd>
+              <dd className="m-2">김한모 (010-****-6971)</dd>
+              <dd className="m-2">김한모 (010-****-6971)</dd>
+              <dd className="m-2">김한모 (010-****-6971)</dd>
+              <dd className="m-2">김한모 (010-****-6971)</dd>
+              <dd className="m-2">김한모 (010-****-6971)</dd>
+            </article>
+          )}
+        </section>
+        <div className=" h-0 border-[1px] border-solid border-[#000]"></div>
+        <div className="flex justify-end mt-5 mb-20 mr-20">
+          {data.state === "예정" ? (
+            <Link href="/register/edit">
+              <ShortButton text={"수정"} />
+            </Link>
+          ) : null}
+          <Link href="/mypage/mylist">
+            {data.state === "예정" ? (
+              <ShortWhite text={"목록"} />
+            ) : (
+              <ShortButton text={"목록"} />
+            )}
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default myDrawId;
-// import React from "react";
-
-// export default function myDraeDetail() {
-//   const data1 = {
-//     no: 4,
-//     date: new Date(),
-//     state: "예정",
-//     name: "YOYO",
-//     winner: 5,
-//   };
-//   const data2 = {
-//     no: 5,
-//     date: new Date(),
-//     state: "완료",
-//     name: "ZAZA",
-//     winner: 6,
-//   };
-
-//   const formatDate = (date) => {
-//     const options = {
-//       year: "numeric",
-//       month: "2-digit",
-//       day: "2-digit",
-//       hour: "2-digit",
-//       minute: "2-digit",
-//       hour12: true,
-//       timeZone: "Asia/Seoul",
-//     };
-//   };
-//   return (
-//     <div className="flex flex-col items-center justify-center mt-20 mb-20">
-//       <div className="text-[20px] w-[380px] mb-2">기본 정보</div>
-//       <div className="flex flex-col justify-evenly w-[380px] h-[127px] bg-[#fff] border-[1px] border-solid border-[#000]">
-//         <div className=" ml-5 text-[18px]  ">Username : 아이스아메리</div>
-//         <div className=" ml-5 text-[18px] ">Email : barcardi26@gmail.com</div>
-//       </div>
-//       <div className="mt-10 text-[20px] w-[380px] mb-2">나의 추첨 현황</div>
-//       <div className="w-[383px] h-[138px]">
-//         <div className="relative w-[383px] h-[138px] bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
-//           <div className="absolute left-[60px] top-0 w-[90px] h-[51px] text-[18px] flex flex-col justify-center">
-//             추첨 예정
-//           </div>
-//           <div className="absolute left-[60px] top-[56px] w-[78px] h-[51px] text-[32px]  text-center flex flex-col justify-center">
-//             0
-//           </div>
-//           <div className="absolute left-[250px] top-[56px] w-[78px] h-[51px] text-[32px] text-center flex flex-col justify-center">
-//             2
-//           </div>
-//           <div className="absolute left-[250px] top-0 w-[90px] h-[51px] text-[18px]  flex flex-col justify-center">
-//             추첨 완료
-//           </div>
-//           <Image
-//             className="absolute left-[192px] top-[40px]"
-//             src={pick_line}
-//             height={80}
-//           ></Image>
-//         </div>
-//       </div>
-//       <div className="absolute left-[210px] top-[247px] w-[228px] h-[228px]"></div>
-//       <div className="relative mt-10 w-[379px] h-[77px] border-[1px] border-solid border-[#000] overflow-hidden">
-//         <div className="absolute left-[22px] top-[25px] w-[191px] text-[20px]  ">
-//           <Link href="/mypage/edit">회원 정보 수정</Link>
-//         </div>
-//       </div>
-//       <div className="relative w-[379px] h-[77px] border-[1px] border-solid border-[#000] overflow-hidden">
-//         <div className="absolute left-[22px] top-[25px] w-[191px] text-[20px]  ">
-//           추첨내역 조회
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
+export default myEventDetail;
