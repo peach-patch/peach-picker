@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { usePagination, useTable } from "react-table";
 
@@ -10,7 +11,13 @@ const TableComponent = () => {
         Cell: ({ value }) => <div>{value}번</div>,
       },
       { accessor: "date", Header: "추첨 일시" },
-      { accessor: "name", Header: "이벤트 명" },
+      {
+        accessor: "name",
+        Header: "이벤트 명",
+        Cell: ({ value }) => (
+          <Link href={`/mypage/mylist/${value}`}>{value}</Link>
+        ),
+      },
       {
         accessor: "winner",
         Header: () => <div className="text-right ">당첨자 수</div>,
@@ -161,9 +168,7 @@ const TableComponent = () => {
             return (
               <tr
                 {...row.getRowProps()}
-                className={`border-b ${
-                  isLastRow ? "border-b-2 border-black" : ""
-                }`}
+                className={` ${isLastRow ? "border-b-2 border-black" : ""}`}
               >
                 {row.cells.map((cell) => (
                   <td
