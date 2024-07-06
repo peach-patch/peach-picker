@@ -14,8 +14,10 @@ const TableComponent = () => {
       {
         accessor: "name",
         Header: "이벤트 명",
-        Cell: ({ value }) => (
-          <Link href={`/mypage/mylist/${value}`}>{value}</Link>
+        Cell: ({ value, row }) => (
+          <Link href={`/mypage/mylist/${(value, row.original.no)}`}>
+            {value}
+          </Link>
         ),
       },
       {
