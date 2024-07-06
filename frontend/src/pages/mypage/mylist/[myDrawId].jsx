@@ -4,7 +4,7 @@ import { Linefont } from "next/font/google";
 import Link from "next/link";
 import { useState, EventHandler, ReactNode } from "react";
 
-const 과거추첨내역상세페이지 = () => {
+const myEventDetail = () => {
   const formatDate = (date) => {
     const options = {
       year: "numeric",
@@ -83,4 +83,4 @@ const 과거추첨내역상세페이지 = () => {
   );
 };
 
-export default 과거추첨내역상세페이지;
+export default myEventDetail;

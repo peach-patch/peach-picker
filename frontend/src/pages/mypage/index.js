@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function mypage() {
   return (
-    <div className="flex flex-col justify-center mt-20 mb-20 items-center">
+    <div className="flex flex-col items-center justify-center mt-20 mb-20">
       <div className="text-[20px] w-[380px] mb-2">기본 정보</div>
       <div className="flex flex-col justify-evenly w-[380px] h-[127px] bg-[#fff] border-[1px] border-solid border-[#000]">
         <div className=" ml-5 text-[18px]  ">Username : 아이스아메리</div>
@@ -41,7 +41,7 @@ export default function mypage() {
       </div>
       <div className="relative w-[379px] h-[77px] border-[1px] border-solid border-[#000] overflow-hidden">
         <div className="absolute left-[22px] top-[25px] w-[191px] text-[20px]  ">
-          추첨내역 조회
+          <Link href="mypage/mylist">추첨내역 조회</Link>
         </div>
       </div>
     </div>
