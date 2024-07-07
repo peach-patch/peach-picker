@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function edit() {
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="w-2/3 relative max-w-[606px] flex flex-col">
         <div className="relative mb-1 mt-20 left-0 w-[103px] h-[38px] text-[20px] flex flex-col justify-center">
           회원 정보
@@ -56,7 +56,7 @@ export default function edit() {
           </div>
         </div>
         <Link href="/mypage">
-          <div className="mt-4 mb-10 flex flex-col justify-center items-center w-full h-[70px] bg-[#fff] border-[1px] border-solid border-[#808080] rounded-[5px]">
+          <div className="mt-4 mb-10 center1 w-full h-[70px] bg-[#fff] border-[1px] border-solid border-[#808080] rounded-[5px]">
             <div className=" text-[20px]">취소</div>
           </div>
         </Link>
