@@ -34,8 +34,7 @@ public class UserController {
     }
 
 
-    // TODO
-    @GetMapping("/profile")
+    @GetMapping("profile")
     public ProfileResp getUserProfile(@CurrentUser User user) {
         return userFacade.getUserProfile(user);
     }

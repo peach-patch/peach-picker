@@ -1,12 +1,15 @@
 package com.peach.backend.global.minio.util;
 
+import com.peach.backend.global.minio.exception.MinioCanNotPutException;
 import com.peach.backend.global.minio.exception.MinioObjectNotFoundException;
 import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,9 +20,16 @@ public class MinioUtil {
     private final MinioProperties minioProperties;
     private final MinioClient minioClient;
 
-    // TODO
-    public void putObjectToMinio() {
-
+    public void putObjectToMinio(MultipartFile multipartFile, String location) {
+        try {
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(minioProperties.getBucketName())
+                    .object(location)
+                    .stream(multipartFile.getInputStream(), multipartFile.getSize(), -1)
+                    .build());
+        } catch (Exception e) {
+            throw MinioCanNotPutException.EXCEPTION;
+        }
     }
 
     public String getUrlFromMinioObject(String route) {
@@ -31,7 +41,6 @@ public class MinioUtil {
                     .expiry(2, TimeUnit.HOURS)
                     .build());
         } catch (Exception e) {
-            e.printStackTrace();
             throw MinioObjectNotFoundException.EXCEPTION;
         }
     }

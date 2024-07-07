@@ -17,6 +17,7 @@ public class PeachPickerExceptionHandler extends ResponseEntityExceptionHandler 
 
     @ExceptionHandler(PeachPickerException.class)
     public ResponseEntity<Object> handleCustomException(PeachPickerException e) {
+        e.printStackTrace();
         log.error("Peach Picker Exception : " + e.getErrorProperty().getMessage());
         return handleExceptionInternal(e.getErrorProperty());
     }
