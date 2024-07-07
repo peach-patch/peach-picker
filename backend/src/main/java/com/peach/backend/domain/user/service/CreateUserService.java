@@ -14,17 +14,14 @@ public class CreateUserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
+
     public void createUser(final SignUpReq req) {
-        if(duplicateEmailCheck(req.getEmail())) throw UserAlreadyExistException.EXCEPTION;
+        if (duplicateEmailCheck(req.getEmail())) throw UserAlreadyExistException.EXCEPTION;
 
         userRepository.save(req.toEntity(passwordEncoder));
     }
 
-    // TODO
-    // 카카오 로그인 로직
-    public void createUserWithKakao() {
 
-    }
     private Boolean duplicateEmailCheck(String email) {
         return userRepository.existsByEmail(email);
     }
