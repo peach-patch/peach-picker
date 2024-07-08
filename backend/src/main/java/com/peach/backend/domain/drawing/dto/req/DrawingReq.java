@@ -27,6 +27,7 @@ public class DrawingReq {
                 .drawingType(drawingType)
                 .date(drawingAt)
                 .owner(user)
+                .winner(winner)
                 .drawingStatus(DrawingStatus.STANDBY)
                 .build();
     }
