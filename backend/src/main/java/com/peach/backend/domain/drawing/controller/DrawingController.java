@@ -34,7 +34,7 @@ public class DrawingController {
     }
 
     @GetMapping("{id}")
-    public GetDrawingDetailsResp getDrawingDetails(@PathVariable("id") Long id) {
+    public GetDrawingDetailsResp getDrawingDetails(@PathVariable("id") Long id, @CurrentUser User user) {
         return drawingFacade.getDrawingDetails(id);
     }
 

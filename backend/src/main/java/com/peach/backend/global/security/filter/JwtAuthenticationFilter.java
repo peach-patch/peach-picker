@@ -1,5 +1,8 @@
 package com.peach.backend.global.security.filter;
 
+import com.peach.backend.domain.user.entity.User;
+import com.peach.backend.domain.user.enums.Role;
+import com.peach.backend.global.security.dto.CustomUserDetails;
 import com.peach.backend.global.security.service.CustomUserDetailsService;
 import com.peach.backend.global.security.service.JwtValidateService;
 import com.peach.backend.global.security.util.JwtTokenProvider;
@@ -11,11 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(!PERMIT_URL.contains(request.getServletPath())) {
             String accessToken = jwtTokenProvider.resolveToken(request);
             if (accessToken != null) setAuthentication(accessToken, request);
+            else setAnonymousAuthentication(request);
         }
 
         filterChain.doFilter(request, response);
@@ -39,6 +45,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void setAuthentication(String token, HttpServletRequest request) throws ExpiredJwtException {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(jwtValidateService.getUserEmail(token));
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private void setAnonymousAuthentication(HttpServletRequest request) {
+        UserDetails userDetails = new CustomUserDetails(User.builder().name("ANONYMOUS").role(Role.USER).build());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
