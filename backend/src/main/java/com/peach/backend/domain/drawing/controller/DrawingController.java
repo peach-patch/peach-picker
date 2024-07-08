@@ -1,6 +1,7 @@
 package com.peach.backend.domain.drawing.controller;
 
 import com.peach.backend.domain.drawing.dto.req.DrawingReq;
+import com.peach.backend.domain.drawing.dto.req.DrawingSeedReq;
 import com.peach.backend.domain.drawing.dto.req.GetDrawingListReq;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingDetailsResp;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingListResp;
@@ -36,6 +37,12 @@ public class DrawingController {
     @GetMapping("{id}")
     public GetDrawingDetailsResp getDrawingDetails(@PathVariable("id") Long id, @CurrentUser User user) {
         return drawingFacade.getDrawingDetails(id);
+    }
+
+    @PostMapping("seed")
+    public ResponseEntity<String> createDrawingSeed(@RequestBody DrawingSeedReq seed){
+        drawingFacade.createDrawingSeed(seed.getClientTime());
+        return ResponseEntity.ok().body("시드 생성이 완료되었습니다.");
     }
 
 }
