@@ -1,4 +1,4 @@
-package com.peach.backend.global.minio.exception.error;
+package com.peach.backend.global.util.minio.exception.error;
 
 import com.peach.backend.global.error.exception.ErrorProperty;
 import lombok.Getter;

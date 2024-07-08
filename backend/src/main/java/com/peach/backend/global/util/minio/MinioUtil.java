@@ -1,8 +1,8 @@
-package com.peach.backend.global.minio.util;
+package com.peach.backend.global.util.minio;
 
-import com.peach.backend.global.minio.exception.MinioCanNotPutException;
-import com.peach.backend.global.minio.exception.MinioObjectNotFoundException;
-import io.minio.GetObjectArgs;
+import com.peach.backend.global.util.minio.dto.MinioProperties;
+import com.peach.backend.global.util.minio.exception.MinioCanNotPutException;
+import com.peach.backend.global.util.minio.exception.MinioObjectNotFoundException;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;

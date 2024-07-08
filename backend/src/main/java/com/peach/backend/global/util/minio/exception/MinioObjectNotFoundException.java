@@ -1,7 +1,7 @@
-package com.peach.backend.global.minio.exception;
+package com.peach.backend.global.util.minio.exception;
 
 import com.peach.backend.global.error.exception.PeachPickerException;
-import com.peach.backend.global.minio.exception.error.MinioErrorProperty;
+import com.peach.backend.global.util.minio.exception.error.MinioErrorProperty;
 
 public class MinioObjectNotFoundException extends PeachPickerException {
 

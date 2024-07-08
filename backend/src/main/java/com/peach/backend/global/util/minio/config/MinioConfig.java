@@ -1,7 +1,7 @@
-package com.peach.backend.global.minio.config;
+package com.peach.backend.global.util.minio.config;
 
 
-import com.peach.backend.global.minio.util.MinioProperties;
+import com.peach.backend.global.util.minio.dto.MinioProperties;
 import io.minio.MinioClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
