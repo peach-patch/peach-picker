@@ -7,7 +7,6 @@ import com.peach.backend.domain.drawing.entity.Drawing;
 import com.peach.backend.domain.drawing.entity.repository.DrawingRepository;
 import com.peach.backend.domain.drawing.entity.repository.ParticipantRepository;
 import com.peach.backend.domain.drawing.exception.DrawingNotFoundException;
-import com.peach.backend.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class GetDrawingService {
                 .title(drawing.getTitle())
                 .winner(drawing.getWinner())
                 .organizer(drawing.getOwner().getName())
-                .drawingAt(drawing.getDate())
+                .drawingAt(drawing.getDrawingAt())
                 .participants(participantRepository.findAllByDrawing(drawing).stream().map(GetDrawingDetailsResp.Participants::ofForUser).collect(Collectors.toList()))
                 .build();
     }

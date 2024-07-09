@@ -20,7 +20,7 @@ public class GetDrawingListResp {
         return GetDrawingListResp.builder()
                 .id(drawing.getId())
                 .title(drawing.getTitle())
-                .drawingAt(drawing.getDate())
+                .drawingAt(drawing.getDrawingAt())
                 .winner(drawing.getWinner())
                 .organizer(drawing.getOwner().getName())
                 .drawingType(drawing.getDrawingType().getName())

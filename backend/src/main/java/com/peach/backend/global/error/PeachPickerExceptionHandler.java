@@ -7,13 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
 @Slf4j
-public class PeachPickerExceptionHandler extends ResponseEntityExceptionHandler {
+public class PeachPickerExceptionHandler {
 
     @ExceptionHandler(PeachPickerException.class)
     public ResponseEntity<Object> handleCustomException(PeachPickerException e) {
@@ -27,6 +29,14 @@ public class PeachPickerExceptionHandler extends ResponseEntityExceptionHandler 
         log.error("IllegalArgument : " + e.getMessage(), e);
         ErrorProperty errorProperty = ErrorCode.BAD_REQUEST;
         return handleExceptionInternal(errorProperty, e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleMethodArgumentNotValidationException(MethodArgumentNotValidException e) {
+        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        log.error("Method : " + message, e);
+        ErrorProperty errorProperty = ErrorCode.BAD_REQUEST;
+        return handleExceptionInternal(errorProperty, message);
     }
 
     @ExceptionHandler({Exception.class})
