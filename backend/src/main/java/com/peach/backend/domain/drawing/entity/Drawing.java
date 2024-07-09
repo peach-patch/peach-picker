@@ -28,7 +28,7 @@ public class Drawing {
     private String participantPath;
     private String title;
     private Long winner;
-    private LocalDateTime date;
+    private LocalDateTime drawingAt;
 
     @Enumerated(EnumType.STRING)
     private DrawingStatus drawingStatus;
@@ -37,13 +37,13 @@ public class Drawing {
     private User owner;
 
     @Builder
-    public Drawing(DrawingType drawingType, String thumbnailPath, String participantPath, String title, Long winner, LocalDateTime date, DrawingStatus drawingStatus, User owner) {
+    public Drawing(DrawingType drawingType, String thumbnailPath, String participantPath, String title, Long winner, LocalDateTime drawingAt, DrawingStatus drawingStatus, User owner) {
         this.drawingType = drawingType;
         this.thumbnailPath = thumbnailPath;
         this.participantPath = participantPath;
         this.title = title;
         this.winner = winner;
-        this.date = date;
+        this.drawingAt = drawingAt;
         this.drawingStatus = drawingStatus;
         this.owner = owner;
     }
