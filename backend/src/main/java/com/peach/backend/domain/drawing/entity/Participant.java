@@ -19,6 +19,7 @@ public class Participant {
     private String email;
     private String name;
     private String phone;
+    private Boolean isWinner;
 
     @ManyToOne
     private Drawing drawing;
@@ -29,5 +30,6 @@ public class Participant {
         this.name = name;
         this.phone = phone;
         this.drawing = drawing;
+        this.isWinner = false;
     }
 }
