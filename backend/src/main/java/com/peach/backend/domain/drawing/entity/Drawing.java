@@ -55,4 +55,8 @@ public class Drawing {
     public void updateParticipants(String participantPath) {
         this.participantPath = participantPath;
     }
+
+    public void updateDrawingStatus(DrawingStatus status) {
+        this.drawingStatus = status;
+    }
 }
