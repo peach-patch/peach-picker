@@ -1,8 +1,7 @@
 package com.peach.backend.global.validator.annotation;
 
 
-import com.peach.backend.global.validator.impl.FiveMinuteIntervalValidator;
-import com.peach.backend.global.validator.impl.LocalDateTimeNullValidator;
+import com.peach.backend.global.validator.impl.RequestNotNullValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -13,9 +12,9 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = LocalDateTimeNullValidator.class)
-public @interface LocalDateTimeNull {
-    String message() default "시각을 입력해주세요.";
+@Constraint(validatedBy = RequestNotNullValidator.class)
+public @interface RequestNotNull {
+    String message() default "요청이 비어있습니다.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
