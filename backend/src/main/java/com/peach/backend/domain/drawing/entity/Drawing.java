@@ -3,6 +3,7 @@ package com.peach.backend.domain.drawing.entity;
 import com.peach.backend.domain.drawing.enums.DrawingStatus;
 import com.peach.backend.domain.drawing.enums.DrawingType;
 import com.peach.backend.domain.user.entity.User;
+import com.peach.backend.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @NoArgsConstructor
-public class Drawing {
+public class Drawing extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,5 +59,9 @@ public class Drawing {
 
     public void updateDrawingStatus(DrawingStatus status) {
         this.drawingStatus = status;
+    }
+
+    public void updateWinner(Long winner) {
+        this.winner = winner;
     }
 }
