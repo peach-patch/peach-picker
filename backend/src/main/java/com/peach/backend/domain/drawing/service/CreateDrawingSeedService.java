@@ -15,7 +15,7 @@ import java.time.ZoneId;
 public class CreateDrawingSeedService {
     private final DrawingSeedRepository drawingSeedRepository;
 
-    public void createDrawingSeed(LocalDateTime clientTime) {
+    public Long createDrawingSeed(LocalDateTime clientTime) {
         LocalDateTime serverTime = LocalDateTime.now();
         Long seedValue = clientTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
                 + serverTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
@@ -24,7 +24,6 @@ public class CreateDrawingSeedService {
                 .clientTime(clientTime)
                 .serverTime(serverTime)
                 .build();
-        drawingSeedRepository.save(seed);
-
+        return drawingSeedRepository.save(seed).getSeedValue();
     }
 }

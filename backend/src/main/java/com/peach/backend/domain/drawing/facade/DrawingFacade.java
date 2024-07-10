@@ -2,11 +2,13 @@ package com.peach.backend.domain.drawing.facade;
 
 import com.peach.backend.domain.drawing.dto.req.DrawingReq;
 import com.peach.backend.domain.drawing.dto.req.GetDrawingListReq;
+import com.peach.backend.domain.drawing.dto.req.StartDrawingReq;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingDetailsResp;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingListResp;
 import com.peach.backend.domain.drawing.service.CreateDrawingSeedService;
 import com.peach.backend.domain.drawing.service.CreateDrawingService;
 import com.peach.backend.domain.drawing.service.GetDrawingService;
+import com.peach.backend.domain.drawing.service.StartDrawingService;
 import com.peach.backend.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ public class DrawingFacade {
     private final CreateDrawingService createDrawingService;
     private final GetDrawingService getDrawingService;
     private final CreateDrawingSeedService createDrawingSeedService;
+    private final StartDrawingService startDrawingService;
 
 
     @Transactional
@@ -41,7 +44,12 @@ public class DrawingFacade {
 
 
     @Transactional
-    public void createDrawingSeed(LocalDateTime clientTime) {
-        createDrawingSeedService.createDrawingSeed(clientTime);
+    public Long createDrawingSeed(LocalDateTime clientTime) {
+        return createDrawingSeedService.createDrawingSeed(clientTime);
+    }
+
+    @Transactional
+    public int startDrawing(StartDrawingReq req){
+        return startDrawingService.startDrawing(req);
     }
 }

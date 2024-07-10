@@ -20,6 +20,7 @@ public class Participant {
     private String name;
     private String phone;
     private Boolean isWinner;
+    private long randomNums;
 
     @ManyToOne
     private Drawing drawing;
@@ -31,5 +32,13 @@ public class Participant {
         this.phone = phone;
         this.drawing = drawing;
         this.isWinner = false;
+    }
+
+    public void updateRandomNums(Long randomNums) {
+        this.randomNums = randomNums;
+    }
+
+    public void updateIsWinner(Boolean isWinner) {
+        this.isWinner = isWinner;
     }
 }
