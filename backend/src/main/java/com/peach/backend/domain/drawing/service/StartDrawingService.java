@@ -35,6 +35,17 @@ public class StartDrawingService {
         return winners.size();
     }
 
+    public void startDrawing(Long seed, Drawing drawing){
+        List<Participant> participants = participantRepository.findAllByDrawing(drawing);
+        createRandomNums(seed, participants);
+
+        List<Participant> winners = findWinners(seed, participants, drawing.getWinner());
+        for(Participant p : winners){
+            p.updateIsWinner(true);
+            participantRepository.save(p);
+        }
+    }
+
     private void createRandomNums(Long seed, List<Participant> participants){
         Random random = new Random(seed);
 
