@@ -50,7 +50,7 @@ jobs:
           BASE64_KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
           KUBECTL_VERSION: '1.29.3'
         with:
-          args: set image deployment/peach-picker-be peach-picker-be=${{ secrets.DOCKER_USERNAME }}/peach-picker-be:${{ github.sha }} -n peach-picker
+          args: set image deployment/peach-picker-be peach-picker-be=${{ secrets.DOCKER_REPO }}/peach-picker-be:${{ github.sha }} -n peach-picker
 
 
     #- name: Deploy to Kubernetes
