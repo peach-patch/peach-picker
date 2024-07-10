@@ -1,6 +1,5 @@
 package com.peach.backend.domain.drawing.service;
 
-import com.peach.backend.domain.drawing.dto.req.StartDrawingReq;
 import com.peach.backend.domain.drawing.entity.Drawing;
 import com.peach.backend.domain.drawing.entity.repository.DrawingRepository;
 import com.peach.backend.domain.drawing.enums.DrawingStatus;
@@ -50,16 +49,11 @@ public class DoDrawingService {
         // 추첨 중 상태로 변경
         drawing.updateDrawingStatus(DrawingStatus.ONGOING);
 
-        int winnerCount = drawing.getWinner().intValue();
+//        int winnerCount = drawing.getWinner().intValue();
 
         long seed = createDrawingSeedService.createDrawingSeed(drawing.getCreatedAt());
 
-        startDrawingService.startDrawing(
-                StartDrawingReq.builder()
-                        .seed(seed)
-                        .drawing_id(drawing.getId())
-                        .build()
-        );
+        startDrawingService.startDrawing(seed, drawing);
 //        while(winnerCount > 0) {
 //            log.info("Drawing : {}, Count : {}", drawing.getTitle(), winnerCount);
 //
