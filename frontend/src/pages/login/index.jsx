@@ -112,7 +112,7 @@ const Index = () => {
           <div className="text-sm ml-1">아이디/비밀번호 찾기</div>
         </div>
       </form>
-      <div className="m-4 center1">
+      <div className="m-4 w-1/5 center1">
         <div className="flex items-center min-w-60 w-full">
           <div className="w-2/12 border-[1px] border-[#808080]"></div>
           <div className="text-gray-500 text-center text-sm w-10/12">
