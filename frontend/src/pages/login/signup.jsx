@@ -10,11 +10,47 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let hasError = false;
+    const newErrors = {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    if (!username) {
+      newErrors.username = "필수정보입니다.";
+      hasError = true;
+    }
+    if (!email) {
+      newErrors.email = "필수정보입니다.";
+      hasError = true;
+    }
+    if (!password) {
+      newErrors.password = "필수정보입니다.";
+      hasError = true;
+    }
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "필수정보입니다.";
+      hasError = true;
+    }
     if (password !== confirmPassword) {
       setMessage("비밀번호가 일치하지 않습니다.");
+      hasError = true;
+    }
+
+    setErrors(newErrors);
+
+    if (hasError) {
       return;
     }
 
@@ -30,12 +66,10 @@ const Signup = () => {
         }
       );
 
-      // JSON 형식이 아닐 경우 텍스트로 파싱
       const responseData = await response.text();
       try {
         const data = JSON.parse(responseData);
         if (response.ok) {
-          // 회원가입 성공 후 로그인 토큰 저장
           localStorage.setItem("token", data.token);
           sessionStorage.setItem("token", data.token);
           alert("회원가입이 완료되었습니다.");
@@ -45,7 +79,6 @@ const Signup = () => {
         }
       } catch (error) {
         if (response.ok) {
-          // 회원가입 성공 후 로그인 토큰 저장
           localStorage.setItem("token", responseData.token);
           sessionStorage.setItem("token", responseData.token);
           alert("회원가입이 완료되었습니다.");
@@ -62,7 +95,12 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col justify-center mb-10 items-center ">
-      <Image src={peach_logo} width={200} alt="Peach Logo" />
+      <Image
+        src={peach_logo}
+        width={200}
+        alt="Peach Logo"
+        className="sm:flex hidden"
+      />
       <form className="w-1/5 mt-10 min-w-60" onSubmit={handleSubmit}>
         <div className="mb-5 w-full justify-center flex items-center py-3 border-[1px] border-solid border-[#808080]">
           <Image src={kakao} width={20} alt="Kakao Login" />
@@ -74,7 +112,7 @@ const Signup = () => {
           <div className="w-5/12 border-[1px] h-[1px] border-[#808080]"></div>
         </div>
         <div>Username</div>
-        <div className="mb-5 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
+        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
           <input
             type="text"
             className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
@@ -83,8 +121,12 @@ const Signup = () => {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
+        {errors.username && (
+          <div className="text-red-500 mb-3 text-[10px]">{errors.username}</div>
+        )}
+
         <div>Email</div>
-        <div className="mb-5 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
+        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
           <input
             type="email"
             className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
@@ -93,8 +135,12 @@ const Signup = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
+        {errors.email && (
+          <div className="text-red-500 mb-3 text-[10px]">{errors.email}</div>
+        )}
+
         <div>Password</div>
-        <div className="mb-5 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
+        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
           <input
             type="password"
             className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
@@ -103,8 +149,12 @@ const Signup = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+        {errors.password && (
+          <div className="text-red-500 mb-3 text-[10px]">{errors.password}</div>
+        )}
+
         <div>Confirm Password</div>
-        <div className="mb-5 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
+        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
           <input
             type="password"
             className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
@@ -113,6 +163,12 @@ const Signup = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
+        {errors.confirmPassword && (
+          <div className="text-red-500 mb-3 text-[10px]">
+            {errors.confirmPassword}
+          </div>
+        )}
+
         <div className="text-red-500 mb-5 text-[10px]">{message}</div>
         <BasicBtn
           text={"Submit"}
