@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import menu_logo from "../../public/피치피커.png";
 import hamburger from "../images/hamburger.png";
 import bell from "../images/bell.png";
@@ -9,8 +9,25 @@ import Image from "next/image";
 import Link from "next/link";
 import peach_logo from "../../public/peach_logo.png";
 
-export default function menu() {
-  const [login, setLogin] = useState(false);
+export default function Menu() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // localStorage 또는 sessionStorage에서 토큰을 확인
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    // 로그아웃 시 토큰 삭제 및 로그인 상태 변경
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    setIsLoggedIn(false);
+  };
+
   return (
     <div>
       <div className="flex justify-between hidden p-2  bg-menuColor font-noto-sans sm:flex">
@@ -31,7 +48,7 @@ export default function menu() {
           </div>
         </div>
         <div className="flex">
-          {login ? (
+          {isLoggedIn ? (
             <>
               <div className="p-2">
                 <Link href="/register">추첨 등록</Link>
@@ -42,21 +59,21 @@ export default function menu() {
               <div className="p-2">
                 <Link href="/mypage">마이 페이지</Link>
               </div>
-              <button onClick={() => setLogin(false)} className="mr-5">
+              <button onClick={handleLogout} className="mr-5">
                 로그아웃
               </button>
             </>
           ) : (
-            <button onClick={() => setLogin(true)} className="mr-5">
-              로그인
-            </button>
+            <Link href="/login">
+              <button className="mr-5">로그인</button>
+            </Link>
           )}
         </div>
       </div>
       <div>
         <div className="flex flex-col items-center mt-10">
           <Image
-            className="sm:hidden "
+            className="sm:hidden"
             src={peach_logo}
             width={280}
             height={280}
@@ -70,7 +87,7 @@ export default function menu() {
               src={home}
               width={30}
               height={30}
-              alt="메뉴 로고"
+              alt="홈"
             ></Image>
           </Link>
           <Link href="/completedDrawings">
@@ -79,7 +96,7 @@ export default function menu() {
               src={search}
               width={30}
               height={30}
-              alt="메뉴 로고"
+              alt="검색"
             ></Image>
           </Link>
           <Link href="/drawings">
@@ -88,7 +105,7 @@ export default function menu() {
               src={treasure}
               width={30}
               height={30}
-              alt="메뉴 로고"
+              alt="추첨"
             ></Image>
           </Link>
           <Link href="/mypage">
@@ -97,7 +114,7 @@ export default function menu() {
               src={bell}
               width={30}
               height={30}
-              alt="메뉴 로고"
+              alt="알림"
             ></Image>
           </Link>
           <Link href="/login">
@@ -106,7 +123,7 @@ export default function menu() {
               src={hamburger}
               width={30}
               height={30}
-              alt="메뉴 로고"
+              alt="메뉴"
             ></Image>
           </Link>
         </div>
