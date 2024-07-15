@@ -26,7 +26,7 @@ const Index = () => {
     e.preventDefault();
 
     const response = await fetch(
-      "/api/users/sign-in", // 프록시 서버를 통해 요청
+      "https://maewakka123.iptime.org:31765/users/sign-in",
       {
         method: "POST",
         headers: {
