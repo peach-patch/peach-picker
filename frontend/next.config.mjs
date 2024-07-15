@@ -4,9 +4,17 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  output: 'export',
+  output: "export",
   images: {
     unoptimized: true,
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://maewakka123.iptime.org:31765/:path*", // HTTP API 서버 주소
+      },
+    ];
   },
 };
 

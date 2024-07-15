@@ -26,7 +26,7 @@ const Index = () => {
     e.preventDefault();
 
     const response = await fetch(
-      "http://maewakka123.iptime.org:31765/users/sign-in",
+      "/api/users/sign-in", // 프록시 서버를 통해 요청
       {
         method: "POST",
         headers: {
@@ -65,7 +65,7 @@ const Index = () => {
         src={peach_logo}
         width={200}
         alt="Peach Logo"
-        className="sm:flex"
+        className="sm:flex hidden"
       />
       <form className="w-1/5 mt-10 min-w-60" onSubmit={handleLogin}>
         <div className="flex items-center">
@@ -125,7 +125,7 @@ const Index = () => {
           </div>
           <div className="w-2/12 border-[1px] border-[#808080]"></div>
         </div>
-        <div className="flex">
+        <div className="flex justify-center">
           <Image src={kakao} width={40} className="m-3" alt="Kakao" />
           <Image src={google} width={40} className="m-3" alt="Google" />
           <Image src={naver} width={40} className="m-3" alt="Naver" />
