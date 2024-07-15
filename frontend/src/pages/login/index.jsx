@@ -25,42 +25,37 @@ const Index = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch(
-        "https://maewakka123.iptime.org:31765/users/sign-in",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      const data = await response.json();
-      console.log(data);
-      if (response.ok) {
-        setMessage(data.message);
-
-        if (keepLoggedIn) {
-          localStorage.setItem("token", data.token); // 로그인 유지
-        } else {
-          sessionStorage.setItem("token", data.token); // 세션 스토리지에 토큰 저장
-        }
-
-        if (rememberMe) {
-          localStorage.setItem("savedEmail", email); // 아이디 저장
-        } else {
-          localStorage.removeItem("savedEmail");
-        }
-
-        window.location.href = "/";
-      } else {
-        setMessage(data.message);
+    const response = await fetch(
+      "http://maewakka123.iptime.org:31765/users/sign-in",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       }
-    } catch (error) {
-      console.error("Error:", error);
-      setMessage("Network error or server is not reachable");
+    );
+
+    const data = await response.json();
+    console.log(data);
+    if (response.ok) {
+      setMessage(data.message);
+
+      if (keepLoggedIn) {
+        localStorage.setItem("token", data.token); // 로그인 유지
+      } else {
+        sessionStorage.setItem("token", data.token); // 세션 스토리지에 토큰 저장
+      }
+
+      if (rememberMe) {
+        localStorage.setItem("savedEmail", email); // 아이디 저장
+      } else {
+        localStorage.removeItem("savedEmail");
+      }
+
+      window.location.href = "/";
+    } else {
+      setMessage(data.message);
     }
   };
 
@@ -70,7 +65,7 @@ const Index = () => {
         src={peach_logo}
         width={200}
         alt="Peach Logo"
-        className="sm:flex hidden"
+        className="sm:flex"
       />
       <form className="w-1/5 mt-10 min-w-60" onSubmit={handleLogin}>
         <div className="flex items-center">
@@ -130,7 +125,7 @@ const Index = () => {
           </div>
           <div className="w-2/12 border-[1px] border-[#808080]"></div>
         </div>
-        <div className="flex justify-center">
+        <div className="flex">
           <Image src={kakao} width={40} className="m-3" alt="Kakao" />
           <Image src={google} width={40} className="m-3" alt="Google" />
           <Image src={naver} width={40} className="m-3" alt="Naver" />
