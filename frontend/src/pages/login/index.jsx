@@ -25,37 +25,42 @@ const Index = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(
-      "http://maewakka123.iptime.org:31765/users/sign-in",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      }
-    );
+    try {
+      const response = await fetch(
+        "https://maewakka123.iptime.org:31765/users/sign-in",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-    const data = await response.json();
-    console.log(data);
-    if (response.ok) {
-      setMessage(data.message);
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        setMessage(data.message);
 
-      if (keepLoggedIn) {
-        localStorage.setItem("token", data.token); // 로그인 유지
+        if (keepLoggedIn) {
+          localStorage.setItem("token", data.token); // 로그인 유지
+        } else {
+          sessionStorage.setItem("token", data.token); // 세션 스토리지에 토큰 저장
+        }
+
+        if (rememberMe) {
+          localStorage.setItem("savedEmail", email); // 아이디 저장
+        } else {
+          localStorage.removeItem("savedEmail");
+        }
+
+        window.location.href = "/";
       } else {
-        sessionStorage.setItem("token", data.token); // 세션 스토리지에 토큰 저장
+        setMessage(data.message);
       }
-
-      if (rememberMe) {
-        localStorage.setItem("savedEmail", email); // 아이디 저장
-      } else {
-        localStorage.removeItem("savedEmail");
-      }
-
-      window.location.href = "/";
-    } else {
-      setMessage(data.message);
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("Network error or server is not reachable");
     }
   };
 
