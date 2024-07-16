@@ -24,9 +24,9 @@ const Index = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    console.log(`${process.env.API_URL}/users/sign-in`, "확인");
     const response = await fetch(
-      "https://maewakka123.iptime.org:31765/users/sign-in",
+      `${process.env.NEXT_PUBLIC_API_URL}/users/sign-in`,
       {
         method: "POST",
         headers: {
