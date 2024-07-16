@@ -33,6 +33,7 @@ const Index = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
+        credentials: "include",
       }
     );
 
