@@ -6,6 +6,7 @@ import naver from "../../images/naver.png";
 import Image from "next/image";
 import BasicBtn from "@/components/button/BasicBtn";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ const Index = () => {
   const [message, setMessage] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
@@ -20,11 +22,14 @@ const Index = () => {
       setEmail(savedEmail);
       setRememberMe(true);
     }
+
+    // 환경 변수를 출력하여 확인
+    console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
   }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(`${process.env.API_URL}/users/sign-in`, "확인");
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/users/sign-in`,
       {
@@ -33,12 +38,10 @@ const Index = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-        credentials: "include",
       }
     );
 
     const data = await response.json();
-    console.log(data);
     if (response.ok) {
       setMessage(data.message);
 
@@ -54,7 +57,7 @@ const Index = () => {
         localStorage.removeItem("savedEmail");
       }
 
-      window.location.href = "/";
+      router.push("/profile");
     } else {
       setMessage(data.message);
     }
@@ -70,7 +73,6 @@ const Index = () => {
       />
       <form className="w-1/5 mt-10 min-w-60" onSubmit={handleLogin}>
         <div className="flex items-center">
-          {keepLoggedIn}
           <input
             type="checkbox"
             className="w-5 h-5 text-gray form-checkbox"
@@ -100,6 +102,7 @@ const Index = () => {
             type="password"
             className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
             placeholder="비밀번호"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>

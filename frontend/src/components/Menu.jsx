@@ -20,6 +20,7 @@ export default function Menu() {
       setIsLoggedIn(true);
     }
   }, []);
+  console.log("로그인되었는지 확인 ", isLoggedIn);
 
   const handleLogout = () => {
     // 로그아웃 시 토큰 삭제 및 로그인 상태 변경
