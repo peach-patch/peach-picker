@@ -17,14 +17,15 @@ public class WebConfig implements WebMvcConfigurer {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping(("/**"))
-                        .allowedOrigins("*")
                         .allowedOrigins("http://localhost:3000", "https://peach-picker.site")
                         .allowedMethods(
                                 HttpMethod.GET.name(),
                                 HttpMethod.HEAD.name(),
                                 HttpMethod.POST.name(),
                                 HttpMethod.PUT.name(),
-                                HttpMethod.DELETE.name());
+                                HttpMethod.DELETE.name())
+                        .allowCredentials(true);
+
             }
         };
     }
