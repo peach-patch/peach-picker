@@ -12,6 +12,8 @@ export default function Document() {
           http-equiv="Content-Security-Policy"
           content="upgrade-insecure-requests"
         ></meta> */}
+        <link rel="icon" type="image/png" sizes="16x16" href="/pink_logo.png" />
+        <title>피치피커</title>
       </Head>
       <body>
         <Main />
