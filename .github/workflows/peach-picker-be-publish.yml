@@ -40,9 +40,9 @@ jobs:
       - name: Docker build & push to docker repo
         run: |
           cd backend
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_REPO }}/peach-picker-be:${{ github.sha }} .
-          docker push ${{ secrets.DOCKER_REPO }}/peach-picker-be:${{ github.sha }}
+          docker login ${{ secrets.DOCKER_REGISTRY }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_REGISTRY }}/peach-picker/peach-picker-be:${{ github.sha }} .
+          docker push ${{ secrets.DOCKER_REGISTRY }}/peach-picker/peach-picker-be:${{ github.sha }}
 
       - name: Deploy to Kubernetes
         uses: Gabryel8818/kubectl@v1.0.1
@@ -50,7 +50,7 @@ jobs:
           BASE64_KUBE_CONFIG: ${{ secrets.KUBECONFIG }}
           KUBECTL_VERSION: '1.29.3'
         with:
-          args: set image deployment/peach-picker-be peach-picker-be=${{ secrets.DOCKER_USERNAME }}/peach-picker-be:${{ github.sha }} -n peach-picker
+          args: set image deployment/peach-picker-be peach-picker-be=${{ secrets.DOCKER_REGISTRY }}/peach-picker/peach-picker-be:${{ github.sha }} -n peach-picker
 
 
     #- name: Deploy to Kubernetes

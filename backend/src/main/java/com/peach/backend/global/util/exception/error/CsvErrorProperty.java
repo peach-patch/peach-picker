@@ -1,4 +1,4 @@
-package com.peach.backend.global.minio.exception.error;
+package com.peach.backend.global.util.exception.error;
 
 import com.peach.backend.global.error.exception.ErrorProperty;
 import lombok.Getter;
@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum MinioErrorProperty implements ErrorProperty {
+public enum CsvErrorProperty implements ErrorProperty {
 
-    MINIO_OBJECT_NOT_FOUND(HttpStatus.NOT_FOUND, "미니오에서 해당 오브젝트를 찾을 수 없습니다."),
+    CSV_READ_ERROR(HttpStatus.NOT_FOUND, "csv 파일을 읽는 중 문제가 발생하였습니다.")
     ;
 
     private final HttpStatus status;

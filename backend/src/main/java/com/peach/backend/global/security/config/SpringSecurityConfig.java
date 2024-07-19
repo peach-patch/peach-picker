@@ -31,6 +31,8 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/drawing/register").hasAuthority("ADMIN")
+                        .requestMatchers("/users/profile").hasAuthority("ADMIN")
                     .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(customUserDetailsService, jwtTokenProvider, jwtValidateService),
