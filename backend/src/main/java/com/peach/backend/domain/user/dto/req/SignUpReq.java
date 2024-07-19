@@ -19,7 +19,7 @@ public class SignUpReq {
                 .name(name)
                 .role(Role.ADMIN)
                 .kakaoSignUp(false)
-                .profileImgUrl("/profile-img/default_profile.png")
+                .profileImgUrl("profile-img/default_profile.png")
                 .build();
     }
 

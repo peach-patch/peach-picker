@@ -33,8 +33,9 @@ export default function Menu() {
 
   return (
     <div>
-      <div className="flex justify-between hidden p-2 bg-menuColor font-noto-sans sm:flex">
-        <div className="flex ml-5">
+
+      <div className="flex justify-between hidden p-2  bg-menuColor font-noto-sans sm:flex">
+        <div className="flex items-center ml-5">
           <Link href="/">
             <Image
               src={menu_logo}
