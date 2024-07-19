@@ -1,210 +1,271 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ko } from "date-fns/locale";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+import Link from "next/link";
+import React from "react";
+import { usePagination, useTable } from "react-table";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import base64Font from "../../../fonts/base64font";
+import ShortWhite from "@/components/button/ShortWhite";
 
-export default function register() {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropDown = () => {
-    setIsOpen(!isOpen);
-  };
+TableComponent = () => {
+  const columns = React.useMemo(
+    () => [
+      {
+        accessor: "no",
+        Header: "No",
+        Cell: ({ value }) => <div>{value}번</div>,
+      },
+      { accessor: "date", Header: "추첨 일시" },
+      {
+        accessor: "name",
+        Header: "이벤트 명",
+        Cell: ({ value, row }) => (
+          <Link href={`/mypage/mylist/${row.original.no}`}>{value}</Link>
+        ),
+      },
+      {
+        accessor: "winner",
+        Header: () => <div className="text-right ">당첨자 수</div>,
+        Cell: ({ value }) => <div className="pr-4 text-right">{value}명</div>,
+      },
+      {
+        accessor: "state",
+        Header: "진행 현황",
+        Cell: ({ value }) => (
+          <div className={`${value === "예정" ? "text-red-500" : ""}`}>
+            {value}
+          </div>
+        ),
+      },
+    ],
+    []
+  );
 
-  const Today = new Date();
-  const [formatDay, setFormatDay] = useState("날짜 선택");
-  const [selectedDay, setSelectedDay] = useState(Today);
-  const [calOpen, setCalOpen] = useState(false);
-  const dropCalendar = () => {
-    setCalOpen(!calOpen);
+  const data = React.useMemo(
+    () => [
+      { no: 12, name: "SOSO", date: "2024-07-05", winner: 5, state: "예정" },
+      {
+        no: 11,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 10,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 9,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 8,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "완료",
+      },
+      {
+        no: 7,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "완료",
+      },
+      {
+        no: 6,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 5,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 4,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 3,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 2,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+      {
+        no: 1,
+        name: "SOSO",
+        date: "2024-07-05 08:07",
+        winner: 5,
+        state: "예정",
+      },
+    ],
+    []
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page, // 현재 페이지의 행들
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable({ columns, data }, usePagination);
+
+  const downloadPdf = () => {
+    const doc = new jsPDF();
+    doc.addFileToVFS("NotoSansKR-Regular.ttf", base64Font);
+    doc.addFont("NotoSansKR-Regular.ttf", "NotoSansKR", "normal");
+    doc.setFont("NotoSansKR");
+
+    doc.text("나의 추첨 내역", 14, 10);
+    doc.autoTable({
+      startY: 20,
+      head: [
+        columns.map((col) =>
+          typeof col.Header === "function"
+            ? col.Header().props.children
+            : col.Header
+        ),
+      ],
+      body: data.map((row) => columns.map((col) => row[col.accessor])),
+      styles: {
+        font: "NotoSansKR",
+      },
+      headStyles: {
+        fillColor: [0, 0, 0], // 헤더 배경색 (검정색)
+        textColor: [255, 255, 255], // 헤더 글자색 (흰색)
+        fontStyle: "bold",
+      },
+    });
+    doc.save("나의 추첨 내역.pdf");
   };
-  const setDate = (day) => {
-    setSelectedDay(day);
-    console.log(selectedDay);
-    setFormatDay(
-      `${day.getFullYear()}년 ${day.getMonth() + 1}월 ${day.getDate()}일`
-    );
-  };
-  const [method, setMethod] = useState("추첨 방법 선택");
-  const selectMethod = (selectedMethod) => {
-    setMethod(selectedMethod);
-    setIsOpen(false);
-  };
-  const [winnerCnt, setWinnerCnt] = useState("");
-  const handleWinnerCnt = (event) => {
-    setWinnerCnt(event.target.value);
-  };
-  const [eventName, setEventName] = useState("");
-  const handleEventName = (event) => {
-    setEventName(event.target.value);
-  };
-  useEffect(() => {
-    console.log(winnerCnt);
-  }, [winnerCnt]);
-  const [selectedFile, setSelectedFile] = useState("파일을 등록해주세요.");
-  const handleFile = (event) => {
-    const file = event.target.files[0];
-    // if (!file) return;
-    // if (file.type !== "text/csv") {
-    //   alert("CSV 파일만 업로드 가능합니다.");
-    //   return;
-    // }
-    setSelectedFile(file.name);
-    console.log("선택된 파일:", file.name);
-  };
-  const ref = useRef();
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     console.log(event.target);
-  //     if (isOpen && ref.current && !ref.current.contains(event.target)) {
-  //       setIsOpen(false);
-  //     }
-  //   };
-  //   document.addEventListener("click", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("click", handleClickOutside);
-  //   };
-  // }, [isOpen]);
 
   return (
-    <div className="relative w-full flex flex-col justify-center items-center">
-      <div
-        className="mt-20 absoulte w-1/2 flex justify-center items-center"
-        onClick={dropCalendar}
-      >
-        <div className="text-[20px] text-right mr-2 w-[150px] ">일시 : </div>
-        <div className="absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
-          <div className=" flex-1 w-full text-[14px] leading-[140%] font-black text-[#828282] line-clamp-1">
-            {formatDay}
-          </div>
+    <div className="flex flex-col items-center justify-center">
+      <div className="flex items-center content-end justify-between w-4/5">
+        <div className="pb-1 pl-1 text-left ">나의 추첨 내역</div>
+        <div onClick={downloadPdf} className="cursor-pointer ">
+          <ShortWhite text={"출력"} />
+        </div>
+      </div>
 
-          {calOpen && (
-            <div className="relative w-1/2">
-              <div className="absolute right-0 ">
-                <DayPicker
-                  locale={ko}
-                  mode="single"
-                  defaultMonth={Today}
-                  selected={selectedDay}
-                  onSelect={setDate}
-                  styles={{
-                    head_cell: {
-                      width: "auto",
-                      minWidth: " 20px",
-                      maxWidth: "200px",
-                    },
-                    table: {
-                      maxWidth: "none",
-                    },
-                    day: {
-                      margin: "auto",
-                    },
-                  }}
-                />
-              </div>
-            </div>
-          )}
-          <div className="ml-2">▼</div>
-        </div>
-      </div>
-      <div className="mt-10 w-1/2 flex justify-center items-center">
-        <div className="z-1 text-[20px] text-right mr-2 w-[150px] ">
-          이벤트 명 :{" "}
-        </div>
-        <div className="absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
-          <input
-            type="text"
-            className="flex-1 text-[14px] leading-[140%]  font-black text-[#828282] line-clamp-1"
-            placeholder="이벤트명을 입력하세요."
-            onChange={handleEventName}
-          />
-        </div>
-      </div>
-      <div className="mt-10 w-1/2 flex justify-center items-center">
-        <div className="z-1 text-[20px] text-right mr-2 w-[150px] ">
-          당첨자 수 :{" "}
-        </div>
-        <div className="absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
-          <input
-            type="number"
-            className="flex-1 text-[14px] leading-[140%]  font-black text-[#828282] line-clamp-1"
-            placeholder="당첨자 수를 입력하세요."
-            onChange={handleWinnerCnt}
-          />
-        </div>
-      </div>
-      <div className="mt-10 z-1 w-1/2 flex justify-center items-center">
-        <div className=" z-1 text-[20px] text-right mr-2 w-[150px] ">
-          추첨 방법 :{" "}
-        </div>
-        <div
-          className=" left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px] "
-          onClick={dropDown}
+      <table {...getTableProps()} className="w-4/5">
+        <colgroup>
+          <col style={{ width: "5%", minWidth: "100px" }} />
+          <col style={{ width: "10%", minWidth: "200px" }} />
+          <col style={{ width: "15%", minWidth: "150px" }} />
+          <col style={{ width: "60%", minWidth: "100px" }} />
+          <col style={{ width: "10%", minWidth: "150px" }} />
+        </colgroup>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr
+              key={headerGroup.id} // key를 직접 지정
+              {...headerGroup.getHeaderGroupProps()}
+              className="border-t-2 border-b-2 border-black"
+            >
+              {headerGroup.headers.map((column) => (
+                <th
+                  key={column.id}
+                  {...column.getHeaderProps()}
+                  className="px-4 py-2"
+                >
+                  {column.render("Header")}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row, rowIndex) => {
+            prepareRow(row);
+
+            const isLastRow = rowIndex === page.length - 1;
+            return (
+              <tr
+                key={row.id} // key를 직접 지정
+                {...row.getRowProps()}
+                className={` ${isLastRow ? "border-b-2 border-black" : ""}`}
+              >
+                {row.cells.map((cell) => {
+                  const { key, ...cellProps } = cell.getCellProps(); // key를 분리
+                  return (
+                    <td
+                      key={cell.column.id} // key를 직접 지정
+                      {...cellProps}
+                      className="px-4 py-2 text-center"
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div className="mt-10">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {"<<"}
+        </button>{" "}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {"<"}
+        </button>{" "}
+        <span>
+          Page{" "}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{" "}
+        </span>
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {">"}
+        </button>{" "}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {">>"}
+        </button>{" "}
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
         >
-          <div className="flex-1 text-[14px] leading-[140%] font-['Noto_Sans'] font-black text-[#828282] line-clamp-1">
-            {method}
-            {isOpen && (
-              <div className="absolute mt-2 w-1/3 bg-white border border-gray-300 rounded shadow-lg">
-                <div
-                  className="py-2 px-4 hover:bg-gray-100"
-                  onClick={() => selectMethod("사다리 타기")}
-                >
-                  사다리 타기
-                </div>
-                <div
-                  className="py-2 px-4 hover:bg-gray-100"
-                  onClick={() => selectMethod("핀볼")}
-                >
-                  핀볼
-                </div>
-                <div
-                  className="py-2 px-4 hover:bg-gray-100"
-                  onClick={() => selectMethod("공 뽑기")}
-                >
-                  공 뽑기
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="ml-2">▼</div>
-        </div>
-      </div>
-
-      <div className="mt-10 absoulte w-1/2 flex justify-center items-center">
-        <div className="text-[20px] text-right mr-2 w-[150px] ">명단 : </div>
-        <div className="w-full text-[12px] whitespace-nowrap">
-          ※ 휴대폰 번호가 있는 명단을 등록해주세요.
-          <br />※ csv 파일만 등록할 수 있습니다.
-          <br />※ 아직 명단이 완성되지 않았다면 등록이후
-          <br />
-          수정란에서 명단을 등록해주세요.
-          <div className="mt-1 absoulte left-[110px] w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
-            <div className=" flex-1 w-full text-[14px] leading-[140%] font-black text-[#828282] line-clamp-1">
-              {selectedFile}
-            </div>
-          </div>
-          <div className="absolute flex items-center justify-center mt-2 w-[89px] h-[44px] bg-[#d9d9d9] rounded-[5px]">
-            <label style={{ cursor: "pointer" }} htmlFor="fileInput">
-              <div>
-                <input
-                  type="file"
-                  accept=".csv,.xlsx"
-                  id="fileInput"
-                  style={{ display: "none", cursor: "pointer" }}
-                  onChange={handleFile}
-                />
-                파일 찾기
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div className="z-1 relative w-1/2">
-        <div className="absolute right-0 mt-20 w-[96px] h-[45px] flex flex-row items-center justify-center py-[6px] px-[16px] bg-[#000] rounded-[8px]">
-          <div className="text-[20px] leading-[140%]  font-black text-[#fff] whitespace-nowrap">
-            등록
-          </div>
-        </div>
+          {[5, 10, 20].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              {pageSize}개씩 보기
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
-}
+};

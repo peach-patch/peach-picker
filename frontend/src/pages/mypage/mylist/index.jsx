@@ -4,10 +4,9 @@ import { usePagination, useTable } from "react-table";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import base64Font from "../../../fonts/base64font";
-import ShortButton from "@/components/button/ShortBtn";
 import ShortWhite from "@/components/button/ShortWhite";
 
-const TableComponent = () => {
+export default function mylist() {
   const columns = React.useMemo(
     () => [
       {
@@ -20,9 +19,7 @@ const TableComponent = () => {
         accessor: "name",
         Header: "이벤트 명",
         Cell: ({ value, row }) => (
-          <Link href={`/mypage/mylist/${(value, row.original.no)}`}>
-            {value}
-          </Link>
+          <Link href={`/mypage/mylist/${row.original.no}`}>{value}</Link>
         ),
       },
       {
@@ -42,6 +39,7 @@ const TableComponent = () => {
     ],
     []
   );
+
   const data = React.useMemo(
     () => [
       { no: 12, name: "SOSO", date: "2024-07-05", winner: 5, state: "예정" },
@@ -125,6 +123,7 @@ const TableComponent = () => {
     ],
     []
   );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -141,6 +140,7 @@ const TableComponent = () => {
     setPageSize,
     state: { pageIndex, pageSize },
   } = useTable({ columns, data }, usePagination);
+
   const downloadPdf = () => {
     const doc = new jsPDF();
     doc.addFileToVFS("NotoSansKR-Regular.ttf", base64Font);
@@ -188,37 +188,51 @@ const TableComponent = () => {
           <col style={{ width: "10%", minWidth: "150px" }} />
         </colgroup>
         <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr
-              {...headerGroup.getHeaderGroupProps()}
-              className="border-t-2 border-b-2 border-black"
-            >
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()} className="px-4 py-2">
-                  {column.render("Header")}
-                </th>
-              ))}
-            </tr>
-          ))}
+          {headerGroups.map((headerGroup) => {
+            const { key, ...restHeaderGroupProps } =
+              headerGroup.getHeaderGroupProps();
+            return (
+              <tr
+                key={key}
+                {...restHeaderGroupProps}
+                className="border-t-2 border-b-2 border-black"
+              >
+                {headerGroup.headers.map((column) => {
+                  const { key, ...restColumnProps } = column.getHeaderProps();
+                  return (
+                    <th key={key} {...restColumnProps} className="px-4 py-2">
+                      {column.render("Header")}
+                    </th>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </thead>
         <tbody {...getTableBodyProps()}>
           {page.map((row, rowIndex) => {
             prepareRow(row);
 
             const isLastRow = rowIndex === page.length - 1;
+            const { key, ...restRowProps } = row.getRowProps();
             return (
               <tr
-                {...row.getRowProps()}
+                key={key}
+                {...restRowProps}
                 className={` ${isLastRow ? "border-b-2 border-black" : ""}`}
               >
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    className="px-4 py-2 text-center"
-                  >
-                    {cell.render("Cell")}
-                  </td>
-                ))}
+                {row.cells.map((cell) => {
+                  const { key, ...restCellProps } = cell.getCellProps();
+                  return (
+                    <td
+                      key={key}
+                      {...restCellProps}
+                      className="px-4 py-2 text-center"
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
               </tr>
             );
           })}
@@ -258,6 +272,4 @@ const TableComponent = () => {
       </div>
     </div>
   );
-};
-
-export default TableComponent;
+}
