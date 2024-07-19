@@ -42,13 +42,23 @@ const Index = () => {
     );
 
     const data = await response.json();
+    console.log("로그인 응답 데이터:", data); // 응답 데이터 확인
+
     if (response.ok) {
       setMessage(data.message);
 
       if (keepLoggedIn) {
-        localStorage.setItem("token", data.token); // 로그인 유지
+        localStorage.setItem("token", data.accessToken); // 로그인 유지
+        console.log(
+          "토큰이 로컬 스토리지에 저장되었습니다: ",
+          localStorage.getItem("token")
+        );
       } else {
-        sessionStorage.setItem("token", data.token); // 세션 스토리지에 토큰 저장
+        sessionStorage.setItem("token", data.accessToken); // 세션 스토리지에 토큰 저장
+        console.log(
+          "토큰이 세션 스토리지에 저장되었습니다: ",
+          sessionStorage.getItem("token")
+        );
       }
 
       if (rememberMe) {
@@ -57,7 +67,7 @@ const Index = () => {
         localStorage.removeItem("savedEmail");
       }
 
-      router.push("/profile");
+      router.push("/mypage");
     } else {
       setMessage(data.message);
     }

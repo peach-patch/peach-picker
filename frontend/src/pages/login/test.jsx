@@ -6,6 +6,14 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const token = localStorage.getItem("token"); // 또는 sessionStorage
+      console.log(`Bearer ${token} 확인해요 `);
+
+      if (!token) {
+        setError(new Error("토큰이 없습니다. 로그인이 필요합니다."));
+        return;
+      }
+
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/users/profile`,
@@ -13,8 +21,9 @@ const Profile = () => {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // 또는 sessionStorage
+              Authorization: `Bearer ${token}`,
             },
+            credentials: "include",
           }
         );
 
