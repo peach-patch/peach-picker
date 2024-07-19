@@ -16,10 +16,13 @@ export default function Menu() {
     // localStorage 또는 sessionStorage에서 토큰을 확인
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
+    console.log("토큰 확인: ", token); // 디버깅용 로그 추가
     if (token) {
       setIsLoggedIn(true);
     }
   }, []);
+
+  console.log("로그인되었는지 확인 ", isLoggedIn); // 디버깅용 로그 추가
 
   const handleLogout = () => {
     // 로그아웃 시 토큰 삭제 및 로그인 상태 변경
@@ -30,6 +33,7 @@ export default function Menu() {
 
   return (
     <div>
+
       <div className="flex justify-between hidden p-2  bg-menuColor font-noto-sans sm:flex">
         <div className="flex items-center ml-5">
           <Link href="/">
@@ -59,14 +63,16 @@ export default function Menu() {
               <div className="p-2">
                 <Link href="/mypage">마이 페이지</Link>
               </div>
-              <button onClick={handleLogout} className="mr-5">
+              <button onClick={handleLogout} className="p-2">
                 로그아웃
               </button>
             </>
           ) : (
-            <Link href="/login">
-              <button className="mr-5">로그인</button>
-            </Link>
+            <div className="p-2">
+              <Link href="/login">
+                <button className="p-2">로그인</button>
+              </Link>
+            </div>
           )}
         </div>
       </div>
@@ -117,15 +123,27 @@ export default function Menu() {
               alt="알림"
             ></Image>
           </Link>
-          <Link href="/login">
-            <Image
-              className="flex"
-              src={hamburger}
-              width={30}
-              height={30}
-              alt="메뉴"
-            ></Image>
-          </Link>
+          {isLoggedIn ? (
+            <button onClick={handleLogout}>
+              <Image
+                className="flex"
+                src={hamburger}
+                width={30}
+                height={30}
+                alt="로그아웃"
+              ></Image>
+            </button>
+          ) : (
+            <Link href="/login">
+              <Image
+                className="flex"
+                src={hamburger}
+                width={30}
+                height={30}
+                alt="로그인"
+              ></Image>
+            </Link>
+          )}
         </div>
       </div>
     </div>
