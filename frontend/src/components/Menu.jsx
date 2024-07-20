@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import menu_logo from "../../public/피치피커.png";
 import hamburger from "../images/hamburger.png";
 import bell from "../images/bell.png";
@@ -8,24 +8,12 @@ import home from "../images/home.png";
 import Image from "next/image";
 import Link from "next/link";
 import peach_logo from "../../public/peach_logo.png";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Menu() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // localStorage 또는 sessionStorage에서 토큰을 확인
-    const token =
-      localStorage.getItem("token") || sessionStorage.getItem("token");
-    console.log("토큰 확인: ", token); // 디버깅용 로그 추가
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  console.log("로그인되었는지 확인 ", isLoggedIn); // 디버깅용 로그 추가
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
 
   const handleLogout = () => {
-    // 로그아웃 시 토큰 삭제 및 로그인 상태 변경
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
     setIsLoggedIn(false);
@@ -33,8 +21,7 @@ export default function Menu() {
 
   return (
     <div>
-
-      <div className="flex justify-between hidden p-2  bg-menuColor font-noto-sans sm:flex">
+      <div className="flex justify-between hidden p-2 bg-menuColor font-noto-sans sm:flex">
         <div className="flex items-center ml-5">
           <Link href="/">
             <Image
