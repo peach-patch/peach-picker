@@ -4,6 +4,10 @@
 @import "@fontsource/noto-sans"; /* 기본 글꼴 */
 @import "@fontsource/noto-sans/700.css"; /* 굵기 700 */
 
+body {
+  @apply font-sans;
+}
+
 * {
   --rdp-accent-color: #f88787;
   --rdp-background-color: #edc3c6;
@@ -24,4 +28,19 @@
 }
 .rdp {
   background-color: rgb(255, 255, 255); /* 원하는 색상으로 변경 */
+}
+
+@layer {
+  .center1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .center2 {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+  }
 }

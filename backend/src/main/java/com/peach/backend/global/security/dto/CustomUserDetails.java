@@ -12,7 +12,6 @@ import java.util.Collection;
 @AllArgsConstructor
 @Getter
 public class CustomUserDetails implements UserDetails {
-
     private User user;
 
     @Override

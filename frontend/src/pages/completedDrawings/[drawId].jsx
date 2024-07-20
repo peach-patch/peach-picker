@@ -3,7 +3,7 @@ import { Linefont } from "next/font/google";
 import Link from "next/link";
 import { useState, EventHandler, ReactNode } from "react";
 
-const 과거추첨내역상세페이지 = () => {
+const completedDetail = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full overflow-hidden">
       <div className="w-4/5 ">
@@ -43,4 +43,4 @@ const 과거추첨내역상세페이지 = () => {
   );
 };
 
-export default 과거추첨내역상세페이지;
+export default completedDetail;
