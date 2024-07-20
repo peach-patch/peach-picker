@@ -19,11 +19,8 @@ export default function Edit() {
       }
 
       try {
-        const url = "/api/users/profile"; // 요청이 보내지는 URL
-        console.log("Token:", token);
-        console.log("URL:", url);
-
-        const response = await fetch(url, {
+        console.log(token);
+        const response = await fetch("/api/users/profile", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -63,11 +60,7 @@ export default function Edit() {
     }
 
     try {
-      const url = "/api/users/profile"; // 요청이 보내지는 URL
-      console.log("Token:", token);
-      console.log("URL:", url);
-
-      const response = await fetch(url, {
+      const response = await fetch("/api/users/profile", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -80,8 +73,14 @@ export default function Edit() {
         throw new Error("프로필 업데이트에 실패했습니다.");
       }
 
-      const data = await response.json();
-      setMessage("프로필이 성공적으로 업데이트되었습니다.");
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        setMessage("프로필이 성공적으로 업데이트되었습니다.");
+      } else {
+        const textData = await response.text();
+        setMessage(textData);
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
       setMessage("프로필 업데이트에 실패했습니다.");
