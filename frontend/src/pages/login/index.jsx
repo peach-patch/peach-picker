@@ -7,6 +7,7 @@ import Image from "next/image";
 import BasicBtn from "@/components/button/BasicBtn";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ const Index = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const router = useRouter();
+  const { setIsLoggedIn } = useAuth();
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
@@ -23,7 +25,6 @@ const Index = () => {
       setRememberMe(true);
     }
 
-    // 환경 변수를 출력하여 확인
     console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
   }, []);
 
@@ -42,31 +43,22 @@ const Index = () => {
     );
 
     const data = await response.json();
-    console.log("로그인 응답 데이터:", data); // 응답 데이터 확인
-
     if (response.ok) {
       setMessage(data.message);
 
       if (keepLoggedIn) {
-        localStorage.setItem("token", data.accessToken); // 로그인 유지
-        console.log(
-          "토큰이 로컬 스토리지에 저장되었습니다: ",
-          localStorage.getItem("token")
-        );
+        localStorage.setItem("token", data.accessToken);
       } else {
-        sessionStorage.setItem("token", data.accessToken); // 세션 스토리지에 토큰 저장
-        console.log(
-          "토큰이 세션 스토리지에 저장되었습니다: ",
-          sessionStorage.getItem("token")
-        );
+        sessionStorage.setItem("token", data.accessToken);
       }
 
       if (rememberMe) {
-        localStorage.setItem("savedEmail", email); // 아이디 저장
+        localStorage.setItem("savedEmail", email);
       } else {
         localStorage.removeItem("savedEmail");
       }
 
+      setIsLoggedIn(true);
       router.push("/mypage");
     } else {
       setMessage(data.message);
