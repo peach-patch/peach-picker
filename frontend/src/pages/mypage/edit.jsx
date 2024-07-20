@@ -19,8 +19,11 @@ export default function Edit() {
       }
 
       try {
-        console.log(token);
-        const response = await fetch("/api/users/profile", {
+        const url = "/api/users/profile"; // 요청이 보내지는 URL
+        console.log("Token:", token);
+        console.log("URL:", url);
+
+        const response = await fetch(url, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -60,7 +63,11 @@ export default function Edit() {
     }
 
     try {
-      const response = await fetch("/api/users/profile", {
+      const url = "/api/users/profile"; // 요청이 보내지는 URL
+      console.log("Token:", token);
+      console.log("URL:", url);
+
+      const response = await fetch(url, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
