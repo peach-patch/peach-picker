@@ -16,7 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping(("/**"))
+                registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000", "https://peach-picker.site")
                         .allowedMethods(
                                 HttpMethod.GET.name(),
@@ -24,8 +24,9 @@ public class WebConfig implements WebMvcConfigurer {
                                 HttpMethod.POST.name(),
                                 HttpMethod.PUT.name(),
                                 HttpMethod.DELETE.name())
+                        .allowedHeaders("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin")
+                        .exposedHeaders("Authorization", "Content-Type")
                         .allowCredentials(true);
-
             }
         };
     }
