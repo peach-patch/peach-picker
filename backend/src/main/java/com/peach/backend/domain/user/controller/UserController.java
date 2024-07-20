@@ -1,6 +1,7 @@
 package com.peach.backend.domain.user.controller;
 
 import com.peach.backend.domain.user.dto.kakao.KakaoCodeReq;
+import com.peach.backend.domain.user.dto.req.ProfileUpdateReq;
 import com.peach.backend.domain.user.dto.req.SignInReq;
 import com.peach.backend.domain.user.dto.req.SignUpReq;
 import com.peach.backend.domain.user.dto.resp.ProfileResp;
@@ -33,10 +34,15 @@ public class UserController {
         return userFacade.signIn(req);
     }
 
-
     @GetMapping("profile")
     public ProfileResp getUserProfile(@CurrentUser User user) {
         return userFacade.getUserProfile(user);
+    }
+
+    @PatchMapping("profile")
+    public ResponseEntity<String> patchUserProfile(@CurrentUser User user, @RequestBody ProfileUpdateReq req) {
+        userFacade.patchUserProfile(user, req);
+        return ResponseEntity.ok("회원정보 수정이 완료되었습니다.");
     }
 
     @PostMapping("kakao-login")
