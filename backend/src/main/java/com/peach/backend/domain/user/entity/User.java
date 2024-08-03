@@ -50,4 +50,12 @@ public class User extends BaseTimeEntity {
     public void updateRecentLoggedIn(){
         recentLoggedIn = LocalDateTime.now();
     }
+
+    public void updateUserName(String name){
+        this.name = name;
+    }
+
+    public void updatePassword(String password){
+        this.password = password;
+    }
 }
