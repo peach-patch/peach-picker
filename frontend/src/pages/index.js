@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Menu from "../components/Menu";
 import peach_logo from "../../public/peach_logo.png";
 import register from "../../public/register.png";
+import dailycheck from "../../public/dailycheck.png";
 import follow from "../../public/follow.png";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,12 @@ export default function Home() {
 
       <section className="mt-10">NEW EVENT</section>
       <section className="flex">
+        <Image
+          src={dailycheck}
+          width={500}
+          alt="Peach Logo"
+          className="hidden m-10 sm:flex"
+        />
         <Image
           src={register}
           width={500}
