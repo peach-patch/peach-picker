@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fontsource/noto-sans": "^5.0.22",
+    "axios": "^1.7.3",
     "date-fns": "^3.6.0",
     "http-proxy-middleware": "^3.0.0",
     "jspdf": "^2.5.1",
@@ -18,6 +19,7 @@
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
+    "react-kakao-login": "^2.1.1",
     "react-table": "^7.8.0"
   },
   "devDependencies": {
