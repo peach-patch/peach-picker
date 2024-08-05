@@ -6,7 +6,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  output: "export",
+
   images: {
     unoptimized: true,
   },
@@ -17,8 +17,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-
-        destination: `${process.env.NEXT_PUBLIC_API_URL}//users/profile`, // 백엔드 주소
+        destination: `${process.env.NEXT_PUBLIC_API_URL}/:path*`,
       },
     ];
   },
