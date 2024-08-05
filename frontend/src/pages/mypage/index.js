@@ -44,6 +44,7 @@ export default function mypage() {
     };
     fetchProfile();
   }, []);
+
   return (
     <div className="flex flex-col items-center justify-center mt-20 mb-20">
       <div className="text-[20px] w-[380px] mb-2">기본 정보</div>
@@ -70,7 +71,9 @@ export default function mypage() {
             className="absolute left-[192px] top-[40px]"
             src={pick_line}
             height={80}
-          ></Image>
+            width={1} // width를 명시적으로 설정하여 경고를 피합니다
+            alt="Pick Line" // alt 속성을 추가합니다
+          />
         </div>
       </div>
       <div className="absolute left-[210px] top-[247px] w-[228px] h-[228px]"></div>
