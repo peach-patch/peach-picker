@@ -28,10 +28,12 @@ const Index = () => {
     }
 
     console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
-  }, []);
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.Kakao) {
+    if (
+      typeof window !== "undefined" &&
+      window.Kakao &&
+      !window.Kakao.isInitialized()
+    ) {
       window.Kakao.init(KAKAO_KEY);
     }
   }, []);
@@ -39,37 +41,42 @@ const Index = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/users/sign-in`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      }
-    );
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/sign-in`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
-    const data = await response.json();
-    if (response.ok) {
-      setMessage(data.message);
+      const data = await response.json();
+      if (response.ok) {
+        setMessage(data.message);
 
-      if (keepLoggedIn) {
-        localStorage.setItem("token", data.accessToken);
+        if (keepLoggedIn) {
+          localStorage.setItem("token", data.accessToken);
+        } else {
+          sessionStorage.setItem("token", data.accessToken);
+        }
+
+        if (rememberMe) {
+          localStorage.setItem("savedEmail", email);
+        } else {
+          localStorage.removeItem("savedEmail");
+        }
+
+        setIsLoggedIn(true);
+        router.push("/mypage");
       } else {
-        sessionStorage.setItem("token", data.accessToken);
+        setMessage(data.message);
       }
-
-      if (rememberMe) {
-        localStorage.setItem("savedEmail", email);
-      } else {
-        localStorage.removeItem("savedEmail");
-      }
-
-      setIsLoggedIn(true);
-      router.push("/mypage");
-    } else {
-      setMessage(data.message);
+    } catch (error) {
+      console.error("로그인 실패:", error);
+      setMessage("로그인 실패");
     }
   };
 
@@ -78,10 +85,7 @@ const Index = () => {
       console.error("Kakao SDK not loaded");
       return;
     }
-    console.log(
-      `${process.env.NEXT_PUBLIC_API_URL}/users/kakao-login`,
-      "백주소 확인"
-    );
+
     window.Kakao.Auth.login({
       success: async function (authObj) {
         console.log(authObj);
