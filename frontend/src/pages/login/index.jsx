@@ -8,8 +8,7 @@ import BasicBtn from "@/components/button/BasicBtn";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
-
-const KAKAO_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
+import KakaoLogin from "@/components/login/KakaoLogin";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -28,14 +27,6 @@ const Index = () => {
     }
 
     console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
-
-    if (
-      typeof window !== "undefined" &&
-      window.Kakao &&
-      !window.Kakao.isInitialized()
-    ) {
-      window.Kakao.init(KAKAO_KEY);
-    }
   }, []);
 
   const handleLogin = async (e) => {
@@ -78,55 +69,6 @@ const Index = () => {
       console.error("로그인 실패:", error);
       setMessage("로그인 실패");
     }
-  };
-
-  const handleKakaoLogin = () => {
-    if (typeof window === "undefined" || !window.Kakao) {
-      console.error("Kakao SDK not loaded");
-      return;
-    }
-
-    window.Kakao.Auth.login({
-      success: async function (authObj) {
-        console.log(authObj);
-        try {
-          const userRes = await window.Kakao.API.request({
-            url: "/v2/user/me",
-          });
-          console.log(userRes);
-
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/users/kakao-login`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                accessToken: authObj.access_token,
-                refreshToken: authObj.refresh_token,
-                kakaoAccount: userRes.kakao_account,
-              }),
-            }
-          );
-
-          const data = await response.json();
-          console.log(data);
-
-          if (response.ok) {
-            localStorage.setItem("token", data.token);
-            window.location.href = "/";
-          } else {
-            console.error("로그인 실패:", data.message);
-          }
-        } catch (error) {
-          console.error("카카오 로그인 실패:", error);
-        }
-      },
-      fail: function (err) {
-        console.error("카카오 로그인 실패:", err);
-      },
-    });
   };
 
   return (
@@ -196,13 +138,7 @@ const Index = () => {
           <div className="w-2/12 border-[1px] border-[#808080]"></div>
         </div>
         <div className="flex justify-center">
-          <Image
-            onClick={handleKakaoLogin}
-            src={kakao}
-            width={40}
-            className="m-3"
-            alt="Kakao"
-          />
+          <KakaoLogin />
           <Image src={google} width={40} className="m-3" alt="Google" />
           <Image src={naver} width={40} className="m-3" alt="Naver" />
         </div>

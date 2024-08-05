@@ -2,6 +2,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // reactStrictMode: true,
+  trailingSlash: false,
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -16,7 +17,8 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://peach-picker.site/api//users/profile", // 백엔드 주소
+
+        destination: `${process.env.NEXT_PUBLIC_API_URL}//users/profile`, // 백엔드 주소
       },
     ];
   },
