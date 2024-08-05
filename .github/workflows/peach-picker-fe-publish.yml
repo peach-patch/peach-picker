@@ -20,7 +20,7 @@ jobs:
           npm install
           npm run build
 
-      - run: ls -al frontend
+      - run: ls -al frontend/out
   
       - name: copy build result to nginx server
         uses: garygrossgarten/github-action-scp@release
