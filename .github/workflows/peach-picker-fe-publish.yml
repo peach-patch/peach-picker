@@ -43,4 +43,5 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           source: "./frontend/out/*"
           target: /home/woo/nginx/html/peach-picker/
-          # overwrite: true
+          overwrite: true
+          strip_components: 3
