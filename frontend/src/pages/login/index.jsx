@@ -25,8 +25,6 @@ const Index = () => {
       setEmail(savedEmail);
       setRememberMe(true);
     }
-
-    console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
   }, []);
 
   const handleLogin = async (e) => {
