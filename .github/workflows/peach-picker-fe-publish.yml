@@ -32,3 +32,4 @@ jobs:
           local: './frontend/out'
           remote: '/home/woo/nginx/html/peach-picker/'
           recursive: true
+          rmRemote: true
