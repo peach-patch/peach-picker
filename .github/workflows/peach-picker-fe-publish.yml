@@ -44,4 +44,4 @@ jobs:
           source: "./frontend/out/*"
           target: /home/woo/nginx/html/peach-picker/
           # overwrite: true
-          # strip_components: 3
+          strip_components: 2
