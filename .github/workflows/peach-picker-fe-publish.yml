@@ -22,14 +22,25 @@ jobs:
 
       - run: ls -al frontend/out
   
+      # - name: copy build result to nginx server
+      #   uses: garygrossgarten/github-action-scp@release
+      #   with:
+      #     host: ${{ secrets.SERVER_HOST }}
+      #     username: ${{ secrets.SERVER_USER }}
+      #     password: ${{ secrets.SERVER_PASSWD }}
+      #     port: ${{ secrets.SERVER_PORT }}
+      #     local: './frontend/out'
+      #     remote: '/home/woo/nginx/html/peach-picker/'
+      #     recursive: true
+      #     rmRemote: true
+    
       - name: copy build result to nginx server
-        uses: garygrossgarten/github-action-scp@release
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWD }}
           port: ${{ secrets.SERVER_PORT }}
-          local: './frontend/out'
-          remote: '/home/woo/nginx/html/peach-picker/'
-          recursive: true
-          rmRemote: true
+          source: "./frontend/out/*"
+          target: /home/woo/nginx/html/peach-picker/
+          overwrite: true
