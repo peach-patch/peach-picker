@@ -1,56 +1,76 @@
+// src/pages/mypage.js
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import pick_line from "../../images/pick_line.png";
 import Image from "next/image";
 import Link from "next/link";
+import useAuthStore from "../../store/authStore";
 
-export default function mypage() {
+const MyPage = () => {
+  const { isLoggedIn, token, isInitialized, initialize } = useAuthStore();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [profileUrl, setProfileUrl] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const token =
-        localStorage.getItem("token") || sessionStorage.getItem("token");
-      if (!token) {
-        setMessage("로그인이 필요합니다.");
+    if (!isInitialized) {
+      initialize();
+    }
+  }, [initialize, isInitialized]);
+
+  useEffect(() => {
+    if (isInitialized) {
+      if (!isLoggedIn) {
+        router.push("/login");
         return;
       }
 
-      try {
-        console.log(token);
-        const response = await fetch("/api/users/profile", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const fetchProfile = async () => {
+        try {
+          const response = await fetch("/api/users/profile", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-        if (!response.ok) {
-          throw new Error("프로필 정보를 가져오는데 실패했습니다.");
+          if (!response.ok) {
+            throw new Error("프로필 정보를 가져오는데 실패했습니다.");
+          }
+
+          const data = await response.json();
+          setUsername(data.name);
+          setEmail(data.email);
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+          setMessage("프로필 정보를 가져오는데 실패했습니다.");
         }
+      };
 
-        const data = await response.json();
-        setUsername(data.name);
-        setEmail(data.email);
+      fetchProfile();
+    }
+  }, [isInitialized, isLoggedIn, token, router]);
 
-        console.log(data, "edit에서 확인");
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        setMessage("프로필 정보를 가져오는데 실패했습니다.");
-      }
-    };
-    fetchProfile();
-  }, []);
+  if (!isInitialized) {
+    return <div>Loading...</div>;
+  }
+
+  if (message) {
+    return (
+      <div className="flex flex-col items-center justify-center mt-20 mb-20">
+        {message}
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center mt-20 mb-20">
       <div className="text-[20px] w-[380px] mb-2">기본 정보</div>
       <div className="flex flex-col justify-evenly w-[380px] h-[127px] bg-[#fff] border-[1px] border-solid border-[#000]">
-        <div className=" ml-5 text-[18px]  ">Username : {username}</div>
-        <div className=" ml-5 text-[18px] ">Email : {email}</div>
+        <div className="ml-5 text-[18px]">Username : {username}</div>
+        <div className="ml-5 text-[18px]">Email : {email}</div>
       </div>
       <div className="mt-10 text-[20px] w-[380px] mb-2">나의 추첨 현황</div>
       <div className="w-[383px] h-[138px]">
@@ -89,4 +109,6 @@ export default function mypage() {
       </div>
     </div>
   );
-}
+};
+
+export default MyPage;

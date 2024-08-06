@@ -1,3 +1,4 @@
+// src/pages/login/index.js
 import React, { useState, useEffect } from "react";
 import peach_logo from "../../../public/peach_logo.png";
 import kakao from "../../images/kakao.png";
@@ -7,8 +8,8 @@ import Image from "next/image";
 import BasicBtn from "@/components/button/BasicBtn";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useAuth } from "@/contexts/AuthContext";
 import KakaoLogin from "@/components/login/KakaoLogin";
+import useAuthStore from "../../store/authStore";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +18,16 @@ const Index = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const router = useRouter();
-  const { setIsLoggedIn } = useAuth();
+  const { isLoggedIn, login } = useAuthStore((state) => ({
+    isLoggedIn: state.isLoggedIn,
+    login: state.login,
+  }));
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.replace("/");
+    }
+  }, [isLoggedIn, router]);
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("savedEmail");
@@ -58,7 +68,7 @@ const Index = () => {
           localStorage.removeItem("savedEmail");
         }
 
-        setIsLoggedIn(true);
+        login(data.accessToken, keepLoggedIn);
         router.push("/mypage");
       } else {
         setMessage(data.message);

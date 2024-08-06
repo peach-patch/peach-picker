@@ -1,12 +1,22 @@
+// src/pages/_app.js
+import { useEffect } from "react";
+import useAuthStore from "../store/authStore";
 import "@/styles/globals.css";
 import Menu from "@/components/Menu";
-import { AuthProvider } from "@/contexts/AuthContext";
 
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps }) {
+  const initialize = useAuthStore((state) => state.initialize);
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
+
   return (
-    <AuthProvider>
+    <>
       <Menu />
       <Component {...pageProps} />
-    </AuthProvider>
+    </>
   );
 }
+
+export default App;
