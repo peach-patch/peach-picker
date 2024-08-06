@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class KakaoCodeReq {
     private String code;
+    private String client_env;
 }

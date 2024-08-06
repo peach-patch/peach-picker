@@ -28,6 +28,8 @@ public class KakaoLoginService {
     private String kakaoClientId;
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     private String kakaoRedirectUri;
+    @Value("${dev.oauth2.redirect.kakao}")
+    private String devKakaoRedirectUri;
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     private String kakaoClientSecret;
 
@@ -73,7 +75,7 @@ public class KakaoLoginService {
         MultiValueMap<String , String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id",kakaoClientId );
-        params.add("redirect_uri", kakaoRedirectUri);
+        params.add("redirect_uri", kakaoReq.getClient_env() != null && kakaoReq.getClient_env().equals("dev") ? devKakaoRedirectUri : kakaoRedirectUri);
         params.add("code", kakaoReq.getCode());
         params.add("client_secret", kakaoClientSecret);
 
