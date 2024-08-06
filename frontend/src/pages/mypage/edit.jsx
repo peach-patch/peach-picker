@@ -97,7 +97,10 @@ export default function Edit() {
         setMessage("프로필이 성공적으로 업데이트되었습니다.");
       } else {
         const textData = await response.text();
-        setMessage(textData);
+        console.log(textData, "확인");
+        alert(textData);
+        router.push("/mypage");
+        //setMessage(textData);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
