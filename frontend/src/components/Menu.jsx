@@ -1,22 +1,26 @@
+// src/components/Menu.js
 import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import useAuthStore from "../store/authStore";
 import menu_logo from "../../public/피치피커.png";
 import hamburger from "../images/hamburger.png";
 import bell from "../images/bell.png";
 import search from "../images/search.png";
 import treasure from "../images/treasure.png";
 import home from "../images/home.png";
-import Image from "next/image";
-import Link from "next/link";
 import peach_logo from "../../public/peach_logo.png";
-import { useAuth } from "@/contexts/AuthContext";
+import Image from "next/image";
 
-export default function Menu() {
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
+const Menu = () => {
+  const { isLoggedIn, logout } = useAuthStore();
+  const router = useRouter();
 
   const handleLogout = () => {
+    logout();
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
-    setIsLoggedIn(false);
+    router.push("/login");
   };
 
   return (
@@ -24,12 +28,7 @@ export default function Menu() {
       <div className="flex justify-between hidden p-2 bg-menuColor font-noto-sans sm:flex">
         <div className="flex items-center ml-5">
           <Link href="/">
-            <Image
-              src={menu_logo}
-              width={90}
-              height={50}
-              alt="메뉴 로고"
-            ></Image>
+            <Image src={menu_logo} width={90} height={50} alt="메뉴 로고" />
           </Link>
           <div className="p-2 ml-5">
             <Link href="/drawings">실시간 추첨</Link>
@@ -71,7 +70,7 @@ export default function Menu() {
             width={280}
             height={280}
             alt="피치피커 로고"
-          ></Image>
+          />
         </div>
         <div className="fixed bottom-0 flex items-center justify-around w-full p-4 border-t-2 border-gray-500 sm:hidden">
           <Link href="/">
@@ -81,7 +80,7 @@ export default function Menu() {
               width={30}
               height={30}
               alt="홈"
-            ></Image>
+            />
           </Link>
           <Link href="/completedDrawings">
             <Image
@@ -90,7 +89,7 @@ export default function Menu() {
               width={30}
               height={30}
               alt="검색"
-            ></Image>
+            />
           </Link>
           <Link href="/drawings">
             <Image
@@ -99,7 +98,7 @@ export default function Menu() {
               width={30}
               height={30}
               alt="추첨"
-            ></Image>
+            />
           </Link>
           <Link href="/mypage">
             <Image
@@ -108,7 +107,7 @@ export default function Menu() {
               width={30}
               height={30}
               alt="알림"
-            ></Image>
+            />
           </Link>
           {isLoggedIn ? (
             <button onClick={handleLogout}>
@@ -118,7 +117,7 @@ export default function Menu() {
                 width={30}
                 height={30}
                 alt="로그아웃"
-              ></Image>
+              />
             </button>
           ) : (
             <Link href="/login">
@@ -128,11 +127,13 @@ export default function Menu() {
                 width={30}
                 height={30}
                 alt="로그인"
-              ></Image>
+              />
             </Link>
           )}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Menu;

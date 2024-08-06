@@ -1,59 +1,62 @@
+// src/pages/edit.js
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import useAuthStore from "../../store/authStore";
 
 export default function Edit() {
+  const { isLoggedIn, token, isInitialized, initialize } = useAuthStore();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const token =
-        localStorage.getItem("token") || sessionStorage.getItem("token");
-      if (!token) {
+    if (!isInitialized) {
+      initialize();
+    }
+  }, [initialize, isInitialized]);
+
+  useEffect(() => {
+    if (isInitialized) {
+      if (!isLoggedIn) {
         setMessage("로그인이 필요합니다.");
+        router.push("/login");
         return;
       }
 
-      try {
-        console.log(token);
-        const response = await fetch("/api/users/profile", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+      const fetchProfile = async () => {
+        try {
+          const response = await fetch("/api/users/profile", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
-        if (!response.ok) {
-          throw new Error("프로필 정보를 가져오는데 실패했습니다.");
+          if (!response.ok) {
+            throw new Error("프로필 정보를 가져오는데 실패했습니다.");
+          }
+
+          const data = await response.json();
+          setUsername(data.name);
+          setEmail(data.email);
+          setProfileUrl(data.profileUrl);
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+          setMessage("프로필 정보를 가져오는데 실패했습니다.");
         }
+      };
 
-        const data = await response.json();
-        setUsername(data.name);
-        setEmail(data.email);
-        setProfileUrl(data.profileUrl);
-        console.log(data, "edit에서 확인");
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        setMessage("프로필 정보를 가져오는데 실패했습니다.");
-      }
-    };
-
-    fetchProfile();
-  }, []);
+      fetchProfile();
+    }
+  }, [isInitialized, isLoggedIn, token, router]);
 
   const handleUpdateProfile = async () => {
-    const token =
-      localStorage.getItem("token") || sessionStorage.getItem("token");
-    if (!token) {
-      setMessage("로그인이 필요합니다.");
-      return;
-    }
-
     if (password !== confirmPassword) {
       setMessage("비밀번호가 일치하지 않습니다.");
       return;
@@ -75,7 +78,7 @@ export default function Edit() {
 
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
-        const data = await response.json();
+        await response.json();
         setMessage("프로필이 성공적으로 업데이트되었습니다.");
       } else {
         const textData = await response.text();
@@ -86,6 +89,10 @@ export default function Edit() {
       setMessage("프로필 업데이트에 실패했습니다.");
     }
   };
+
+  if (!isInitialized) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col items-center justify-center">
