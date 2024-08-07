@@ -34,49 +34,20 @@ const KakaoLogin = () => {
     if (isMobile) {
       window.Kakao.Auth.authorize({
         redirectUri: REDIRECT_URL,
-        success: handleKakaoResponse,
+        success: (authObj) => {
+          router.push(`/oauth/code/kakao?code=${authObj.code}`);
+        },
         fail: function (err) {
           console.error("Kakao login failed", err);
+          alert("카카오 로그인 실패: " + err.message);
         },
       });
     } else {
       window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
-    }
-  };
-
-  const handleKakaoResponse = async (authObj) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/kakao-login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            code: authObj.code,
-            client_env: process.env.CLIENT_ENV,
-          }),
-        }
+      console.log(
+        `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`,
+        "왱"
       );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        login(data.token, true);
-        console.log(data.user, "정보확인해본당");
-        localStorage.setItem("userName", data.user.properties.nickname);
-        localStorage.setItem("userProfile", data.user.properties.profile_image);
-
-        alert("로그인 성공!");
-        router.push("/mypage");
-      } else {
-        console.error("로그인 실패:", data.message);
-        alert("로그인 실패: " + data.message);
-      }
-    } catch (error) {
-      console.error("카카오 로그인 실패:", error);
-      alert("카카오 로그인 실패: " + error.message);
     }
   };
 
