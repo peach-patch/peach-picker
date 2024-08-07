@@ -40,6 +40,40 @@ const KakaoLogin = () => {
     }
   };
 
+  const handleKakaoResponse = async (authObj) => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/kakao-login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            code: authObj.code,
+            client_env: process.env.CLIENT_ENV,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        login(data.token, true);
+        console.log(data.user, "정보확인해본당");
+        localStorage.setItem("userName", data.user.properties.nickname);
+        localStorage.setItem("userProfile", data.user.properties.profile_image);
+
+        alert("로그인 성공!");
+        router.push("/mypage");
+      } else {
+        console.error("로그인 실패:", data.message);
+      }
+    } catch (error) {
+      console.error("카카오 로그인 실패:", error);
+    }
+  };
+
   return (
     <div onClick={handleKakaoLogin}>
       <Image src={kakao} width={40} className="m-3" alt="kakao login" />
