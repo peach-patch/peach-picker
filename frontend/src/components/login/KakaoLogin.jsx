@@ -34,6 +34,10 @@ const KakaoLogin = () => {
     if (isMobile) {
       window.Kakao.Auth.authorize({
         redirectUri: REDIRECT_URL,
+        success: handleKakaoResponse,
+        fail: function (err) {
+          console.error("Kakao login failed", err);
+        },
       });
     } else {
       window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
