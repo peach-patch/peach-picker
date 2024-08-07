@@ -27,7 +27,7 @@ const KakaoLogin = () => {
       return;
     }
     console.log("Starting Kakao login process...");
-    console.log(REDIRECT_URL);
+    console.log(REDIRECT_URL, "확인확인");
     window.Kakao.Auth.authorize({
       redirectUri: REDIRECT_URL,
     });
