@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   const bodyParams = {
     grant_type: "authorization_code",
     client_id: process.env.NEXT_PUBLIC_KAKAO_JS_KEY,
-    redirect_uri: process.env.REDIRECT_URL,
+    redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URL,
     code,
   };
 
