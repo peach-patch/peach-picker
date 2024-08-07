@@ -72,9 +72,11 @@ const KakaoLogin = () => {
         router.push("/mypage");
       } else {
         console.error("로그인 실패:", data.message);
+        alert("로그인 실패: " + data.message);
       }
     } catch (error) {
       console.error("카카오 로그인 실패:", error);
+      alert("카카오 로그인 실패: " + error.message);
     }
   };
 
