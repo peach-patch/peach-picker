@@ -1,10 +1,14 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import Menu from "../components/Menu";
 import peach_logo from "../../public/peach_logo.png";
 import register from "../../public/register.png";
 import dailycheck from "../../public/dailycheck.png";
 import follow from "../../public/follow.png";
+import possible from "../../public/possible.png";
+import tips from "../../public/tips.png";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -31,25 +35,66 @@ export default function Home() {
       <section className="mt-10">실시간 랭킹</section>
 
       <section className="mt-10">NEW EVENT</section>
-      <section className="flex">
-        <Image
-          src={dailycheck}
-          width={500}
-          alt="Peach Logo"
-          className="hidden m-10 sm:flex"
-        />
-        <Image
-          src={register}
-          width={500}
-          alt="Peach Logo"
-          className="hidden m-10 sm:flex"
-        />
-        <Image
-          src={follow}
-          width={500}
-          alt="Peach Logo"
-          className="hidden m-10 sm:flex"
-        />
+      <section className="w-full max-w-screen-lg ">
+        <Carousel
+          showThumbs={false}
+          autoPlay
+          infiniteLoop
+          centerMode
+          centerSlidePercentage={33.3}
+          showStatus={false}
+        >
+          <div>
+            <Image
+              src={dailycheck}
+              layout="responsive"
+              width={300}
+              height={300}
+              alt="Daily Check"
+              className="m-2"
+            />
+          </div>
+          <div>
+            <Image
+              src={register}
+              layout="responsive"
+              width={300}
+              height={300}
+              alt="Register"
+              className="m-2"
+            />
+          </div>
+          <div>
+            <Image
+              src={possible}
+              layout="responsive"
+              width={300}
+              height={300}
+              alt="Possible"
+              className="m-2"
+            />
+          </div>
+          <div>
+            <Image
+              src={tips}
+              layout="responsive"
+              width={300}
+              height={300}
+              alt="Tips"
+              className="m-2"
+            />
+          </div>
+          <div>
+            <Image
+              src={follow}
+              layout="responsive"
+              width={300}
+              height={300}
+              alt="Follow"
+              className="m-2"
+            />
+          </div>
+        </Carousel>
       </section>
       <section>
         <div>확인</div>
