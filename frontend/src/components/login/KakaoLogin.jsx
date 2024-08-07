@@ -35,7 +35,9 @@ const KakaoLogin = () => {
       window.Kakao.Auth.authorize({
         redirectUri: REDIRECT_URL,
         success: (authObj) => {
-          router.push(`/oauth/code/kakao?code=${authObj.code}`);
+          router.push(
+            `https://kauth.kakao.com/oauth/code/kakao?code=${authObj.code}`
+          );
         },
         fail: function (err) {
           console.error("Kakao login failed", err);
