@@ -5,10 +5,9 @@ import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
 
 const KAKAO_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
-const CLIENT_ENV = process.env.CLIENT_ENV;
+const REDIRECT_URL = process.env.REDIRECT_URL;
 
 const KakaoLogin = () => {
-  console.log("로그인시작");
   const router = useRouter();
   const { login } = useAuthStore();
 
@@ -19,20 +18,18 @@ const KakaoLogin = () => {
       !window.Kakao.isInitialized()
     ) {
       window.Kakao.init(KAKAO_KEY);
-      console.log("Kakao SDK initialized with key:", KAKAO_KEY);
+      console.log("Kakao SDK initialized with key: 확인합니다", KAKAO_KEY);
     }
   }, []);
 
   const handleKakaoLogin = () => {
-    console.log("클릭");
     if (typeof window === "undefined" || !window.Kakao) {
       console.error("Kakao SDK not loaded");
       return;
     }
     console.log("Starting Kakao login process...");
-    console.log(`${window.location.origin}/api/oauth/kakao`);
     window.Kakao.Auth.authorize({
-      redirectUri: `${window.location.origin}/api/oauth/kakao`,
+      redirectUri: REDIRECT_URL,
     });
   };
 

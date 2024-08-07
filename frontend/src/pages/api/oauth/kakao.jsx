@@ -1,10 +1,16 @@
+// pages/api/oauth/kakao.js
+
 export default async function handler(req, res) {
-  console.log("암것도안나오나");
+  console.log("Handler 시작");
+
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed" });
+    console.log("잘못된 메서드:", req.method);
+    return res.status(405).json({ message: "Method not allowed 확인코드" });
   }
 
   const { code, client_env } = req.body;
+  console.log("코드:", code, "클라이언트 환경:", client_env);
+
   const bodyParams = {
     grant_type: "authorization_code",
     client_id: process.env.NEXT_PUBLIC_KAKAO_JS_KEY,
@@ -17,13 +23,13 @@ export default async function handler(req, res) {
     bodyParams.client_env = client_env;
   }
 
-  console.log("Body Params:", bodyParams);
+  console.log("바디 파람 확인", bodyParams);
 
   try {
     const response = await fetch("https://kauth.kakao.com/oauth/token", {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
       },
       body: new URLSearchParams(bodyParams),
     });
@@ -42,6 +48,7 @@ export default async function handler(req, res) {
       });
 
       const userData = await userRes.json();
+      console.log("User Data:", userData);
 
       return res.status(200).json({
         message: "로그인 성공",
@@ -49,6 +56,7 @@ export default async function handler(req, res) {
         user: userData,
       });
     } else {
+      console.log("카카오 API 응답 에러:", data);
       return res
         .status(response.status)
         .json({ message: data.error_description || "로그인 실패" });
