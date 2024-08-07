@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
 
 const KAKAO_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
-const REDIRECT_URL = process.env.REDIRECT_URL;
+const REDIRECT_URL = process.env.NEXT_PUBLIC_REDIRECT_URL;
 
 const KakaoLogin = () => {
   const router = useRouter();
