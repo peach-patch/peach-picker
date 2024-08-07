@@ -18,7 +18,6 @@ const KakaoLogin = () => {
       !window.Kakao.isInitialized()
     ) {
       window.Kakao.init(KAKAO_KEY);
-      console.log("Kakao SDK initialized with key: 확인합니다", KAKAO_KEY);
     }
   }, []);
 
@@ -28,6 +27,7 @@ const KakaoLogin = () => {
       return;
     }
     console.log("Starting Kakao login process...");
+    console.log(REDIRECT_URL);
     window.Kakao.Auth.authorize({
       redirectUri: REDIRECT_URL,
     });
