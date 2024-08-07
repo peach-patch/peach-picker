@@ -28,9 +28,16 @@ const KakaoLogin = () => {
     }
     console.log("Starting Kakao login process...");
     console.log(REDIRECT_URL, "확인확인");
-    window.Kakao.Auth.authorize({
-      redirectUri: REDIRECT_URL,
-    });
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    console.log(isMobile);
+    if (isMobile) {
+      window.Kakao.Auth.authorize({
+        redirectUri: REDIRECT_URL,
+      });
+    } else {
+      window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
+    }
   };
 
   return (
