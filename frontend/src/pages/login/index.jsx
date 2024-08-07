@@ -30,6 +30,7 @@ const Index = () => {
   }, [isLoggedIn, router]);
 
   useEffect(() => {
+    console.log("확인합니다");
     const savedEmail = localStorage.getItem("savedEmail");
     if (savedEmail) {
       setEmail(savedEmail);
