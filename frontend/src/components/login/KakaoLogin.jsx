@@ -1,16 +1,24 @@
 import React, { useEffect } from "react";
 import kakao from "../../images/kakao.png";
 import Image from "next/image";
-const KAKAO_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
+import { useRouter } from "next/router";
+import useAuthStore from "../../store/authStore";
 
+const KAKAO_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
 const KakaoLogin = () => {
+  console.log("시작");
+  const router = useRouter();
+  const { login } = useAuthStore();
+
   useEffect(() => {
+    console.log(`${window.location.origin}/api/oauth/kakao`);
     if (
       typeof window !== "undefined" &&
       window.Kakao &&
       !window.Kakao.isInitialized()
     ) {
       window.Kakao.init(KAKAO_KEY);
+      console.log("Kakao SDK initialized with key:", KAKAO_KEY);
     }
   }, []);
 
@@ -19,50 +27,10 @@ const KakaoLogin = () => {
       console.error("Kakao SDK not loaded");
       return;
     }
-    console.log(
-      `${process.env.NEXT_PUBLIC_API_URL}/users/kakao-login`,
-      "백주소 확인"
-    );
-    window.Kakao.Auth.login({
-      success: async function (authObj) {
-        console.log(authObj);
-        try {
-          const userRes = await window.Kakao.API.request({
-            url: "/v2/user/me",
-          });
-          console.log(userRes);
+    console.log("Starting Kakao login process...");
 
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/users/kakao-login`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                accessToken: authObj.access_token,
-                refreshToken: authObj.refresh_token,
-                kakaoAccount: userRes.kakao_account,
-              }),
-            }
-          );
-
-          const data = await response.json();
-          console.log(data);
-
-          if (response.ok) {
-            localStorage.setItem("token", data.token);
-            window.location.href = "/";
-          } else {
-            console.error("로그인 실패:", data.message);
-          }
-        } catch (error) {
-          console.error("카카오 로그인 실패:", error);
-        }
-      },
-      fail: function (err) {
-        console.error("카카오 로그인 실패:", err);
-      },
+    window.Kakao.Auth.authorize({
+      redirectUri: `${window.location.origin}/api/oauth/kakao`,
     });
   };
 

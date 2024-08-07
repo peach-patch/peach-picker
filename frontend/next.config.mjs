@@ -1,4 +1,3 @@
-// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // reactStrictMode: true,
@@ -12,6 +11,9 @@ const nextConfig = {
   },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NEXT_PUBLIC_KAKAO_JS_KEY: process.env.NEXT_PUBLIC_KAKAO_JS_KEY,
+    CLIENT_ENV: process.env.CLIENT_ENV,
+    REDIRECT_URL: process.env.REDIRECT_URL,
   },
   async rewrites() {
     return [
