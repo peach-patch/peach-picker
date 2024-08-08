@@ -7,6 +7,7 @@ const KakaoOAuthCallback = () => {
   const { login } = useAuthStore();
 
   useEffect(() => {
+    console.log("이동 확인");
     const handleKakaoResponse = async (code) => {
       try {
         const bodyParams = new URLSearchParams({
