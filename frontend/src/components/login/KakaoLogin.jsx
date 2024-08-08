@@ -42,7 +42,6 @@ const KakaoLogin = () => {
         },
       });
     } else {
-      window.location.href = "https://peach-picker.site/oauth/code/kakao";
       alert("모바일이 아닌 경우");
       window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
     }
