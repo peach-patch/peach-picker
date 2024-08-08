@@ -8,7 +8,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        "noto-sans": ['"Noto Sans"', "sans-serif"],
+        sans: ["lsRg"],
+        lsBd: ["lsBd"],
+        lsTh: ["lsTh"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -20,7 +22,6 @@ module.exports = {
         "2vw": "2vw",
         "5vw": "5vw",
       },
-
       colors: {
         menuColor: "#F7F7F7",
       },
