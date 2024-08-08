@@ -47,10 +47,10 @@ const KakaoOAuthCallback = () => {
             "userProfile",
             userData.properties.profile_image
           );
+          localStorage.setItem("email", userData.kakao_account.email);
 
           login(accessToken, true);
-          console.log("유저 데이터 확인", userData);
-
+          console.log("유저 데이터 확인", userData.kakao_account.email);
           alert("로그인 성공!");
           router.push("/mypage");
         } else {

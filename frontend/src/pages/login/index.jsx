@@ -133,9 +133,7 @@ const Index = () => {
         />
         <div className="flex m-1 mt-4">
           <div className="text-sm font-bold">
-            <Link href={"/oauth/code"}>회원가입 |</Link>
-            <Link href={"/oauth"}>회원가입 |</Link>
-            <Link href={"/oauth/code/kakao"}>회원가입 |</Link>
+            <Link href={"/login/signup"}>회원가입 |</Link>
           </div>
           <div className="ml-1 text-sm">아이디/비밀번호 찾기</div>
         </div>
