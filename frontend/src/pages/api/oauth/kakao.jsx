@@ -26,7 +26,6 @@ const KakaoOAuthCallback = () => {
         });
 
         const data = await response.json();
-        console.log("Token response:", data);
 
         if (response.ok) {
           const accessToken = data.access_token;
@@ -40,7 +39,6 @@ const KakaoOAuthCallback = () => {
           });
 
           const userData = await userRes.json();
-          console.log("User data:", userData);
 
           localStorage.setItem("userName", userData.properties.nickname);
           localStorage.setItem(
@@ -49,7 +47,6 @@ const KakaoOAuthCallback = () => {
           );
 
           login(accessToken, true);
-          console.log("유저 데이터 확인", userData);
 
           alert("로그인 성공!");
           router.push("/mypage");

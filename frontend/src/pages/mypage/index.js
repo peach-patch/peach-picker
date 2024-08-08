@@ -13,6 +13,7 @@ const MyPage = () => {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
+  console.log(" 회원정보 시작");
   useEffect(() => {
     if (!isInitialized) {
       initialize();
@@ -26,8 +27,11 @@ const MyPage = () => {
         return;
       }
       const storedUserName = localStorage.getItem("userName");
+      const storedEmail = localStorage.getItem("email");
+      console.log(storedEmail, "??");
       if (storedUserName) {
         setUsername(storedUserName);
+        setEmail(storedEmail);
         // 프로필 사진이 있다면 프로필 사진도 설정할 수 있음
       } else {
         const fetchProfile = async () => {
