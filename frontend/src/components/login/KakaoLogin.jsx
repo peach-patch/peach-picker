@@ -34,8 +34,7 @@ const KakaoLogin = () => {
       window.Kakao.Auth.authorize({
         redirectUri: REDIRECT_URL,
         success: (authObj) => {
-          console.log("이것도 확인");
-          // router.push(`/oauth/code/kakao?code=${authObj.code}`);
+          router.push(`/oauth/code/kakao?code=${authObj.code}`);
         },
         fail: function (err) {
           console.error("Kakao login failed", err);
@@ -43,7 +42,8 @@ const KakaoLogin = () => {
         },
       });
     } else {
-      window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
+      alert("모바일이 아닌 경우");
+      // window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_KEY}&redirect_uri=${REDIRECT_URL}&response_type=code`;
     }
   };
 
