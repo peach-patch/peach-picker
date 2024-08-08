@@ -97,7 +97,6 @@ export default function Home() {
         </Carousel>
       </section>
       <section>
-        <div>확인</div>
         <div>공지사항 이용약관 개인정보처리방침 공식 인스타그램</div>
         <div>Copyright © PEACH-PATCH DEPARTMENT. All rights reserved.</div>
       </section>

@@ -27,7 +27,6 @@ const KakaoLogin = () => {
       return;
     }
     console.log("Starting Kakao login process...");
-    console.log(REDIRECT_URL, "확인확인");
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     console.log(isMobile);
