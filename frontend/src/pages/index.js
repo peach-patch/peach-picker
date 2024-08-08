@@ -8,6 +8,7 @@ import possible from "../../public/possible.png";
 import tips from "../../public/tips.png";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -96,10 +97,7 @@ export default function Home() {
           </div>
         </Carousel>
       </section>
-      <section>
-        <div>공지사항 이용약관 개인정보처리방침 공식 인스타그램</div>
-        <div>Copyright © PEACH-PATCH DEPARTMENT. All rights reserved.</div>
-      </section>
+      <Footer />
     </div>
   );
 }

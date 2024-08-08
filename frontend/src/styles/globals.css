@@ -1,8 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "@fontsource/noto-sans"; /* 기본 글꼴 */
-@import "@fontsource/noto-sans/700.css"; /* 굵기 700 */
+@font-face {
+  font-family: "lsRg";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Rg.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "lsBd";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "lsTh";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Th.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
 
 body {
   @apply font-sans;
