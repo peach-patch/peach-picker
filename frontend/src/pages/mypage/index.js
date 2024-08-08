@@ -25,31 +25,36 @@ const MyPage = () => {
         router.push("/login");
         return;
       }
+      const storedUserName = localStorage.getItem("userName");
+      if (storedUserName) {
+        setUsername(storedUserName);
+        // 프로필 사진이 있다면 프로필 사진도 설정할 수 있음
+      } else {
+        const fetchProfile = async () => {
+          try {
+            const response = await fetch("/api/users/profile", {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
 
-      const fetchProfile = async () => {
-        try {
-          const response = await fetch("/api/users/profile", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
+            if (!response.ok) {
+              throw new Error("프로필 정보를 가져오는데 실패했습니다.");
+            }
 
-          if (!response.ok) {
-            throw new Error("프로필 정보를 가져오는데 실패했습니다.");
+            const data = await response.json();
+            setUsername(data.name);
+            setEmail(data.email);
+          } catch (error) {
+            console.error("Error fetching profile:", error);
+            setMessage("프로필 정보를 가져오는데 실패했습니다.");
           }
+        };
 
-          const data = await response.json();
-          setUsername(data.name);
-          setEmail(data.email);
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-          setMessage("프로필 정보를 가져오는데 실패했습니다.");
-        }
-      };
-
-      fetchProfile();
+        fetchProfile();
+      }
     }
   }, [isInitialized, isLoggedIn, token, router]);
 
