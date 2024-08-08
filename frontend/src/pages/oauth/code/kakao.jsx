@@ -28,12 +28,13 @@ const KakaoOAuthCallback = () => {
 
         if (response.ok) {
           login(data.token, true);
+          console.log(data.user, "User information");
           localStorage.setItem("userName", data.user.properties.nickname);
           localStorage.setItem(
             "userProfile",
             data.user.properties.profile_image
           );
-          console.log(data.user);
+          console.log("유저 데이터 확인", data.user);
           alert("로그인 성공!");
           router.push("/mypage");
         } else {
