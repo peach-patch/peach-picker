@@ -1,3 +1,4 @@
+// next.config.mjs
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
@@ -21,16 +22,7 @@ const nextConfig = {
       },
     ];
   },
-  output: "export", // 정적 사이트 생성을 위한 설정
-  exportPathMap: async function (
-    defaultPathMap, // Next.js가 기본적으로 생성하는 경로 맵
-    { dev, dir, outDir, distDir, buildId }
-  ) {
-    return {
-      ...defaultPathMap, // 기본 경로 맵을 포함
-      "/oauth/code/kakao/test": { page: "/oauth/code/kakao/test" }, // 추가 경로 정의
-    };
-  },
+  output: "export",
 };
 
 export default nextConfig;

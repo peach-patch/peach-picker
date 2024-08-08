@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function index() {
-  return <div>index</div>;
+  return <div>여기가 화면에 나오길..</div>;
 }
