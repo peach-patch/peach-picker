@@ -10,8 +10,6 @@ const KakaoOAuthCallback = () => {
     const { code } = router.query;
 
     if (code) {
-      console.log("코드 확인:", code);
-
       const sendCodeToBackend = async (code) => {
         try {
           const response = await fetch("/api/users/kakao-login", {
@@ -21,7 +19,6 @@ const KakaoOAuthCallback = () => {
             },
             body: JSON.stringify({
               code,
-              client_env: "dev",
             }),
           });
 

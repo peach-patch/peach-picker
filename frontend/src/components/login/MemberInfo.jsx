@@ -25,15 +25,13 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
       const storedProfileImg = localStorage.getItem("profileImg");
 
       if (storedUserName) {
-        console.log("저장되어있으면");
         setUsername(storedUserName);
         setEmail(storedEmail);
         setProfileImg(storedProfileImg);
       } else {
-        console.log("읽어와야함");
         const fetchProfile = async () => {
           try {
-            const response = await fetch(`api/users/profile`, {
+            const response = await fetch(`/api/users/profile`, {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
@@ -46,7 +44,7 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
             }
 
             const data = await response.json();
-            console.log(data, "회원정보뭐가");
+
             localStorage.setItem("email", data.email);
             localStorage.setItem("userName", data.name);
             localStorage.setItem("profileImg", data.profileUrl);
