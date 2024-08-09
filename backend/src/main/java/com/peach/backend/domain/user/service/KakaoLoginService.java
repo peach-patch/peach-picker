@@ -63,7 +63,7 @@ public class KakaoLoginService {
                     .RecentLoggedIn(LocalDateTime.now())
                     .provider("kakao")
                     .profileImgUrl(kakaoProfile.properties.profile_image)
-                    .role(Role.USER)
+                    .role(Role.ADMIN)
                     .password(String.valueOf(random.nextInt(Integer.MAX_VALUE)))
                     .build();
             userRepository.save(user);
