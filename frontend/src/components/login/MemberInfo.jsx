@@ -7,7 +7,6 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  console.log(token, "회원조회시작");
   useEffect(() => {
     if (!isInitialized) {
       initialize();
@@ -34,7 +33,7 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
         console.log("읽어와야함");
         const fetchProfile = async () => {
           try {
-            const response = await fetch("/api/users/profile", {
+            const response = await fetch(`api/users/profile`, {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
@@ -51,8 +50,10 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
             localStorage.setItem("email", data.email);
             localStorage.setItem("userName", data.name);
             localStorage.setItem("profileImg", data.profileUrl);
+
             setUsername(data.name);
             setEmail(data.email);
+            setProfileImg(data.profileUrl);
           } catch (error) {
             console.error("Error fetching profile:", error);
             setMessage("프로필 정보를 가져오는데 실패했습니다.");
