@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import kakao from "../../images/kakao.png";
+import kakao from "../../images/kakao_login.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
@@ -7,7 +7,7 @@ import useAuthStore from "../../store/authStore";
 const KAKAO_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
 const REDIRECT_URL = process.env.NEXT_PUBLIC_REDIRECT_URL;
 
-const KakaoLogin = () => {
+const KakaoSignup = () => {
   const router = useRouter();
   const { login } = useAuthStore();
 
@@ -21,7 +21,7 @@ const KakaoLogin = () => {
     }
   }, []);
 
-  const handleKakaoLogin = () => {
+  const handleKakaoSignup = () => {
     if (typeof window === "undefined" || !window.Kakao) {
       console.error("Kakao SDK not loaded");
       return;
@@ -47,10 +47,14 @@ const KakaoLogin = () => {
   };
 
   return (
-    <div onClick={handleKakaoLogin}>
-      <Image src={kakao} width={40} className="m-3" alt="kakao login" />
+    <div
+      onClick={handleKakaoSignup}
+      className="mb-5 w-full justify-center flex items-center py-3 border-[1px] border-solid border-[#808080]"
+    >
+      <Image src={kakao} width={20} alt="Kakao Login" />
+      <div className="ml-5">카카오 회원가입</div>
     </div>
   );
 };
 
-export default KakaoLogin;
+export default KakaoSignup;
