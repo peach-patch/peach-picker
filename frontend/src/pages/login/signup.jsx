@@ -6,6 +6,7 @@ import kakao from "../../images/kakao_login.png";
 import TermsOfService from "../../components/signup/TermsOfService";
 import PrivacyPolicy from "../../components/signup/PrivacyPolicy";
 import EmailVerification from "../../components/signup/EmailVerification";
+import KakaoSignup from "../../components/signup/KakaoSignup";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -136,16 +137,17 @@ const Signup = () => {
         className="hidden sm:flex"
       />
       <form className="w-1/4 mt-10 min-w-60" onSubmit={handleSubmit}>
+        <KakaoSignup />
         <div className="mb-5 w-full justify-center flex items-center py-3 border-[1px] border-solid border-[#808080]">
           <Image src={kakao} width={20} alt="Kakao Login" />
-          <div className="ml-5">카카오 로그인</div>
+          <div className="ml-5">카카오 회원가입</div>
         </div>
         <div className="flex items-center w-full mb-5">
           <div className="w-5/12 h-[1px] border-[1px] border-black"></div>
           <div className="w-2/12 text-sm text-center">혹은</div>
           <div className="w-5/12 border-[1px] h-[1px] border-black"></div>
         </div>
-        <div>Username</div>
+        <div className="mt-4">Username</div>
         <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
           <input
             type="text"
@@ -159,7 +161,7 @@ const Signup = () => {
           <div className="text-red-500 mb-3 text-[10px]">{errors.name}</div>
         )}
 
-        <div className="flex w-full items-center">
+        <div className="flex mt-4 w-full items-center">
           <EmailVerification
             email={email}
             onEmailChange={handleEmailChange}
@@ -175,7 +177,7 @@ const Signup = () => {
           <div className="text-red-500 mb-3 text-[10px]">{errors.email}</div>
         )}
 
-        <div>Password</div>
+        <div className="mt-4">Password</div>
         <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
           <input
             type="password"
@@ -189,7 +191,7 @@ const Signup = () => {
           <div className="text-red-500 mb-3 text-[10px]">{errors.password}</div>
         )}
 
-        <div>Confirm Password</div>
+        <div className="mt-4">Confirm Password</div>
         <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
           <input
             type="password"

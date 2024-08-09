@@ -52,7 +52,7 @@ const KakaoOAuthCallback = () => {
           login(accessToken, true);
           console.log("유저 데이터 확인", userData.kakao_account.email);
           alert("로그인 성공!");
-          router.push("/mypage");
+          router.push("/");
         } else {
           console.error("로그인 실패:", data.message);
           alert("로그인 실패: " + data.message);

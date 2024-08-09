@@ -1,10 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const EmailVerification = ({ email, onEmailChange, setVerificationStatus }) => {
   const [emailSent, setEmailSent] = useState(false);
   const [showVerificationInput, setShowVerificationInput] = useState(false);
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerified, setIsVerified] = useState(false);
+  const [timer, setTimer] = useState(600);
+
+  useEffect(() => {
+    let countdown;
+    if (emailSent && !isVerified) {
+      countdown = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+    return () => clearInterval(countdown);
+  }, [emailSent, isVerified]);
+
+  useEffect(() => {
+    if (timer <= 0) {
+      setTimer(0);
+      setVerificationStatus(false);
+    }
+  }, [timer, setVerificationStatus]);
 
   const handleEmailVerification = async () => {
     if (!email) {
@@ -26,6 +44,7 @@ const EmailVerification = ({ email, onEmailChange, setVerificationStatus }) => {
       if (response.ok) {
         setEmailSent(true);
         setShowVerificationInput(true);
+        setTimer(600);
         alert("이메일 인증 링크가 전송되었습니다.");
       } else {
         const data = await response.json();
@@ -42,6 +61,11 @@ const EmailVerification = ({ email, onEmailChange, setVerificationStatus }) => {
   };
 
   const handleVerificationCheck = async () => {
+    if (timer <= 0) {
+      alert("유효시간이 만료되었습니다. 재인증해주세요.");
+      return;
+    }
+
     if (!verificationCode) {
       alert("인증번호를 입력해 주세요.");
       return;
@@ -75,6 +99,12 @@ const EmailVerification = ({ email, onEmailChange, setVerificationStatus }) => {
     }
   };
 
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+  };
+
   return (
     <div className="w-full flex-col items-center">
       <div>Email</div>
@@ -106,6 +136,9 @@ const EmailVerification = ({ email, onEmailChange, setVerificationStatus }) => {
               value={verificationCode}
               onChange={handleVerificationCodeChange}
             />
+            <div className="text-red-500 w-32 text-right text-sm mr-3 ml-3">
+              {timer > 0 ? formatTime(timer) : "시간초과"}
+            </div>
           </div>
           <button
             type="button"
