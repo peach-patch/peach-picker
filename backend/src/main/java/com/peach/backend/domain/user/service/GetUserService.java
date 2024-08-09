@@ -30,16 +30,19 @@ public class GetUserService {
     }
 
     public ProfileResp getUserProfileByJwtToken(User user) {
-        if(!user.getKakaoSignUp()) {
+        if(user.getProvider().isEmpty()) {
             return ProfileResp.builder()
                     .email(user.getEmail())
                     .name(user.getName())
                     .profileUrl(minioUtil.getUrlFromMinioObject(user.getProfileImgUrl()))
                     .build();
         }
-        // TODO
         else {
-            return null;
+            return ProfileResp.builder()
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .profileUrl(user.getProfileImgUrl())
+                    .build();
         }
     }
 }
