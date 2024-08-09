@@ -21,6 +21,9 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://woonexus.site/repository/woo-maven-repo/'
+    }
 }
 
 dependencies {
@@ -73,6 +76,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-parent:3.3.1'
 
+    // mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // exception
+    implementation 'com.woo:rest-exception:1.0.0'
 }
 
 tasks.named('test') {

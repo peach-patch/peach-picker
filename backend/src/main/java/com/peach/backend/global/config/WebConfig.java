@@ -1,5 +1,7 @@
 package com.peach.backend.global.config;
 
+import com.woo.exception.config.ErrorConfig;
+import com.woo.exception.handler.RestExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    @Bean
+    public RestExceptionHandler setRestExceptionHandler() throws Exception {
+        ErrorConfig errorConfig = ErrorConfig.build();
+
+        return RestExceptionHandler.setErrorConfig(errorConfig);
+    }
     @Bean
     public WebMvcConfigurer webMvcConfigurer() {
         return new WebMvcConfigurer() {

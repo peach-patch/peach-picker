@@ -4,9 +4,8 @@ import com.peach.backend.domain.user.dto.req.SignInReq;
 import com.peach.backend.domain.user.dto.resp.ProfileResp;
 import com.peach.backend.domain.user.entity.User;
 import com.peach.backend.domain.user.entity.repository.UserRepository;
-import com.peach.backend.domain.user.exception.LoginFailException;
-import com.peach.backend.domain.user.exception.UserNotFoundException;
 import com.peach.backend.global.util.minio.MinioUtil;
+import com.woo.exception.util.BizException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,12 @@ public class GetUserService {
     private final MinioUtil minioUtil;
 
     public User findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email).orElseThrow(() -> UserNotFoundException.EXCEPTION);
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new BizException("user_not_found"));
     }
 
     public User findUserByEmailAndPassword(SignInReq req) {
-        User user = userRepository.findUserByEmail(req.getEmail()).orElseThrow(() -> LoginFailException.EXCEPTION);
-        if(!passwordEncoder.matches(req.getPassword(), user.getPassword())) throw LoginFailException.EXCEPTION;
+        User user = userRepository.findUserByEmail(req.getEmail()).orElseThrow(() -> new BizException("login_fail"));
+        if(!passwordEncoder.matches(req.getPassword(), user.getPassword())) throw new BizException("login_fail");
 
         return user;
     }

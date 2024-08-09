@@ -8,7 +8,7 @@ import com.peach.backend.domain.user.dto.kakao.KakaoCodeReq;
 import com.peach.backend.domain.user.entity.User;
 import com.peach.backend.domain.user.entity.repository.UserRepository;
 import com.peach.backend.domain.user.enums.Role;
-import com.peach.backend.domain.user.exception.UserNotFoundException;
+import com.woo.exception.util.BizException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class KakaoLoginService {
         // 기존 회원이면
         if (userRepository.existsByEmail(kakaoProfile.getKakao_account().email)) {
             User user = userRepository.findUserByEmail(kakaoProfile.getKakao_account().email)
-                    .orElseThrow(() -> UserNotFoundException.EXCEPTION);
+                    .orElseThrow(() -> new BizException("user_not_found"));
 
             user.updateRecentLoggedIn();
             userRepository.save(user);

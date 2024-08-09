@@ -49,4 +49,18 @@ public class UserController {
     public ResponseEntity<SignInResp> kakaoLogin(@RequestBody KakaoCodeReq kakaoReq) {
         return ResponseEntity.ok(userFacade.KakaoLogin(kakaoReq));
     }
+
+    @GetMapping("/code/send")
+    public ResponseEntity<String> sendVerifyingCode(@RequestParam(name = "email") String email) {
+        userFacade.sendVerificationEmail(email);
+
+        return ResponseEntity.ok("인증코드가 발송되었습니다.");
+    }
+
+    @GetMapping("/code/verify")
+    public ResponseEntity<String> verifyingCode(@RequestParam(name = "email") String email, @RequestParam(name = "code") String code) {
+        userFacade.verifyingCode(email, code);
+
+        return ResponseEntity.ok("인증이 완료되었습니다.");
+    }
 }

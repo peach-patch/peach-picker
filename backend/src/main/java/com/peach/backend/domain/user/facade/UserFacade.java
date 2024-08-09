@@ -7,10 +7,7 @@ import com.peach.backend.domain.user.dto.req.SignUpReq;
 import com.peach.backend.domain.user.dto.resp.ProfileResp;
 import com.peach.backend.domain.user.dto.resp.SignInResp;
 import com.peach.backend.domain.user.entity.User;
-import com.peach.backend.domain.user.service.CreateUserService;
-import com.peach.backend.domain.user.service.GetUserService;
-import com.peach.backend.domain.user.service.KakaoLoginService;
-import com.peach.backend.domain.user.service.UpdateUserService;
+import com.peach.backend.domain.user.service.*;
 import com.peach.backend.global.security.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,6 +21,7 @@ public class UserFacade {
     private final UpdateUserService updateUserService;
     private final KakaoLoginService kakaoLoginService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final EmailVerificationService emailVerificationService;
 
     public void signUp(SignUpReq req) {
         createUserService.createUser(req);
@@ -50,5 +48,13 @@ public class UserFacade {
         return SignInResp.builder()
                 .accessToken(jwtTokenProvider.generateAccessToken(user.getEmail()))
                 .build();
+    }
+
+    public void sendVerificationEmail(String email) {
+        emailVerificationService.sendVerificationEmail(email);
+    }
+
+    public void verifyingCode(String email, String code) {
+        emailVerificationService.verifyingCode(email, code);
     }
 }
