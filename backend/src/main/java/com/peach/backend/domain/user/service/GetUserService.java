@@ -30,7 +30,7 @@ public class GetUserService {
     }
 
     public ProfileResp getUserProfileByJwtToken(User user) {
-        if(user.getProvider().isEmpty()) {
+        if(user.getProvider()==null || user.getProvider().isEmpty()) {
             return ProfileResp.builder()
                     .email(user.getEmail())
                     .name(user.getName())
