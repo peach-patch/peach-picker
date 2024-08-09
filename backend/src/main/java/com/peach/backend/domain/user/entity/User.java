@@ -54,6 +54,7 @@ public class User extends BaseTimeEntity {
     public void updateUserName(String name){
         this.name = name;
     }
+    public void updateProfileImgUrl(String profileImgUrl) {this.profileImgUrl = profileImgUrl;}
 
     public void updatePassword(String password){
         this.password = password;

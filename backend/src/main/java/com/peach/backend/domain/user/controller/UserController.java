@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PatchMapping("profile")
-    public ResponseEntity<String> patchUserProfile(@CurrentUser User user, @RequestBody ProfileUpdateReq req) {
+    public ResponseEntity<String> patchUserProfile(@CurrentUser User user, @ModelAttribute ProfileUpdateReq req) {
         userFacade.patchUserProfile(user, req);
         return ResponseEntity.ok("회원정보 수정이 완료되었습니다.");
     }

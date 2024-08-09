@@ -28,6 +28,7 @@ public class MinioUtil {
                     .stream(multipartFile.getInputStream(), multipartFile.getSize(), -1)
                     .build());
         } catch (Exception e) {
+            e.printStackTrace();
             throw MinioCanNotPutException.EXCEPTION;
         }
     }
@@ -41,6 +42,7 @@ public class MinioUtil {
                     .expiry(2, TimeUnit.HOURS)
                     .build());
         } catch (Exception e) {
+            e.printStackTrace();
             throw MinioObjectNotFoundException.EXCEPTION;
         }
     }
