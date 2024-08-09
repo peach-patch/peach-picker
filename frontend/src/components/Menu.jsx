@@ -19,6 +19,9 @@ const Menu = () => {
   const handleLogout = () => {
     logout();
     localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("email");
+    localStorage.removeItem("userProfile");
     sessionStorage.removeItem("token");
     router.push("/login");
   };

@@ -54,6 +54,7 @@ const Index = () => {
       );
 
       const data = await response.json();
+      console.log(data, "데이터 확인");
       if (response.ok) {
         setMessage(data.message);
 
