@@ -21,17 +21,15 @@ const KakaoOAuthCallback = () => {
             },
             body: JSON.stringify({
               code,
+              client_env: "dev",
             }),
           });
 
           const data = await response.json();
 
           if (response.ok) {
-            console.log(data, "카카오데이터확인");
             const accessToken = data.accessToken;
-
             login(accessToken, true);
-
             alert("로그인 성공!");
             router.push("/");
           } else {
