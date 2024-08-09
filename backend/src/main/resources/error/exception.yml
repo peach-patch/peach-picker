@@ -1,0 +1,64 @@
+### USER ###
+user_not_found:
+  status: 404
+  message: 해당 사용자를 찾을 수 없습니다.
+user_already_exist:
+  status: 409
+  message: 이미 가입된 이메일 입니다.
+login_fail:
+  status: 401
+  message: 로그인에 실패하였습니다. ID/PW 를 확인하세요.
+sign_up_fail:
+  status: 409
+  message: 회원 가입에 실패하였습니다.
+email_verify_fail:
+  status: 409
+  message: 이메일 인증에 실패하였습니다. 다시 인증하여 주세요.
+email_not_verified:
+  status: 409
+  message: 이메일이 인증되지 않았습니다. 이메일을 인증해주세요.
+duplicated_nickname:
+  status: 409
+  message: 이미 존재하는 닉네임입니다.
+
+### JWT ###
+token_expired:
+  status: 401
+  message: 토큰이 만료 되었습니다.
+token_not_valid:
+  status: 401
+  message: 토큰이 유효하지 않습니다.
+
+### MINIO ###
+minio_can_not_put:
+  status: 500
+  message: 미디어 파일을 저장할 수 없습니다.
+minio_can_not_get:
+  status: 404
+  message: 미디어 파일을 가져올 수 없습니다.
+
+### CHALLENGE ###
+challenge_already_exist:
+  status: 409
+  message: 이미 챌린징 중입니다.
+challenge_not_found:
+  status: 404
+  message: 해당 챌린지를 찾을 수 없습니다.
+participant_not_found:
+  status: 404
+  message: 해당 참가자를 찾을 수 없습니다.
+not_join_challenge:
+  status: 409
+  message: 참가한 챌린지가 아닙니다.
+not_challenge_owner:
+  status: 409
+  message: 챌린지 소유주가 아닙니다.
+can_not_drop_own:
+  status: 409
+  message: 본인은 강퇴할 수 없습니다.
+history_not_found:
+  status: 404
+  message: 해당 히스토리를 찾을 수 없습니다.
+history_not_own:
+  status: 409
+  message: 본인의 히스토리만 수정/삭제할 수 있습니다.
