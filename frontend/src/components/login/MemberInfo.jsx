@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
 
-const MemberInfo = ({ setUsername, setEmail }) => {
+const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
   const { isLoggedIn, token, isInitialized, initialize } = useAuthStore();
   const [message, setMessage] = useState("");
   const router = useRouter();
 
+  console.log(token);
   useEffect(() => {
     if (!isInitialized) {
       initialize();
@@ -22,11 +23,14 @@ const MemberInfo = ({ setUsername, setEmail }) => {
       // 소셜 로그인
       const storedUserName = localStorage.getItem("userName");
       const storedEmail = localStorage.getItem("email");
+      const storedProfileImg = localStorage.getItem("profileImg");
 
       if (storedUserName) {
         setUsername(storedUserName);
         setEmail(storedEmail);
+        setProfileImg(storedProfileImg);
       } else {
+        console.log("소셜로그인아님");
         const fetchProfile = async () => {
           try {
             const response = await fetch("/api/users/profile", {
@@ -42,8 +46,10 @@ const MemberInfo = ({ setUsername, setEmail }) => {
             }
 
             const data = await response.json();
+            console.log(data, "회원정보뭐가");
             localStorage.setItem("email", data.email);
             localStorage.setItem("userName", data.name);
+            localStorage.setItem("profileImg", data.profileUrl);
             setUsername(data.name);
             setEmail(data.email);
           } catch (error) {

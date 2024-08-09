@@ -9,18 +9,32 @@ const MyPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [profileImg, setProfileImg] = useState("");
   const router = useRouter();
 
   console.log("회원정보 시작");
+  console.log(profileImg, "이미지");
 
   return (
-    <div className="flex flex-col items-center justify-center mt-20 mb-20">
-      <MemberInfo setUsername={setUsername} setEmail={setEmail} />{" "}
+    <div className="flex flex-col items-center justify-center mt-10 mb-20">
+      <MemberInfo
+        setUsername={setUsername}
+        setEmail={setEmail}
+        setProfileImg={setProfileImg}
+      />{" "}
       {message && (
-        <div className="flex flex-col items-center justify-center mt-20 mb-20">
+        <div className="flex flex-col items-center justify-center mt-10 mb-20">
           {message}
         </div>
       )}
+      <section className="relative mb-10 overflow-hidden rounded-full w-60 h-60">
+        <Image
+          src={profileImg}
+          layout="fill"
+          objectFit="cover"
+          alt="Profile Image"
+        />
+      </section>
       <div className="text-[20px] w-[380px] mb-2">기본 정보</div>
       <div className="flex flex-col justify-evenly w-[380px] h-[127px] bg-[#fff] border-[1px] border-solid border-[#000]">
         <div className="ml-5 text-[18px]">Username : {username}</div>
@@ -41,12 +55,13 @@ const MyPage = () => {
           <div className="absolute left-[250px] top-0 w-[90px] h-[51px] text-[18px] flex flex-col justify-center">
             추첨 완료
           </div>
+
           <Image
             className="absolute left-[192px] top-[40px]"
             src={pick_line}
             height={80}
-            width={1} // width를 명시적으로 설정하여 경고를 피합니다
-            alt="Pick Line" // alt 속성을 추가합니다
+            width={1}
+            alt="Pick Line"
           />
         </div>
       </div>

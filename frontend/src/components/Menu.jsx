@@ -75,7 +75,7 @@ const Menu = () => {
             alt="피치피커 로고"
           />
         </div>
-        <div className="fixed bottom-0 flex items-center justify-around w-full p-4 border-t-2 border-gray-500 sm:hidden">
+        <div className="fixed bottom-0 flex items-center justify-around w-full p-4 bg-white border-t-2 border-gray-500 sm:hidden">
           <Link href="/">
             <Image
               className="flex"
@@ -113,14 +113,18 @@ const Menu = () => {
             />
           </Link>
           {isLoggedIn ? (
-            <button onClick={handleLogout}>
-              <Image
-                className="flex"
-                src={hamburger}
-                width={30}
-                height={30}
-                alt="로그아웃"
-              />
+            <button
+            // onClick={handleLogout}
+            >
+              <Link href="/mypage">
+                <Image
+                  className="flex"
+                  src={hamburger}
+                  width={30}
+                  height={30}
+                  alt="로그아웃"
+                />
+              </Link>
             </button>
           ) : (
             <Link href="/login">

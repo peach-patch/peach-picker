@@ -26,7 +26,6 @@ const KakaoOAuthCallback = () => {
         });
 
         const data = await response.json();
-        console.log("Token response:", data);
 
         if (response.ok) {
           const accessToken = data.access_token;
@@ -40,17 +39,13 @@ const KakaoOAuthCallback = () => {
           });
 
           const userData = await userRes.json();
-          console.log("User data:", userData);
 
-          localStorage.setItem("userName", userData.properties.nickname);
-          localStorage.setItem(
-            "userProfile",
-            userData.properties.profile_image
-          );
-          localStorage.setItem("email", userData.kakao_account.email);
+          // localStorage.setItem("userName", userData.properties.nickname);
+          // localStorage.setItem("profileImg", userData.properties.profile_image);
+          // localStorage.setItem("email", userData.kakao_account.email);
 
           login(accessToken, true);
-          console.log("유저 데이터 확인", userData.kakao_account.email);
+
           alert("로그인 성공!");
           router.push("/");
         } else {

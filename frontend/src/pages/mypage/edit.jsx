@@ -16,6 +16,9 @@ export default function Edit() {
   const [passwordMessage, setPasswordMessage] = useState("");
   const router = useRouter();
 
+  const storedName = localStorage.getItem("userName");
+  const storedEmail = localStorage.getItem("email");
+
   useEffect(() => {
     if (!isInitialized) {
       initialize();
@@ -27,31 +30,35 @@ export default function Edit() {
       setMessage("로그인이 필요합니다.");
       router.push("/login");
     } else if (isInitialized && isLoggedIn) {
-      const fetchProfile = async () => {
-        try {
-          const response = await fetch("/api/users/profile", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
+      setEmail(storedEmail);
+      setUsername(storedName);
+      setProfileImg(storedProfileImg);
 
-          if (!response.ok) {
-            throw new Error("프로필 정보를 가져오는데 실패했습니다.");
-          }
+      //   const fetchProfile = async () => {
+      //     try {
+      //       const response = await fetch("/api/users/profile", {
+      //         method: "GET",
+      //         headers: {
+      //           "Content-Type": "application/json",
+      //           Authorization: `Bearer ${token}`,
+      //         },
+      //       });
 
-          const data = await response.json();
-          setUsername(data.name);
-          setEmail(data.email);
-          setProfileUrl(data.profileUrl);
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-          setMessage("프로필 정보를 가져오는데 실패했습니다.");
-        }
-      };
+      //       if (!response.ok) {
+      //         throw new Error("프로필 정보를 가져오는데 실패했습니다.");
+      //       }
 
-      fetchProfile();
+      //       const data = await response.json();
+      //       setUsername(data.name);
+      //       setEmail(data.email);
+      //       setProfileUrl(data.profileUrl);
+      //     } catch (error) {
+      //       console.error("Error fetching profile:", error);
+      //       setMessage("프로필 정보를 가져오는데 실패했습니다.");
+      //     }
+      //   };
+
+      // fetchProfile();
     }
   }, [isInitialized, isLoggedIn, token, router]);
 
