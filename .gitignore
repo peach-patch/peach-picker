@@ -680,6 +680,7 @@ gradle-app.setting
 *.yaml
 *.yml
 !peach-picker-be-publish.yml
+!exception.yml
 <<<<<<< HEAD
 =======
 
