@@ -23,6 +23,38 @@ const Signup = () => {
   const [showWarning, setShowWarning] = useState(false);
   const [termsVisible, setTermsVisible] = useState(false);
   const [privacyVisible, setPrivacyVisible] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+
+  const handleEmailVerification = async () => {
+    if (!email) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "이메일을 입력해 주세요.",
+      }));
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/users/send-verification-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setEmailSent(true);
+        alert("이메일 인증 링크가 전송되었습니다.");
+      } else {
+        const data = await response.json();
+        setMessage(data.message || "이메일 전송 실패");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("요청 실패");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -137,14 +169,24 @@ const Signup = () => {
         )}
 
         <div>Email</div>
-        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
-          <input
-            type="email"
-            className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <div className="flex w-full items-center">
+          <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
+            <input
+              type="email"
+              className="bg-[#f8f8f8] ml-3 w-full text-[20px] outline-none flex-grow"
+              placeholder="Enter email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <button
+            type="button"
+            className="text-white ml-2 w-28 bg-black h-12 hover:bg-black text-sm px-4 py-2 rounded"
+            onClick={handleEmailVerification}
+            disabled={emailSent}
+          >
+            {emailSent ? "이메일 전송됨" : "인증하기"}
+          </button>
         </div>
         {errors.email && (
           <div className="text-red-500 mb-3 text-[10px]">{errors.email}</div>
