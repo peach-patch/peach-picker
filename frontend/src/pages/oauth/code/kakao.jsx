@@ -21,7 +21,6 @@ const KakaoOAuthCallback = () => {
             },
             body: JSON.stringify({
               code,
-              client_env: "dev",
             }),
           });
 
