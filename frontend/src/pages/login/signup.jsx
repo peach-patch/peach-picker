@@ -20,7 +20,7 @@ const Signup = () => {
     confirmPassword: "",
   });
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isVerified, setIsVerified] = useState(false); // 이메일 인증 상태 추가
+  const [isVerified, setIsVerified] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -113,6 +113,8 @@ const Signup = () => {
         if (response.ok) {
           localStorage.setItem("token", responseData.token);
           sessionStorage.setItem("token", responseData.token);
+          localStorage.setItem("email", email);
+          localStorage.setItem("userName", name);
           alert("회원가입이 완료되었습니다.");
           window.location.href = "/";
         } else {

@@ -62,12 +62,12 @@ const EmailVerification = ({ email, onEmailChange, setVerificationStatus }) => {
 
       if (response.ok) {
         setIsVerified(true);
-        setVerificationStatus(true); // 부모 컴포넌트에 인증 성공 상태 전달
+        setVerificationStatus(true);
         alert("이메일 인증이 완료되었습니다.");
       } else {
         alert("인증번호가 일치하지 않습니다.");
         setIsVerified(false);
-        setVerificationStatus(false); // 부모 컴포넌트에 인증 실패 상태 전달
+        setVerificationStatus(false);
       }
     } catch (error) {
       console.error("Error:", error);
