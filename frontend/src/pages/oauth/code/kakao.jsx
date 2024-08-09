@@ -7,62 +7,49 @@ const KakaoOAuthCallback = () => {
   const { login } = useAuthStore();
 
   useEffect(() => {
-    console.log("이동 확인됨.... ");
-    const handleKakaoResponse = async (code) => {
-      try {
-        const bodyParams = new URLSearchParams({
-          grant_type: "authorization_code",
-          client_id: process.env.NEXT_PUBLIC_KAKAO_JS_KEY,
-          redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URL,
-          code,
-        });
+    const { code } = router.query;
 
-        const response = await fetch("https://kauth.kakao.com/oauth/token", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-          },
-          body: bodyParams,
-        });
+    if (code) {
+      console.log("코드 확인:", code);
 
-        const data = await response.json();
-
-        if (response.ok) {
-          const accessToken = data.access_token;
-
-          // 사용자 정보 요청
-          const userRes = await fetch("https://kapi.kakao.com/v2/user/me", {
-            method: "GET",
+      const sendCodeToBackend = async (code) => {
+        try {
+          const response = await fetch("/api/users/kakao-login", {
+            method: "POST",
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+              code,
+              client_env: "dev",
+            }),
           });
 
-          const userData = await userRes.json();
+          const data = await response.json();
 
-          // localStorage.setItem("userName", userData.properties.nickname);
-          // localStorage.setItem("profileImg", userData.properties.profile_image);
-          // localStorage.setItem("email", userData.kakao_account.email);
+          if (response.ok) {
+            console.log(data, "카카오데이터확인");
+            const accessToken = data.accessToken;
 
-          login(accessToken, true);
+            login(accessToken, true);
 
-          alert("로그인 성공!");
-          router.push("/");
-        } else {
-          console.error("로그인 실패:", data.message);
-          alert("로그인 실패: " + data.message);
+            alert("로그인 성공!");
+            router.push("/");
+          } else {
+            console.error("로그인 실패:", data.message);
+            alert("로그인 실패: " + data.message);
+          }
+        } catch (error) {
+          console.error("카카오 로그인 처리 실패:", error);
+          alert("카카오 로그인 처리 실패: " + error.message);
         }
-      } catch (error) {
-        console.error("카카오 로그인 실패:", error);
-        alert("카카오 로그인 실패: " + error.message);
-      }
-    };
+      };
 
-    const { code } = router.query;
-    if (code) {
-      handleKakaoResponse(code);
+      sendCodeToBackend(code);
+    } else {
+      console.log("코드가 없습니다.");
     }
-  }, [router.query]);
+  }, [router.query, login, router]);
 
   return <div>로그인 처리 중...</div>;
 };

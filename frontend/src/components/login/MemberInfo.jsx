@@ -7,7 +7,7 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  console.log(token);
+  console.log(token, "회원조회시작");
   useEffect(() => {
     if (!isInitialized) {
       initialize();
@@ -26,11 +26,12 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
       const storedProfileImg = localStorage.getItem("profileImg");
 
       if (storedUserName) {
+        console.log("저장되어있으면");
         setUsername(storedUserName);
         setEmail(storedEmail);
         setProfileImg(storedProfileImg);
       } else {
-        console.log("소셜로그인아님");
+        console.log("읽어와야함");
         const fetchProfile = async () => {
           try {
             const response = await fetch("/api/users/profile", {
