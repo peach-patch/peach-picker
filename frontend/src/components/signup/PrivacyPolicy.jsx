@@ -8,11 +8,12 @@ const PrivacyPolicy = ({ visible, toggleVisibility }) => {
         <button
           type="button"
           onClick={toggleVisibility}
-          className="p-1 text-sm text-white bg-black rounded-md"
+          className="p-2 mb-1 font-lsTh text-sm text-white bg-black rounded-md"
         >
           {visible ? "닫음" : "펼침"}
         </button>
       </div>
+      <div className="w-full h-[1px] border-[1px] border-black"></div>
       {visible && (
         <div
           style={{

@@ -5,6 +5,7 @@ import peach_logo from "../../../public/peach_logo.png";
 import kakao from "../../images/kakao_login.png";
 import TermsOfService from "../../components/signup/TermsOfService";
 import PrivacyPolicy from "../../components/signup/PrivacyPolicy";
+import EmailVerification from "../../components/signup/EmailVerification";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -18,11 +19,24 @@ const Signup = () => {
     password: "",
     confirmPassword: "",
   });
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const [termsVisible, setTermsVisible] = useState(false);
   const [privacyVisible, setPrivacyVisible] = useState(false);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+    setIsEmailValid(validateEmail(newEmail));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,6 +57,9 @@ const Signup = () => {
     if (!email) {
       newErrors.email = "필수정보입니다.";
       hasError = true;
+    } else if (!isEmailValid) {
+      newErrors.email = "이메일 형식이 올바르지 않습니다.";
+      hasError = true;
     }
     if (!password) {
       newErrors.password = "필수정보입니다.";
@@ -54,6 +71,10 @@ const Signup = () => {
     }
     if (password !== confirmPassword) {
       setMessage("비밀번호가 일치하지 않습니다.");
+      hasError = true;
+    }
+    if (!isVerified) {
+      alert("이메일 인증을 완료해 주세요.");
       hasError = true;
     }
 
@@ -92,6 +113,8 @@ const Signup = () => {
         if (response.ok) {
           localStorage.setItem("token", responseData.token);
           sessionStorage.setItem("token", responseData.token);
+          localStorage.setItem("email", email);
+          localStorage.setItem("userName", name);
           alert("회원가입이 완료되었습니다.");
           window.location.href = "/";
         } else {
@@ -118,9 +141,9 @@ const Signup = () => {
           <div className="ml-5">카카오 로그인</div>
         </div>
         <div className="flex items-center w-full mb-5">
-          <div className="w-5/12 h-[1px] border-[1px] border-[#808080]"></div>
-          <div className="w-2/12 text-sm text-center text-gray-500">혹은</div>
-          <div className="w-5/12 border-[1px] h-[1px] border-[#808080]"></div>
+          <div className="w-5/12 h-[1px] border-[1px] border-black"></div>
+          <div className="w-2/12 text-sm text-center">혹은</div>
+          <div className="w-5/12 border-[1px] h-[1px] border-black"></div>
         </div>
         <div>Username</div>
         <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
@@ -136,16 +159,18 @@ const Signup = () => {
           <div className="text-red-500 mb-3 text-[10px]">{errors.name}</div>
         )}
 
-        <div>Email</div>
-        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
-          <input
-            type="email"
-            className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+        <div className="flex w-full items-center">
+          <EmailVerification
+            email={email}
+            onEmailChange={handleEmailChange}
+            setVerificationStatus={setIsVerified}
           />
         </div>
+        {!isEmailValid && (
+          <div className="text-red-500 mb-3 text-[10px]">
+            이메일 형식이 올바르지 않습니다.
+          </div>
+        )}
         {errors.email && (
           <div className="text-red-500 mb-3 text-[10px]">{errors.email}</div>
         )}
