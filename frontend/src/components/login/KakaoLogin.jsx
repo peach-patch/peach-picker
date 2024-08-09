@@ -30,6 +30,7 @@ const KakaoLogin = () => {
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     console.log(isMobile);
+    //모바일 화면인 경우
     if (isMobile) {
       window.Kakao.Auth.authorize({
         redirectUri: REDIRECT_URL,

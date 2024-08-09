@@ -1,13 +1,14 @@
-// src/pages/edit.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
+import Image from "next/image";
 
 export default function Edit() {
   const { isLoggedIn, token, isInitialized, initialize } = useAuthStore();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [profileImg, setProfileImg] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -15,6 +16,7 @@ export default function Edit() {
   const [usernameMessage, setUsernameMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
   const router = useRouter();
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -27,31 +29,12 @@ export default function Edit() {
       setMessage("로그인이 필요합니다.");
       router.push("/login");
     } else if (isInitialized && isLoggedIn) {
-      const fetchProfile = async () => {
-        try {
-          const response = await fetch("/api/users/profile", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error("프로필 정보를 가져오는데 실패했습니다.");
-          }
-
-          const data = await response.json();
-          setUsername(data.name);
-          setEmail(data.email);
-          setProfileUrl(data.profileUrl);
-        } catch (error) {
-          console.error("Error fetching profile:", error);
-          setMessage("프로필 정보를 가져오는데 실패했습니다.");
-        }
-      };
-
-      fetchProfile();
+      const storedName = localStorage.getItem("userName");
+      const storedEmail = localStorage.getItem("email");
+      const storedProfileImg = localStorage.getItem("profileImg");
+      setEmail(storedEmail);
+      setUsername(storedName);
+      setProfileImg(storedProfileImg);
     }
   }, [isInitialized, isLoggedIn, token, router]);
 
@@ -100,11 +83,25 @@ export default function Edit() {
         console.log(textData, "확인");
         alert(textData);
         router.push("/mypage");
-        //setMessage(textData);
       }
     } catch (error) {
       console.error("Error updating profile:", error);
       setMessage("프로필 업데이트에 실패했습니다.");
+    }
+  };
+
+  const handleProfilePicClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleProfilePicChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImg(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -119,6 +116,26 @@ export default function Edit() {
           회원 정보
         </div>
         <div className="w-full mb-3 h-0 border-[1px] border-solid border-[#000]"></div>
+        <div className="w-full center1">
+          <section className="relative mt-10 mb-5 overflow-hidden rounded-full w-60 h-60">
+            <Image
+              src={profileImg}
+              layout="fill"
+              objectFit="cover"
+              alt="Profile Image"
+            />
+          </section>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleProfilePicChange}
+            accept="image/*"
+          />
+          <div className="mb-10 cursor-pointer" onClick={handleProfilePicClick}>
+            프로필사진 수정
+          </div>
+        </div>
         <div className="mb-1 w-[112px] text-[20px]">Username</div>
         <div className="relative w-full h-[70px] flex flex-col">
           <div className="absolute left-0 w-full h-[70px] bg-[#f8f8f8] border-[1px] border-solid border-[#808080]"></div>
