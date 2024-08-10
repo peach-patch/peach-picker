@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      height: {
+        "calc-100vh-64": "calc(100vh - 64px)",
+      },
       fontFamily: {
         sans: ["lsRg"],
         lsBd: ["lsBd"],
