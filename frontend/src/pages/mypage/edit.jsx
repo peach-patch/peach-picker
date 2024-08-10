@@ -60,27 +60,28 @@ export default function Edit() {
     }
 
     try {
-      const formData = new FormData();
-      formData.append("name", username);
-      formData.append("profileImg", profileImg);
-
       const response = await fetch("/api/users/profile", {
         method: "PATCH",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: formData,
+        body: JSON.stringify({
+          name: username,
+          profileImg: profileImg,
+        }),
       });
 
       if (!response.ok) {
         throw new Error("프로필 업데이트에 실패했습니다.");
       }
-
+      console.log(response, "이거꼭꼭response");
       const contentType = response.headers.get("content-type");
+      console.log(contentType, "이거더더더꼭꼭response");
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
         console.log(data, "이거꼭확인해");
-
+        // 서버에서 반환된 데이터를 로컬 스토리지에 저장
         localStorage.setItem("email", data.email);
         localStorage.setItem("userName", data.name);
         localStorage.setItem("profileImg", data.profileUrl);
@@ -93,7 +94,8 @@ export default function Edit() {
         setMessage("프로필이 성공적으로 업데이트되었습니다.");
       } else {
         const textData = await response.text();
-        console.log(textData, "텍스트 확인");
+        console.log(textData, "확인");
+        alert(textData);
       }
 
       router.push("/mypage");
