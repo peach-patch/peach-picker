@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
@@ -9,7 +9,6 @@ export default function Edit() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [profileImg, setProfileImg] = useState("");
-  const [profileUrl, setProfileUrl] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -61,13 +60,16 @@ export default function Edit() {
     }
 
     try {
+      const formData = new FormData();
+      formData.append("name", username);
+      formData.append("profileImg", profileImg);
+
       const response = await fetch("/api/users/profile", {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ name: username, password }),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -76,14 +78,25 @@ export default function Edit() {
 
       const contentType = response.headers.get("content-type");
       if (contentType && contentType.includes("application/json")) {
-        await response.json();
+        const data = await response.json();
+        console.log(data, "이거꼭확인해");
+
+        localStorage.setItem("email", data.email);
+        localStorage.setItem("userName", data.name);
+        localStorage.setItem("profileImg", data.profileUrl);
+
+        // 상태 업데이트
+        setUsername(data.name);
+        setEmail(data.email);
+        setProfileImg(data.profileUrl);
+
         setMessage("프로필이 성공적으로 업데이트되었습니다.");
       } else {
         const textData = await response.text();
-        console.log(textData, "확인");
-        alert(textData);
-        router.push("/mypage");
+        console.log(textData, "텍스트 확인");
       }
+
+      router.push("/mypage");
     } catch (error) {
       console.error("Error updating profile:", error);
       setMessage("프로필 업데이트에 실패했습니다.");

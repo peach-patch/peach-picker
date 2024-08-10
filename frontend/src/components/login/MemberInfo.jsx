@@ -28,6 +28,7 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
         setUsername(storedUserName);
         setEmail(storedEmail);
         setProfileImg(storedProfileImg);
+        console.log("이게되어서는안돼");
       } else {
         const fetchProfile = async () => {
           try {
