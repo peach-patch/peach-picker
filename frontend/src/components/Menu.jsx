@@ -27,7 +27,7 @@ const Menu = () => {
   };
 
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex justify-between hidden h-16 p-2 bg-menuColor font-noto-sans sm:flex">
         <div className="flex items-center ml-5">
           <Link href="/">
