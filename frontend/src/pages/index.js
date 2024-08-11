@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Menu from "@/components/Menu";
+import ThirdView from "@/components/main/ThirdView";
 function App() {
   useEffect(() => {
     const sections = document.querySelectorAll(".section");
@@ -33,8 +34,8 @@ function App() {
       <div className="flex w-full h-screen bg-blue-500 section snap-start">
         <Menu />
       </div>
-      <div className="flex items-center justify-center h-screen bg-red-500 section snap-start">
-        Section 2
+      <div className="flex justify-center h-screen section snap-start">
+        <ThirdView />
       </div>
       <div className="flex items-center justify-center h-screen bg-green-500 section snap-start">
         Section 3
