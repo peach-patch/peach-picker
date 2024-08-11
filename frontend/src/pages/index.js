@@ -31,10 +31,10 @@ function App() {
       id="fullpage"
       className="h-screen overflow-hidden snap-y snap-mandatory"
     >
-      <div className="flex w-full h-screen bg-blue-500 section snap-start">
+      <div className="flex w-full h-screen section snap-start">
         <Menu />
       </div>
-      <div className="flex justify-center h-screen section snap-start">
+      <div className="flex justify-center h-screen bg-amber-50 section snap-start">
         <ThirdView />
       </div>
       <div className="flex items-center justify-center h-screen bg-green-500 section snap-start">
