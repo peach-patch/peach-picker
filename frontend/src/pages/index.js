@@ -3,10 +3,12 @@ import Menu from "@/components/Menu";
 import ThirdView from "@/components/main/ThirdView";
 import SecondView from "@/components/main/SecondView";
 import LastView from "@/components/main/LastView";
+
 function App() {
   useEffect(() => {
     const sections = document.querySelectorAll(".section");
     let currentSection = 0;
+    let startY = 0;
 
     const scrollToSection = (index) => {
       sections[index].scrollIntoView({ behavior: "smooth" });
@@ -21,10 +23,30 @@ function App() {
       scrollToSection(currentSection);
     };
 
+    const handleTouchStart = (event) => {
+      startY = event.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (event) => {
+      const endY = event.changedTouches[0].clientY;
+      const deltaY = startY - endY;
+
+      if (deltaY > 50 && currentSection < sections.length - 1) {
+        currentSection += 1;
+      } else if (deltaY < -50 && currentSection > 0) {
+        currentSection -= 1;
+      }
+      scrollToSection(currentSection);
+    };
+
     window.addEventListener("wheel", handleScroll);
+    window.addEventListener("touchstart", handleTouchStart);
+    window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
       window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, []);
 
