@@ -5,13 +5,16 @@ import follow from "../../../public/follow.png";
 import possible from "../../../public/possible.png";
 import tips from "../../../public/tips.png";
 import Image from "next/image";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+// import { Carousel } from "react-responsive-carousel";
+// import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Carousel from "./Carousel";
 
 export default function SecondView() {
+  const images = [register, dailycheck, follow, possible, tips];
   return (
     <div className="flex items-center justify-center h-full">
-      <section className="w-3/4 md:w-1/2">
+      <Carousel images={images} />
+      {/* <section className="w-3/4 md:w-1/2">
         <Carousel
           showThumbs={false}
           autoPlay
@@ -71,7 +74,7 @@ export default function SecondView() {
             />
           </div>
         </Carousel>
-      </section>
+      </section> */}
     </div>
   );
 }
