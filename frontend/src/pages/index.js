@@ -39,7 +39,7 @@ function App() {
       <div className="flex justify-center h-screen bg-amber-50 section snap-start">
         <ThirdView />
       </div>
-      <div className="flex items-center justify-center h-screen bg-green-500 section snap-start">
+      <div className="flex items-center justify-center h-screen bg-amber-100 section snap-start">
         <SecondView />
       </div>
       <div className="flex h-screen section snap-start">

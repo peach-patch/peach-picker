@@ -23,26 +23,27 @@ const Carousel = ({ images }) => {
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full max-w-full mx-auto mt-4">
       <button
         className="absolute left-0 z-10 p-2 text-white transform -translate-y-1/2 bg-gray-700 top-1/2"
         onClick={scrollLeft}
+        style={{ marginLeft: "-1rem" }}
       >
         ❮
       </button>
       <div
         ref={carouselRef}
-        className="flex p-4 space-x-4 overflow-x-scroll carousel scroll-smooth snap-x snap-mandatory"
+        className="flex p-2 space-x-2 overflow-x-scroll scroll-smooth snap-x snap-mandatory"
       >
         {images.map((image, index) => (
-          <div key={index} className="flex-shrink-0 w-1/4 snap-center">
+          <div key={index} className="flex-shrink-0 w-1/5 snap-center">
             <Image
               src={image}
               layout="responsive"
-              width={400} // 원하는 너비 조정
-              height={400} // 원하는 높이 조정
+              width={80}
+              height={80}
               alt={`Slide ${index + 1}`}
-              className="m-2"
+              className="m-1"
             />
           </div>
         ))}
@@ -50,6 +51,7 @@ const Carousel = ({ images }) => {
       <button
         className="absolute right-0 z-10 p-2 text-white transform -translate-y-1/2 bg-gray-700 top-1/2"
         onClick={scrollRight}
+        style={{ marginRight: "-1rem" }}
       >
         ❯
       </button>
