@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import Menu from "@/components/Menu";
+
 import ThirdView from "@/components/main/ThirdView";
 import SecondView from "@/components/main/SecondView";
+import FirstView from "@/components/main/FirstView";
 import LastView from "@/components/main/LastView";
 
 function App() {
@@ -56,7 +57,7 @@ function App() {
       className="h-screen overflow-hidden snap-y snap-mandatory"
     >
       <div className="flex w-full h-screen section snap-start">
-        <Menu />
+        <FirstView />
       </div>
       <div className="flex justify-center h-screen bg-amber-50 section snap-start">
         <ThirdView />
