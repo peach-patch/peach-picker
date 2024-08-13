@@ -51,8 +51,8 @@ export default function ThirdView() {
             />
             <div className="flex items-center justify-end mt-10">
               <div className="flex items-center w-1/2 mt-10">
-                Get your feel good fix
-                <br /> that brings you back to life.
+                기분 좋은 해결책을 얻으세요.
+                <br /> That brings you back to life.
                 <div className="w-1/5">
                   <Image src={to} layout="responsive" alt="to" />
                 </div>
@@ -63,9 +63,9 @@ export default function ThirdView() {
 
         <section className="relative flex-shrink-0 w-1/3 pt-4">
           <div className="pb-10 mr-8">
-            Check in. Chew up. Tune out. Peach Picker helps elevate
-            micro-experiences for those who want to check-in to the moment in a
-            hard and heavy world.
+            확인하세요. 음미하세요. 차단하세요. Peach Picker는 힘들고 무거운
+            세상 속에서 순간에 몰입하고 싶은 사람들을 위해 작은 경험들을
+            고양시켜 줍니다.
           </div>
           <Image
             src={imagesSection2[index2]}
