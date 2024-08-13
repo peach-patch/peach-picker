@@ -1,103 +1,70 @@
 import Image from "next/image";
-import { Inter } from "next/font/google";
-import peach_logo from "../../public/peach_logo.png";
-import register from "../../public/register.png";
-import dailycheck from "../../public/dailycheck.png";
-import follow from "../../public/follow.png";
-import possible from "../../public/possible.png";
-import tips from "../../public/tips.png";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import Footer from "@/components/Footer";
-
-const inter = Inter({ subsets: ["latin"] });
+import Head from "next/head";
+import circle from "../../images/circle.png";
+import greenEffect from "../../images/greeny.png";
+import peach from "../../images/3dpeach.png";
+import blue_heart from "../../images/blue_heart.png";
+import main_picker from "../../images/main-picker.png";
+import main_letter from "../../images/mainLetter.png";
+import earth from "../../images/earth.png";
+import Menu from "../Menu";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="flex flex-col items-center justify-center w-screen">
-      <Image
-        src={peach_logo}
-        width={200}
-        alt="Peach Logo"
-        className="hidden m-10 sm:flex"
-      />
-      <p className="mb-20 text-5xl">공정하게 추첨하는 Peach Picker</p>
-      <section className="flex justify-around w-4/5">
-        <article className="justify-center w-1/3">
-          쉽게 추첨이 등록 가능해요
-        </article>
-        <article className="justify-center w-1/3">
-          해당 시간에 실시간 추첨을 볼 수 있어요
-        </article>
-        <article className="justify-center w-1/3">
-          이후 추첨 내역에서 당첨자 정보를 확인할 수 있어요
-        </article>
-      </section>
-      <section className="mt-10">실시간 랭킹</section>
+  const [isGrowing, setIsGrowing] = useState(false);
+  const [showLogo, setShowLogo] = useState(false);
+  const [visibleLetters, setVisibleLetters] = useState([]);
 
-      <section className="mt-10">NEW EVENT</section>
-      <section className="w-full max-w-screen-lg ">
-        <Carousel
-          showThumbs={false}
-          autoPlay
-          infiniteLoop
-          centerMode
-          centerSlidePercentage={33.3}
-          showStatus={false}
-        >
-          <div>
-            <Image
-              src={dailycheck}
-              layout="responsive"
-              width={300}
-              height={300}
-              alt="Daily Check"
-              className="m-2"
-            />
+  return (
+    <div className="flex flex-col w-screen h-screen bg-[#FFF8F2]">
+      <Head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <Menu />
+      <div className="flex flex-col justify-between flex-grow">
+        <section className="w-2/3 mt-5 ml-10">
+          <Image src={main_letter} alt="main" layout="responsive" width={100} />
+        </section>
+        <div className="flex flex-col justify-end flex-grow">
+          <section className="flex">
+            <div className="flex flex-col w-1/4 p-4 my-5 ml-10 text-2xl bg-white border-2 border-black ">
+              <div>PEACH-DAY</div>
+              <div className="flex flex-col w-full border border-black "></div>
+              <div>26/06/2024</div>
+            </div>
+            <div className="flex flex-col w-1/4 p-4 my-5 ml-10 text-2xl bg-white border-2 border-black ">
+              <div>IG</div>
+              <div className="flex flex-col w-full border border-black "></div>
+              <div>@peachpicker_official</div>
+            </div>
+            <div className="flex w-1/2 p-4 my-5 ml-10 mr-10 text-2xl text-left bg-white border-2 border-black ">
+              <div className="flex flex-col justify-between flex-grow">
+                <div>E-MAIL</div>
+                <div className="flex flex-col w-full border border-black "></div>
+                <div>peach.patch.picker@gmail.com</div>
+              </div>
+              <div className="flex items-end justify-end w-1/6 ml-4">
+                <Image
+                  src={earth}
+                  alt="earth"
+                  layout="responsive"
+                  width={100}
+                />
+              </div>
+            </div>
+          </section>
+          <div
+            className="flex items-center justify-between p-4 mx-10 mb-5 text-xl text-center text-black bg-red-300 border-2 border-black"
+            style={{ fontFamily: "Playfair Display, serif" }}
+          >
+            <div>Created by PEACH-PATCH</div>
+            <div>#공정함을 잃지 말자</div>
           </div>
-          <div>
-            <Image
-              src={register}
-              layout="responsive"
-              width={300}
-              height={300}
-              alt="Register"
-              className="m-2"
-            />
-          </div>
-          <div>
-            <Image
-              src={possible}
-              layout="responsive"
-              width={300}
-              height={300}
-              alt="Possible"
-              className="m-2"
-            />
-          </div>
-          <div>
-            <Image
-              src={tips}
-              layout="responsive"
-              width={300}
-              height={300}
-              alt="Tips"
-              className="m-2"
-            />
-          </div>
-          <div>
-            <Image
-              src={follow}
-              layout="responsive"
-              width={300}
-              height={300}
-              alt="Follow"
-              className="m-2"
-            />
-          </div>
-        </Carousel>
-      </section>
-      <Footer />
+        </div>
+      </div>
     </div>
   );
 }
