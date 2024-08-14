@@ -65,7 +65,7 @@ function App() {
       <div className="flex items-center justify-center h-screen bg-amber-100 section snap-start">
         <SecondView />
       </div>
-      <div className="flex h-screen section snap-start">
+      <div className="flex h-screen section bg-amber-50 snap-start">
         <LastView />
       </div>
     </div>
