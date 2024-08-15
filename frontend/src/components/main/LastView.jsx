@@ -17,7 +17,7 @@ export default function LastView() {
             alt="logo"
           />
         </div>
-        <div className="w-1/4">
+        <div className="w-1/4 p-10 pr-16">
           <Image
             src={lottery}
             width={100}

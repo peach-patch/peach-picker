@@ -38,6 +38,8 @@ export default function Edit() {
   }, [isInitialized, isLoggedIn, token, router]);
 
   const handleUpdateProfile = async () => {
+    console.log("왜?", username);
+    console.log("왜?", profileImg);
     if (!username) {
       setUsernameMessage("사용자 이름을 입력해야 합니다.");
       return;
@@ -45,21 +47,22 @@ export default function Edit() {
       setUsernameMessage("");
     }
 
-    if (!password) {
-      setPasswordMessage("비밀번호를 입력해야 합니다.");
-      return;
-    } else {
-      setPasswordMessage("");
-    }
+    // if (!password) {
+    //   setPasswordMessage("비밀번호를 입력해야 합니다.");
+    //   return;
+    // } else {
+    //   setPasswordMessage("");
+    // }
 
-    if (password !== confirmPassword) {
-      setMessage("비밀번호가 일치하지 않습니다.");
-      return;
-    } else {
-      setMessage("");
-    }
+    //if (password !== confirmPassword) {
+    // setMessage("비밀번호가 일치하지 않습니다.");
+    //  return;
+    //} else {
+    //  setMessage("");
+    //}
 
     try {
+      console.log("왜?", username);
       const response = await fetch("/api/users/profile", {
         method: "PATCH",
         headers: {
@@ -92,6 +95,11 @@ export default function Edit() {
         setProfileImg(data.profileUrl);
 
         setMessage("프로필이 성공적으로 업데이트되었습니다.");
+      } else if (contentType.includes("text/plain")) {
+        const textData = await response.text();
+        console.log("Response Data (Text):", textData, "과연 ㅋㅋ");
+        localStorage.setItem("userName", username);
+        localStorage.setItem("profileImg", profileImg);
       } else {
         const textData = await response.text();
         console.log(textData, "확인");
@@ -133,12 +141,12 @@ export default function Edit() {
         <div className="w-full mb-3 h-0 border-[1px] border-solid border-[#000]"></div>
         <div className="w-full center1">
           <section className="relative mt-10 mb-5 overflow-hidden rounded-full w-60 h-60">
-            <Image
+            {/* <Image
               src={profileImg}
               layout="fill"
               objectFit="cover"
               alt="Profile Image"
-            />
+            /> */}
           </section>
           <input
             type="file"
@@ -181,7 +189,7 @@ export default function Edit() {
           />
         </div>
         <div className="text-[20px] mb-1 mt-4">Password</div>
-        <div className="relative w-full h-[70px] flex flex-col">
+        {/* <div className="relative w-full h-[70px] flex flex-col">
           <div className="absolute left-0 w-full h-[70px] bg-[#f8f8f8] border-[1px] border-solid border-[#808080]"></div>
           <input
             type="password"
@@ -212,10 +220,10 @@ export default function Edit() {
               setMessage("");
             }}
           />
-        </div>
-        {message && (
+        </div> */}
+        {/* {message && (
           <div className="text-red-500 mb-3 text-[10px]">{message}</div>
-        )}
+        )} */}
         <div className="flex mt-20">
           <div
             className="flex items-center justify-center w-1/2 mr-2 h-[70px] bg-[#fb5e67] rounded-[5px] cursor-pointer"
