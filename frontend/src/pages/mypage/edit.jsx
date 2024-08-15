@@ -62,17 +62,18 @@ export default function Edit() {
     //}
 
     try {
-      console.log("왜?", username);
+      const formData = new FormData();
+      formData.append("name", username);
+      if (profileImg) {
+        formData.append("profileImg", profileImg);
+      }
+
       const response = await fetch("/api/users/profile", {
         method: "PATCH",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          name: username,
-          profileImg: profileImg,
-        }),
+        body: formData,
       });
 
       if (!response.ok) {
