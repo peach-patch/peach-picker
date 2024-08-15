@@ -67,6 +67,10 @@ export default function Edit() {
       if (profileImg) {
         formData.append("profileImg", profileImg);
       }
+      console.log(formData.get("name"));
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
 
       const response = await fetch("/api/users/profile", {
         method: "PATCH",
@@ -121,11 +125,7 @@ export default function Edit() {
   const handleProfilePicChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImg(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setProfileImg(file);
     }
   };
 
@@ -142,12 +142,12 @@ export default function Edit() {
         <div className="w-full mb-3 h-0 border-[1px] border-solid border-[#000]"></div>
         <div className="w-full center1">
           <section className="relative mt-10 mb-5 overflow-hidden rounded-full w-60 h-60">
-            {/* <Image
+            <Image
               src={profileImg}
               layout="fill"
               objectFit="cover"
               alt="Profile Image"
-            /> */}
+            />
           </section>
           <input
             type="file"
