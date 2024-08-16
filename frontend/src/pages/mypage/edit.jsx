@@ -47,20 +47,6 @@ export default function Edit() {
       setUsernameMessage("");
     }
 
-    // if (!password) {
-    //   setPasswordMessage("비밀번호를 입력해야 합니다.");
-    //   return;
-    // } else {
-    //   setPasswordMessage("");
-    // }
-
-    //if (password !== confirmPassword) {
-    // setMessage("비밀번호가 일치하지 않습니다.");
-    //  return;
-    //} else {
-    //  setMessage("");
-    //}
-
     try {
       const formData = new FormData();
       formData.append("name", username);
