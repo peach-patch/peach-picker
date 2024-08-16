@@ -48,7 +48,10 @@ export default function Register() {
   };
 
   return (
-    <div className="relative flex flex-col items-center min-w-[1000px] justify-center w-full h-screen">
+    <div
+      className="relative flex flex-col items-center min-w-[1000px] justify-center w-full"
+      style={{ height: "calc(100vh - 100px)" }}
+    >
       <div
         className="flex items-center justify-center mb-4 w-1/2"
         onClick={dropCalendar}
