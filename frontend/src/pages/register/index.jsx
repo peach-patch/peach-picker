@@ -93,6 +93,30 @@ export default function Register() {
       </div>
 
       <div className="flex items-center justify-center w-1/2 m-4">
+        <div className="text-right mr-2 w-[150px] font-bold">대표 사진 :</div>
+        <div className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
+          <input
+            type="text"
+            className="flex-1 text-[14px] leading-[140%] font-black text-[#828282] line-clamp-1"
+            placeholder="사진을 등록해주세요."
+            onChange={handleEventName}
+          />
+        </div>
+        <div className="flex items-center justify-center  bg-[#d9d9d9] rounded-[5px] px-4 ml-2">
+          <label style={{ cursor: "pointer" }} htmlFor="fileInput">
+            <input
+              type="file"
+              accept=".csv,.xlsx"
+              id="fileInput"
+              style={{ display: "none", cursor: "pointer" }}
+              onChange={handleFile}
+            />
+            파일 찾기
+          </label>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-center w-1/2 m-4">
         <div className="text-right mr-2 w-[150px] font-bold">당첨자 수 :</div>
         <div className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
           <input
@@ -104,10 +128,10 @@ export default function Register() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center w-1/2 m-4 z-1">
+      <div className="flex items-center justify-center w-1/2 m-4 z-1 relative">
         <div className="text-right mr-2 w-[150px] font-bold">추첨 방법 :</div>
         <div
-          className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px] cursor-pointer"
+          className="relative w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px] cursor-pointer"
           onClick={dropDown}
         >
           <div className="flex-1 text-[14px] leading-[140%] font-black text-[#828282]">
@@ -115,7 +139,7 @@ export default function Register() {
           </div>
           <div className="ml-2">▼</div>
           {isOpen && (
-            <div className="absolute w-1/3 mt-2 bg-white border border-gray-300 rounded shadow-lg">
+            <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg">
               <div
                 className="px-4 py-2 hover:bg-gray-100"
                 onClick={() => selectMethod("사다리 타기")}
