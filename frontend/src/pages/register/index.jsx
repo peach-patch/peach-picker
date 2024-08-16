@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { ko } from "date-fns/locale";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
@@ -27,6 +27,7 @@ export default function Register() {
     setFormatDay(
       `${day.getFullYear()}년 ${day.getMonth() + 1}월 ${day.getDate()}일`
     );
+    setCalOpen(false); // 날짜를 선택하면 달력을 닫음
   };
 
   const selectMethod = (selectedMethod) => {
@@ -52,35 +53,35 @@ export default function Register() {
       className="relative flex flex-col items-center min-w-[1000px] justify-center w-full"
       style={{ height: "calc(100vh - 100px)" }}
     >
-      <div
-        className="flex items-center justify-center mb-4 w-1/2"
-        onClick={dropCalendar}
-      >
-        <div className="text-right mr-2 w-[150px]">일시 :</div>
-        <div className="w-3/5 h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
-          <div className="flex-1 text-[14px] leading-[140%] font-black text-[#828282]">
-            {formatDay}
+      <div className="flex items-center justify-center mb-4 w-1/2">
+        <div className="text-right mr-2 w-[150px] font-bold">일시 :</div>
+        <div className="relative w-3/5 h-[40px]">
+          <div
+            onClick={dropCalendar}
+            className="flex h-full items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px] cursor-pointer"
+          >
+            <div className="flex-1 text-[14px] leading-[140%] font-black text-[#828282]">
+              {formatDay}
+            </div>
+            <div className="ml-2">▼</div>
           </div>
           {calOpen && (
-            <div className="relative w-1/2">
-              <div className="absolute right-0">
-                <DayPicker
-                  locale={ko}
-                  mode="single"
-                  defaultMonth={selectedDay}
-                  selected={selectedDay}
-                  onSelect={setDate}
-                />
-              </div>
+            <div className="absolute z-20 mt-2 w-[330px] right-0 justify-center items-center flex bg-white border border-gray-300 rounded shadow-lg">
+              <DayPicker
+                locale={ko}
+                mode="single"
+                defaultMonth={selectedDay}
+                selected={selectedDay}
+                onSelect={setDate}
+              />
             </div>
           )}
-          <div className="ml-2">▼</div>
         </div>
         <Time />
       </div>
 
       <div className="flex items-center justify-center w-1/2 m-4">
-        <div className="text-right mr-2 w-[150px]">이벤트 명 :</div>
+        <div className="text-right mr-2 w-[150px] font-bold">이벤트 명 :</div>
         <div className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
           <input
             type="text"
@@ -92,7 +93,7 @@ export default function Register() {
       </div>
 
       <div className="flex items-center justify-center w-1/2 m-4">
-        <div className="text-right mr-2 w-[150px]">당첨자 수 :</div>
+        <div className="text-right mr-2 w-[150px] font-bold">당첨자 수 :</div>
         <div className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
           <input
             type="number"
@@ -104,7 +105,7 @@ export default function Register() {
       </div>
 
       <div className="flex items-center justify-center w-1/2 m-4 z-1">
-        <div className="text-right mr-2 w-[150px]">추첨 방법 :</div>
+        <div className="text-right mr-2 w-[150px] font-bold">추첨 방법 :</div>
         <div
           className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px] cursor-pointer"
           onClick={dropDown}
@@ -139,7 +140,7 @@ export default function Register() {
       </div>
 
       <div className="flex items-center justify-center w-1/2 mt-10">
-        <div className="text-right mr-2 w-[150px]">명단 :</div>
+        <div className="text-right mr-2 w-[150px] font-bold">명단 :</div>
         <div className="w-full text-[12px] whitespace-nowrap">
           ※ 휴대폰 번호가 있는 명단을 등록해주세요.
           <br />※ csv 파일만 등록할 수 있습니다.
