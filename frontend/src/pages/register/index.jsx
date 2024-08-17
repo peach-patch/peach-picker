@@ -3,6 +3,7 @@ import { ko } from "date-fns/locale";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import Time from "../../components/register/Time";
+import ImgUpload from "@/components/register/ImgUpload";
 
 export default function Register() {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +54,7 @@ export default function Register() {
       className="relative flex flex-col items-center min-w-[1000px] justify-center w-full"
       style={{ height: "calc(100vh - 100px)" }}
     >
-      <div className="flex items-center justify-center mb-4 w-1/2">
+      <div className="flex items-center justify-center w-1/2 mb-4">
         <div className="text-right mr-2 w-[150px] font-bold">일시 :</div>
         <div className="relative w-3/5 h-[40px]">
           <div
@@ -128,7 +129,7 @@ export default function Register() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center w-1/2 m-4 z-1 relative">
+      <div className="relative flex items-center justify-center w-1/2 m-4 z-1">
         <div className="text-right mr-2 w-[150px] font-bold">추첨 방법 :</div>
         <div
           className="relative w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px] cursor-pointer"
@@ -139,7 +140,7 @@ export default function Register() {
           </div>
           <div className="ml-2">▼</div>
           {isOpen && (
-            <div className="absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg">
+            <div className="absolute left-0 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg top-full">
               <div
                 className="px-4 py-2 hover:bg-gray-100"
                 onClick={() => selectMethod("사다리 타기")}
@@ -170,7 +171,7 @@ export default function Register() {
           <br />※ csv 파일만 등록할 수 있습니다.
           <br />※ 아직 명단이 완성되지 않았다면 등록이후 수정란에서 명단을
           등록해주세요.
-          <div className="flex mb-10 mt-2">
+          <div className="flex mt-2 mb-10">
             <div className=" w-full h-[40px] flex items-center justify-between py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
               <div className="flex-1 text-[14px] leading-[140%] text-[#828282] line-clamp-1">
                 {selectedFile}
