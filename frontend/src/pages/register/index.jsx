@@ -4,6 +4,8 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import Time from "../../components/register/Time";
 import ImgUpload from "@/components/register/ImgUpload";
+import upload from "../../images/upload.png";
+import Image from "next/image";
 
 export default function Register() {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,10 +53,14 @@ export default function Register() {
 
   return (
     <div
-      className="relative flex flex-col items-center min-w-[1000px] justify-center w-full"
+      className=" mt-20 flex flex-col items-center min-w-[1000px] justify-center w-full"
       style={{ height: "calc(100vh - 100px)" }}
     >
-      <div className="flex items-center justify-center w-1/2 mb-4">
+      <div className="w-1/5 mt-20 ">
+        <ImgUpload />
+      </div>
+
+      <div className="flex items-center justify-center w-1/2">
         <div className="text-right mr-2 w-[150px] font-bold">일시 :</div>
         <div className="relative w-3/5 h-[40px]">
           <div
@@ -93,31 +99,7 @@ export default function Register() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center w-1/2 m-4">
-        <div className="text-right mr-2 w-[150px] font-bold">대표 사진 :</div>
-        <div className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
-          <input
-            type="text"
-            className="flex-1 text-[14px] leading-[140%] font-black text-[#828282] line-clamp-1"
-            placeholder="사진을 등록해주세요."
-            onChange={handleEventName}
-          />
-        </div>
-        <div className="flex items-center justify-center  bg-[#d9d9d9] rounded-[5px] px-4 ml-2">
-          <label style={{ cursor: "pointer" }} htmlFor="fileInput">
-            <input
-              type="file"
-              accept=".csv,.xlsx"
-              id="fileInput"
-              style={{ display: "none", cursor: "pointer" }}
-              onChange={handleFile}
-            />
-            파일 찾기
-          </label>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-center w-1/2 m-4">
+      <div className="flex items-center justify-center w-1/2 mb-4">
         <div className="text-right mr-2 w-[150px] font-bold">당첨자 수 :</div>
         <div className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
           <input
@@ -129,7 +111,7 @@ export default function Register() {
         </div>
       </div>
 
-      <div className="relative flex items-center justify-center w-1/2 m-4 z-1">
+      <div className="relative flex items-center justify-center w-1/2 mb-4 z-1">
         <div className="text-right mr-2 w-[150px] font-bold">추첨 방법 :</div>
         <div
           className="relative w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px] cursor-pointer"
@@ -164,8 +146,8 @@ export default function Register() {
         </div>
       </div>
 
-      <div className="flex items-center justify-center w-1/2 mt-10">
-        <div className="text-right mr-2 w-[150px] font-bold">명단 :</div>
+      <div className="flex items-center justify-center w-1/2 mb-10">
+        <div className="text-right mr-2 mt-6 w-[150px] font-bold">명단 :</div>
         <div className="w-full text-[12px] whitespace-nowrap">
           ※ 휴대폰 번호가 있는 명단을 등록해주세요.
           <br />※ csv 파일만 등록할 수 있습니다.
@@ -194,7 +176,7 @@ export default function Register() {
       </div>
 
       <div className="flex justify-end w-1/2 z-1">
-        <button className="w-[96px] mt-10 h-[45px] py-[6px] px-[16px] bg-[#000] text-white rounded-[8px]">
+        <button className="w-[96px] mb-10 h-[45px] py-[6px] px-[16px] bg-[#000] text-white rounded-[8px]">
           등록
         </button>
       </div>

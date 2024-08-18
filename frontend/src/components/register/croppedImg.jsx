@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 
-export default function croppedImg({ imageSrc, onCropComplete }) {
+export default function CropImage({ imageSrc, onCropComplete }) {
   const cropperRef = useRef(null);
 
   const getCroppedImage = () => {
@@ -18,7 +18,7 @@ export default function croppedImg({ imageSrc, onCropComplete }) {
       <Cropper
         src={imageSrc}
         style={{ height: 400, width: "100%" }}
-        aspectRatio={1}
+        aspectRatio={1} // 정사각형 비율
         viewMode={1}
         guides={false}
         ref={cropperRef}

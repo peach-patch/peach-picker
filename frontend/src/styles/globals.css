@@ -23,9 +23,9 @@
   font-style: normal;
 }
 
-* {
+/* * {
   margin-top: 0 !important;
-}
+} */
 body {
   @apply font-sans;
 }

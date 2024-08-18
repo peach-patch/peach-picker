@@ -1,33 +1,69 @@
 import React, { useState } from "react";
+import Modal from "./Modal";
 import CropImage from "./croppedImg";
+import Image from "next/image";
+import upload from "../../images/upload.png";
 
 export default function ImageUploadAndCrop() {
   const [imageSrc, setImageSrc] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
-  const [showCropper, setShowCropper] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result);
-      setShowCropper(true);
+      setIsModalOpen(true);
     };
     reader.readAsDataURL(file);
   };
 
   const handleCropComplete = (croppedImageDataUrl) => {
     setCroppedImage(croppedImageDataUrl);
-    setShowCropper(false);
+    setIsModalOpen(false);
   };
 
   return (
-    <div>
-      <input type="file" onChange={handleImageUpload} />
-      {showCropper && imageSrc && (
-        <CropImage imageSrc={imageSrc} onCropComplete={handleCropComplete} />
+    <div className="mb-10 center1">
+      {croppedImage ? (
+        <img
+          src={croppedImage}
+          alt="Cropped"
+          style={{ width: "100%", height: "auto" }}
+        />
+      ) : (
+        <Image src={upload} layout="responsive" alt="upload" />
       )}
-      {croppedImage && <img src={croppedImage} alt="Cropped" />}
+
+      <button
+        onClick={() => document.getElementById("fileInput").click()}
+        className="font-bold"
+        style={{
+          // marginTop: "10px",
+          padding: "5px 10px",
+          // backgroundColor: "lightgray",
+          color: "black",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+      >
+        대표 사진 등록
+      </button>
+      <input
+        id="fileInput"
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        style={{ display: "none" }}
+      />
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        {imageSrc && (
+          <CropImage imageSrc={imageSrc} onCropComplete={handleCropComplete} />
+        )}
+      </Modal>
     </div>
   );
 }
