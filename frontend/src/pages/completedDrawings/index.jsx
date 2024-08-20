@@ -6,7 +6,7 @@ export default function MyList() {
   const [filteredData, setFilteredData] = useState([]);
   const [filterInput, setFilterInput] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("title");
-  const [ownerFilter, setOwnerFilter] = useState("");
+  const [inputError, setInputError] = useState(false); // 입력 필드 에러
 
   const fetchData = async () => {
     try {
@@ -29,13 +29,23 @@ export default function MyList() {
 
       const result = await response.json();
       setData(result);
-      setFilteredData(result); // 초기 필터링 데이터 설정
+      setFilteredData(result); // 초기 필터링
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   const handleSearch = () => {
+    if (filterInput.trim() === "") {
+      setInputError(true);
+
+      setTimeout(() => {
+        setInputError(false);
+      }, 1000);
+
+      return;
+    }
+
     let filtered = data;
 
     if (selectedFilter === "title") {
@@ -44,7 +54,7 @@ export default function MyList() {
       );
     } else if (selectedFilter === "owner") {
       filtered = data.filter((item) =>
-        item.organizer.toLowerCase().includes(ownerFilter.toLowerCase())
+        item.organizer.toLowerCase().includes(filterInput.toLowerCase())
       );
     }
 
@@ -52,12 +62,12 @@ export default function MyList() {
   };
 
   useEffect(() => {
-    fetchData(); // 초기 렌더링 시 데이터 로드
+    fetchData(); // 초기 렌더링
   }, []);
 
-  useEffect(() => {
-    handleSearch(); // 필터 입력값이 변경될 때마다 필터링 적용
-  }, [filterInput, ownerFilter, selectedFilter]);
+  const inputClassName = inputError
+    ? "p-2 mr-4 border border-red-500 rounded"
+    : "p-2 mr-4 border border-gray-300 rounded";
 
   const columns = React.useMemo(
     () => [
@@ -125,10 +135,10 @@ export default function MyList() {
         </select>
 
         <input
+          className={inputClassName}
           value={filterInput}
           onChange={(e) => setFilterInput(e.target.value)}
           placeholder="검색어 입력"
-          className="p-2 mr-4 border border-gray-300 rounded"
         />
 
         <button
