@@ -36,10 +36,10 @@ public class DrawingController {
     // public List<GetDrawingListResp> getDrawingListByConditions(@RequestBody GetDrawingListReq req) {
     //     return drawingFacade.getDrawingListByConditions(req);
     // }
-@GetMapping
-public List<GetDrawingListResp> getDrawingListByConditions() {
-    return drawingFacade.getDrawingListByConditions(new GetDrawingListReq());
-}
+  @GetMapping
+    public List<GetDrawingListResp> getAllDrawings() {
+        return drawingFacade.getAllDrawings();
+    }
 
 
     @GetMapping("{id}")

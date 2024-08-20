@@ -26,6 +26,14 @@ public class GetDrawingService {
                 .stream().map(GetDrawingListResp::of).collect(Collectors.toList());
     }
 
+
+public List<GetDrawingListResp> getAllDrawings() {
+    return drawingRepository.findAll()
+            .stream()
+            .map(GetDrawingListResp::of)
+            .collect(Collectors.toList());
+}
+
     public GetDrawingDetailsResp getDrawingDetails(final Long id) {
         Drawing drawing = drawingRepository.findById(id).orElseThrow(() -> DrawingNotFoundException.EXCEPTION);
 
