@@ -1,21 +1,17 @@
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { usePagination, useTable } from "react-table";
 
 export default function MyList() {
   const [data, setData] = useState([]);
-  const [filterInput, setFilterInput] = useState("o"); // title 필터의 기본값 "o"
+  const [filteredData, setFilteredData] = useState([]); // 필터링된 데이터를 위한 상태
+  const [filterInput, setFilterInput] = useState(""); // title 필터의 기본값 "o"
   const [selectedFilter, setSelectedFilter] = useState("title");
-  const [startDate, setStartDate] = useState("2024-07-01");
-  const [endDate, setEndDate] = useState("2024-12-08");
-  const [ownerFilter, setOwnerFilter] = useState("헬"); // owner 필터의 기본값 "헬"
+  const [ownerFilter, setOwnerFilter] = useState(""); // owner 필터의 기본값 "헬"
 
-  const fetchData = async (searchParams) => {
+  const fetchData = async () => {
     try {
-      const query = new URLSearchParams(searchParams).toString();
-      console.log(query);
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/drawing?${query}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/drawing`,
         {
           method: "GET",
           headers: {
@@ -32,29 +28,36 @@ export default function MyList() {
       }
 
       const result = await response.json();
-      console.log(result, "결과확인");
       setData(result);
+      setFilteredData(result);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   const handleSearch = () => {
-    const searchParams = {
-      title: filterInput || "o", // 기본값 "o"
-      owner: ownerFilter || "헬", // 기본값 "헬"
-      startDate,
-      endDate,
-    };
+    let filtered = data;
 
-    console.log("Search Params:", searchParams);
+    if (selectedFilter === "title") {
+      filtered = data.filter((item) =>
+        item.title.toLowerCase().includes(filterInput.toLowerCase())
+      );
+    } else if (selectedFilter === "owner") {
+      filtered = data.filter((item) =>
+        item.organizer.toLowerCase().includes(ownerFilter.toLowerCase())
+      );
+    }
 
-    fetchData(searchParams);
+    setFilteredData(filtered);
   };
 
   useEffect(() => {
-    handleSearch(); // 초기 렌더링 시 데이터 로드
+    fetchData(); // 초기 렌더링
   }, []);
+
+  useEffect(() => {
+    handleSearch();
+  }, [filterInput, ownerFilter, selectedFilter]);
 
   const columns = React.useMemo(
     () => [
@@ -107,7 +110,7 @@ export default function MyList() {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
-  } = useTable({ columns, data }, usePagination);
+  } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -125,20 +128,6 @@ export default function MyList() {
           value={filterInput}
           onChange={(e) => setFilterInput(e.target.value)}
           placeholder="검색어 입력"
-          className="p-2 mr-4 border border-gray-300 rounded"
-        />
-
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          className="p-2 mr-4 border border-gray-300 rounded"
-        />
-
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
           className="p-2 mr-4 border border-gray-300 rounded"
         />
 
