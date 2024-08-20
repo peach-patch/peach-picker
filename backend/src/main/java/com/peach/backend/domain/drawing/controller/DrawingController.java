@@ -37,9 +37,10 @@ public class DrawingController {
     //     return drawingFacade.getDrawingListByConditions(req);
     // }
 @GetMapping
-public List<GetDrawingListResp> getDrawingListByConditions(@ModelAttribute GetDrawingListReq req) {
-    return drawingFacade.getDrawingListByConditions(req);
+public List<GetDrawingListResp> getDrawingListByConditions() {
+    return drawingFacade.getDrawingListByConditions(new GetDrawingListReq());
 }
+
 
     @GetMapping("{id}")
     public GetDrawingDetailsResp getDrawingDetails(@PathVariable("id") Long id, @CurrentUser User user) {
