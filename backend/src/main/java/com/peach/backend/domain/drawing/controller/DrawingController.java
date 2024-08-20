@@ -26,15 +26,20 @@ public class DrawingController {
     private final DrawingFacade drawingFacade;
 
     @PostMapping("register")
-    public ResponseEntity<String> registerDrawing(@Valid @RequestBody @ModelAttribute DrawingReq req, @CurrentUser User user) {
+    public ResponseEntity<String> registerDrawing(@Valid @RequestBody @ModelAttribute DrawingReq req,
+            @CurrentUser User user) {
         drawingFacade.createDrawing(req, user);
 
         return ResponseEntity.ok().body("추첨 생성이 완료되었습니다.");
     }
-    @GetMapping
-    public List<GetDrawingListResp> getDrawingListByConditions(@RequestBody GetDrawingListReq req) {
-        return drawingFacade.getDrawingListByConditions(req);
-    }
+    // @GetMapping
+    // public List<GetDrawingListResp> getDrawingListByConditions(@RequestBody GetDrawingListReq req) {
+    //     return drawingFacade.getDrawingListByConditions(req);
+    // }
+@GetMapping
+public List<GetDrawingListResp> getDrawingListByConditions(@ModelAttribute GetDrawingListReq req) {
+    return drawingFacade.getDrawingListByConditions(req);
+}
 
     @GetMapping("{id}")
     public GetDrawingDetailsResp getDrawingDetails(@PathVariable("id") Long id, @CurrentUser User user) {
@@ -42,13 +47,13 @@ public class DrawingController {
     }
 
     @PostMapping("seed")
-    public ResponseEntity<Long> createDrawingSeed(@RequestBody DrawingSeedReq seed){
+    public ResponseEntity<Long> createDrawingSeed(@RequestBody DrawingSeedReq seed) {
         ;
         return ResponseEntity.ok().body(drawingFacade.createDrawingSeed(seed.getClientTime()));
     }
 
     @PostMapping("start")
-    public ResponseEntity<String> StartDrawing(@RequestBody StartDrawingReq req){
+    public ResponseEntity<String> StartDrawing(@RequestBody StartDrawingReq req) {
         return ResponseEntity.ok().body(drawingFacade.startDrawing(req) + "명의 당첨자가 추첨되었습니다.");
     }
 
