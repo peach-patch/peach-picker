@@ -4,9 +4,9 @@ import { usePagination, useTable } from "react-table";
 export default function MyList() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]); // 필터링된 데이터를 위한 상태
-  const [filterInput, setFilterInput] = useState(""); // title 필터의 기본값 "o"
+  const [filterInput, setFilterInput] = useState("o");
   const [selectedFilter, setSelectedFilter] = useState("title");
-  const [ownerFilter, setOwnerFilter] = useState(""); // owner 필터의 기본값 "헬"
+  const [ownerFilter, setOwnerFilter] = useState("헬"); // owner 필터의 기본값 "헬"
 
   const fetchData = async () => {
     try {
@@ -29,7 +29,7 @@ export default function MyList() {
 
       const result = await response.json();
       setData(result);
-      setFilteredData(result);
+      setFilteredData(result); // 초기 필터링 데이터 설정
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -52,11 +52,11 @@ export default function MyList() {
   };
 
   useEffect(() => {
-    fetchData(); // 초기 렌더링
+    fetchData(); // 초기 렌더링 시 데이터 로드
   }, []);
 
   useEffect(() => {
-    handleSearch();
+    handleSearch(); // 필터 입력값이 변경될 때마다 필터링 적용
   }, [filterInput, ownerFilter, selectedFilter]);
 
   const columns = React.useMemo(

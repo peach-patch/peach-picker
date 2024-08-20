@@ -32,10 +32,15 @@ public class DrawingFacade {
         createDrawingService.createDrawing(req, user);
     }
 
-    @Transactional(readOnly = true)
-    public List<GetDrawingListResp> getDrawingListByConditions(GetDrawingListReq req) {
-        return getDrawingService.getDrawingListByConditions(req);
-    }
+    // @Transactional(readOnly = true)
+    // public List<GetDrawingListResp> getDrawingListByConditions(GetDrawingListReq req) {
+    //     return getDrawingService.getDrawingListByConditions(req);
+    // }
+@Transactional(readOnly = true)
+public List<GetDrawingListResp> getAllDrawings() {
+    return getDrawingService.getAllDrawings();
+}
+
 
     @Transactional(readOnly = true)
     public GetDrawingDetailsResp getDrawingDetails(Long id) {
