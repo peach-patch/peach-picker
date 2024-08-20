@@ -4,23 +4,31 @@ import { usePagination, useTable } from "react-table";
 
 export default function MyList() {
   const [data, setData] = useState([]);
-  const [filterInput, setFilterInput] = useState("");
+  const [filterInput, setFilterInput] = useState("o"); // title 필터의 기본값 "o"
   const [selectedFilter, setSelectedFilter] = useState("title");
   const [startDate, setStartDate] = useState("2024-07-01");
   const [endDate, setEndDate] = useState("2024-12-08");
+  const [ownerFilter, setOwnerFilter] = useState("헬"); // owner 필터의 기본값 "헬"
 
   const fetchData = async (searchParams) => {
     try {
       const query = new URLSearchParams(searchParams).toString();
-      const response = await fetch(`/api/drawing?${query}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      console.log(query);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/drawing?${query}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const errorText = await response.text();
+        throw new Error(
+          `Network response was not ok: ${response.status} - ${errorText}`
+        );
       }
 
       const result = await response.json();
@@ -33,17 +41,19 @@ export default function MyList() {
 
   const handleSearch = () => {
     const searchParams = {
-      title: selectedFilter === "title" ? filterInput : "",
-      owner: selectedFilter === "owner" ? filterInput : "",
-      startDate: startDate,
-      endDate: endDate,
+      title: filterInput || "o", // 기본값 "o"
+      owner: ownerFilter || "헬", // 기본값 "헬"
+      startDate,
+      endDate,
     };
+
+    console.log("Search Params:", searchParams);
 
     fetchData(searchParams);
   };
 
   useEffect(() => {
-    handleSearch();
+    handleSearch(); // 초기 렌더링 시 데이터 로드
   }, []);
 
   const columns = React.useMemo(
