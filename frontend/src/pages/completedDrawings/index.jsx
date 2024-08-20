@@ -3,10 +3,10 @@ import { usePagination, useTable } from "react-table";
 
 export default function MyList() {
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]); // 필터링된 데이터를 위한 상태
-  const [filterInput, setFilterInput] = useState("o");
+  const [filteredData, setFilteredData] = useState([]);
+  const [filterInput, setFilterInput] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("title");
-  const [ownerFilter, setOwnerFilter] = useState("헬"); // owner 필터의 기본값 "헬"
+  const [ownerFilter, setOwnerFilter] = useState("");
 
   const fetchData = async () => {
     try {
