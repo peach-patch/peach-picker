@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ko } from "date-fns/locale";
+import { useRouter } from "next/router";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import Time from "../../components/register/Time";
@@ -16,8 +17,9 @@ export default function Register() {
   const [winnerCnt, setWinnerCnt] = useState("");
   const [eventName, setEventName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const [thumbnail, setThumbnail] = useState(null); // 썸네일 이미지를 위한 상태
+  const [thumbnail, setThumbnail] = useState(null);
   const { token } = useAuthStore();
+  const router = useRouter();
 
   const dropDown = () => {
     setIsOpen(!isOpen);
@@ -58,7 +60,6 @@ export default function Register() {
   };
 
   const handleImageSelect = (imageDataUrl) => {
-    // Base64 이미지를 Blob으로 변환
     const byteString = atob(imageDataUrl.split(",")[1]);
     const mimeString = imageDataUrl.split(",")[0].split(":")[1].split(";")[0];
     const ab = new ArrayBuffer(byteString.length);
@@ -103,7 +104,7 @@ export default function Register() {
     }
 
     if (thumbnail) {
-      formData.append("thumbnail", thumbnail, "thumbnail.png"); // 썸네일 이미지 추가
+      formData.append("thumbnail", thumbnail, "thumbnail.png");
     }
     for (let [key, value] of formData.entries()) {
       console.log(key, value, "확인");
@@ -121,8 +122,9 @@ export default function Register() {
       );
 
       if (response.ok) {
-        const data = await response.json();
-        console.log("Success:", data);
+        const result = await response.text();
+        alert(result);
+        router.push("/mypage/mylist");
       } else {
         console.error("Error:", response.statusText);
       }
