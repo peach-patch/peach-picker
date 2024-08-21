@@ -195,21 +195,21 @@ export default function Register() {
             <div className="absolute left-0 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg top-full">
               <div
                 className="px-4 py-2 hover:bg-gray-100"
-                onClick={() => selectMethod("사다리 타기")}
+                onClick={() => selectMethod("LOTTERY")}
               >
-                사다리 타기
+                로또
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100"
-                onClick={() => selectMethod("핀볼")}
+                onClick={() => selectMethod("PINBALL")}
               >
                 핀볼
               </div>
               <div
                 className="px-4 py-2 hover:bg-gray-100"
-                onClick={() => selectMethod("공 뽑기")}
+                onClick={() => selectMethod("ROULETTE")}
               >
-                공 뽑기
+                룰렛
               </div>
             </div>
           )}
