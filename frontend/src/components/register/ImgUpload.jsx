@@ -4,7 +4,7 @@ import CropImage from "./croppedImg";
 import Image from "next/image";
 import upload from "../../images/upload.png";
 
-export default function ImageUploadAndCrop() {
+export default function ImageUploadAndCrop({ onImageSelect }) {
   const [imageSrc, setImageSrc] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,6 +22,9 @@ export default function ImageUploadAndCrop() {
   const handleCropComplete = (croppedImageDataUrl) => {
     setCroppedImage(croppedImageDataUrl);
     setIsModalOpen(false);
+
+    // 크롭된 이미지를 상위 컴포넌트로 전달
+    onImageSelect(croppedImageDataUrl);
   };
 
   return (
@@ -40,9 +43,7 @@ export default function ImageUploadAndCrop() {
         onClick={() => document.getElementById("fileInput").click()}
         className="font-bold"
         style={{
-          // marginTop: "10px",
           padding: "5px 10px",
-          // backgroundColor: "lightgray",
           color: "black",
           border: "none",
           borderRadius: "5px",

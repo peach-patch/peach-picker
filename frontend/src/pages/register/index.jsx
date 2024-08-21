@@ -11,12 +11,13 @@ export default function Register() {
   const [calOpen, setCalOpen] = useState(false);
   const [formatDay, setFormatDay] = useState("날짜 선택");
   const [selectedDay, setSelectedDay] = useState(new Date());
-  const [selectedTime, setSelectedTime] = useState("15:00"); // 기본 시간 설정
+  const [selectedTime, setSelectedTime] = useState("15:00");
   const [method, setMethod] = useState("추첨 방법 선택");
   const [winnerCnt, setWinnerCnt] = useState("");
   const [eventName, setEventName] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
-  const { token } = useAuthStore(); // 필요한 데이터만 가져옴
+  const [thumbnail, setThumbnail] = useState(null); // 썸네일 이미지를 위한 상태
+  const { token } = useAuthStore();
 
   const dropDown = () => {
     setIsOpen(!isOpen);
@@ -31,7 +32,7 @@ export default function Register() {
     setFormatDay(
       `${day.getFullYear()}년 ${day.getMonth() + 1}월 ${day.getDate()}일`
     );
-    setCalOpen(false); // 날짜를 선택하면 달력을 닫음
+    setCalOpen(false);
   };
 
   const selectMethod = (selectedMethod) => {
@@ -56,8 +57,21 @@ export default function Register() {
     }
   };
 
+  const handleImageSelect = (imageDataUrl) => {
+    // Base64 이미지를 Blob으로 변환
+    const byteString = atob(imageDataUrl.split(",")[1]);
+    const mimeString = imageDataUrl.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([ab], { type: mimeString });
+
+    setThumbnail(blob);
+  };
+
   const handleSubmit = async () => {
-    // 날짜와 시간을 합쳐서 하나의 Date 객체로 변환
     const [hours, minutes] = selectedTime.split(":");
     const combinedDateTime = new Date(
       selectedDay.getFullYear(),
@@ -67,7 +81,6 @@ export default function Register() {
       parseInt(minutes, 10)
     );
 
-    // YYYY-MM-DDTHH:MM 형식으로 변환 (로컬 시간대 기준)
     const year = combinedDateTime.getFullYear();
     const month = String(combinedDateTime.getMonth() + 1).padStart(2, "0");
     const day = String(combinedDateTime.getDate()).padStart(2, "0");
@@ -81,7 +94,7 @@ export default function Register() {
 
     const formData = new FormData();
     formData.append("title", eventName);
-    formData.append("drawingAt", formattedDateTime); // YYYY-MM-DDTHH:MM 형식
+    formData.append("drawingAt", formattedDateTime);
     formData.append("drawingType", method);
     formData.append("winner", winnerCnt);
 
@@ -89,11 +102,13 @@ export default function Register() {
       formData.append("participants", selectedFile);
     }
 
+    if (thumbnail) {
+      formData.append("thumbnail", thumbnail, "thumbnail.png"); // 썸네일 이미지 추가
+    }
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value, "확인");
+    }
     try {
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/drawing/register`,
         {
@@ -123,7 +138,7 @@ export default function Register() {
     >
       {/* 이미지 업로드 섹션 */}
       <div className="w-1/5 mt-20">
-        <ImgUpload />
+        <ImgUpload onImageSelect={handleImageSelect} />
       </div>
 
       {/* 일시 선택 섹션 */}
