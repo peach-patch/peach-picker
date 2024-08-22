@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "./Modal";
 import CropImage from "./croppedImg";
 import Image from "next/image";
-import upload from "../../images/upload.png";
+import upload from "../../images/upload.webp";
 
 export default function ImageUploadAndCrop({ onImageSelect }) {
   const [imageSrc, setImageSrc] = useState(null);

@@ -6,6 +6,7 @@ import "react-day-picker/dist/style.css";
 import Time from "../../components/register/Time";
 import ImgUpload from "@/components/register/ImgUpload";
 import useAuthStore from "../../store/authStore";
+import Button from "@/components/button/Button";
 
 export default function Register() {
   const [isOpen, setIsOpen] = useState(false);
@@ -252,7 +253,7 @@ export default function Register() {
                 <input
                   type="file"
                   accept=".csv"
-                  id="csvFileInput" // ID를 고유하게 설정
+                  id="csvFileInput"
                   style={{ display: "none", cursor: "pointer" }}
                   onChange={handleFile}
                 />
@@ -263,14 +264,12 @@ export default function Register() {
         </div>
       </div>
 
-      {/* 등록 버튼 */}
       <div className="flex justify-end w-1/2 z-1">
-        <button
-          className="w-[96px] mb-10 h-[45px] py-[6px] px-[16px] bg-[#000] text-white rounded-[8px]"
+        <Button
+          text="등록"
           onClick={handleSubmit}
-        >
-          등록
-        </button>
+          className="w-[96px] mb-10 bg-black text-white"
+        />
       </div>
     </div>
   );

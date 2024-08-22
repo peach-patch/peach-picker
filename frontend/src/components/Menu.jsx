@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useAuthStore from "../store/authStore";
-import menu_logo from "../../public/피치피커.png";
+import menu_logo from "../../public/피치피커.webp";
 import hamburger from "../images/hamburger.png";
 import bell from "../images/bell.png";
 import search from "../images/search.png";

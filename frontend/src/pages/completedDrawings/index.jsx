@@ -1,3 +1,4 @@
+import Button from "@/components/button/Button";
 import React, { useState, useEffect } from "react";
 import { usePagination, useTable } from "react-table";
 
@@ -73,7 +74,7 @@ export default function MyList() {
     () => [
       {
         accessor: "id",
-        Header: "ID",
+        Header: "NO",
         Cell: ({ value }) => <div>{value}</div>,
       },
       {
@@ -98,7 +99,7 @@ export default function MyList() {
       },
       {
         accessor: "organizer",
-        Header: "추첨 회사",
+        Header: "추첨자",
         Cell: ({ value }) => <div>{value}</div>,
       },
     ],
@@ -140,13 +141,11 @@ export default function MyList() {
           onChange={(e) => setFilterInput(e.target.value)}
           placeholder="검색어 입력"
         />
-
-        <button
+        <Button
+          text="검색"
           onClick={handleSearch}
-          className="p-2 text-white bg-blue-500 rounded"
-        >
-          검색
-        </button>
+          className="text-white px-4 bg-[#fb5e67]"
+        />
       </div>
       <div className="flex items-center content-end justify-between w-4/5">
         <div className="pb-1 pl-1 text-left">완료된 추첨 내역</div>

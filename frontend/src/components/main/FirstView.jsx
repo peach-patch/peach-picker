@@ -5,8 +5,8 @@ import greenEffect from "../../images/greeny.png";
 import peach from "../../images/3dpeach.png";
 import blue_heart from "../../images/blue_heart.png";
 import main_picker from "../../images/main-picker.png";
-import main_letter from "../../images/mainLetter.png";
-import earth from "../../images/earth.png";
+import main_letter from "../../images/mainLetter.webp";
+import earth from "../../images/earth.webp";
 import Menu from "../Menu";
 import { useEffect, useState } from "react";
 
