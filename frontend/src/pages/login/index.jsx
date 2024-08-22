@@ -10,6 +10,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import KakaoLogin from "@/components/login/KakaoLogin";
 import useAuthStore from "../../store/authStore";
+import Input from "@/components/login/Input";
+import Button from "@/components/button/Button";
 
 const Index = () => {
   const [email, setEmail] = useState("");
@@ -106,32 +108,27 @@ const Index = () => {
           />
           <span className="ml-2 text-sm">아이디 저장</span>
         </div>
-        <div className="mt-2 flex items-center w-full py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
-          <input
-            type="text"
-            className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
-            placeholder="아이디"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="my-5 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
-          <input
-            type="password"
-            className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
-            placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div className="text-red-500 mb-5 text-[10px]">{message}</div>
-
-        <BasicBtn
-          text={"로그인"}
-          type="submit"
-          bgColor={"#fb5e67"}
-          textColor={"#fff"}
+        <Input
+          type="text"
+          value={email}
+          placeholder="아이디"
+          onChange={(e) => setEmail(e.target.value)}
         />
+
+        <Input
+          type="password"
+          value={password}
+          placeholder="비밀번호"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <div className="text-red-500 mb-5 text-[10px]">{message}</div>
+        <Button
+          type="submit"
+          text="로그인"
+          className="text-white w-full py-4 bg-[#fb5e67] "
+        />
+
         <div className="flex m-1 mt-4">
           <div className="text-sm font-bold">
             <Link href={"/login/signup"}>회원가입 |</Link>

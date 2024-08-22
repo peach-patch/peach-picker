@@ -7,6 +7,8 @@ import TermsOfService from "../../components/signup/TermsOfService";
 import PrivacyPolicy from "../../components/signup/PrivacyPolicy";
 import EmailVerification from "../../components/signup/EmailVerification";
 import KakaoSignup from "../../components/signup/KakaoSignup";
+import Input from "@/components/login/Input";
+import CheckBox from "@/components/login/CheckBox";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -144,16 +146,13 @@ const Signup = () => {
           <div className="w-2/12 text-sm text-center">혹은</div>
           <div className="w-5/12 border-[1px] h-[1px] border-black"></div>
         </div>
-        <div className="mt-4">Username</div>
-        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
-          <input
-            type="text"
-            className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
-            placeholder="Enter username"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+        <Input
+          title="Username"
+          type="text"
+          placeholder="Enter username"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
         {errors.name && (
           <div className="text-red-500 mb-3 text-[10px]">{errors.name}</div>
         )}
@@ -174,30 +173,24 @@ const Signup = () => {
           <div className="text-red-500 mb-3 text-[10px]">{errors.email}</div>
         )}
 
-        <div className="mt-4">Password</div>
-        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
-          <input
-            type="password"
-            className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+        <Input
+          title="Password"
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
         {errors.password && (
           <div className="text-red-500 mb-3 text-[10px]">{errors.password}</div>
         )}
 
-        <div className="mt-4">Confirm Password</div>
-        <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
-          <input
-            type="password"
-            className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
+        <Input
+          title="Confirm Password"
+          type="password"
+          placeholder="Confirm password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
         {errors.confirmPassword && (
           <div className="text-red-500 mb-3 text-[10px]">
             {errors.confirmPassword}
@@ -209,29 +202,22 @@ const Signup = () => {
           visible={termsVisible}
           toggleVisibility={() => setTermsVisible(!termsVisible)}
         />
-        <div className="flex items-center mt-2">
-          <input
-            type="checkbox"
-            checked={termsAccepted}
-            onChange={(e) => setTermsAccepted(e.target.checked)}
-          />
-          <span className="ml-2 text-sm">이용약관에 동의함</span>
-        </div>
+        <CheckBox
+          checked={termsAccepted}
+          onChange={(e) => setTermsAccepted(e.target.checked)}
+          text="이용약관에 동의함"
+        />
+
         <div className="mt-5 mb-5">
           <PrivacyPolicy
             visible={privacyVisible}
             toggleVisibility={() => setPrivacyVisible(!privacyVisible)}
           />
-          <div className="flex items-center mt-2">
-            <input
-              type="checkbox"
-              checked={privacyAccepted}
-              onChange={(e) => setPrivacyAccepted(e.target.checked)}
-            />
-            <span className="ml-2 text-sm">
-              개인 정보 수집 및 이용에 동의함
-            </span>
-          </div>
+          <CheckBox
+            checked={privacyAccepted}
+            onChange={(e) => setPrivacyAccepted(e.target.checked)}
+            text="개인 정보 수집 및 이용에 동의함"
+          />
         </div>
 
         {showWarning && (

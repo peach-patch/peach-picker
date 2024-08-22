@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
 import Image from "next/image";
+import Input from "@/components/login/Input";
+import Button from "@/components/button/Button";
 
 export default function Edit() {
   const { isLoggedIn, token, isInitialized, initialize } = useAuthStore();
@@ -16,6 +18,9 @@ export default function Edit() {
   const [passwordMessage, setPasswordMessage] = useState("");
   const router = useRouter();
   const fileInputRef = useRef(null);
+  const handleCancel = () => {
+    router.push("/mypage");
+  };
 
   useEffect(() => {
     if (!isInitialized) {
@@ -69,18 +74,16 @@ export default function Edit() {
       if (!response.ok) {
         throw new Error("프로필 업데이트에 실패했습니다.");
       }
-      console.log(response, "이거꼭꼭response");
+
       const contentType = response.headers.get("content-type");
-      console.log(contentType, "이거더더더꼭꼭response");
+
       if (contentType && contentType.includes("application/json")) {
         const data = await response.json();
-        console.log(data, "이거꼭확인해");
-        // 서버에서 반환된 데이터를 로컬 스토리지에 저장
+
         localStorage.setItem("email", data.email);
         localStorage.setItem("userName", data.name);
         localStorage.setItem("profileImg", data.profileUrl);
 
-        // 상태 업데이트
         setUsername(data.name);
         setEmail(data.email);
         setProfileImg(data.profileUrl);
@@ -88,18 +91,19 @@ export default function Edit() {
         setMessage("프로필이 성공적으로 업데이트되었습니다.");
       } else if (contentType.includes("text/plain")) {
         const textData = await response.text();
-        console.log("Response Data (Text):", textData, "과연 ㅋㅋ");
+
         localStorage.setItem("userName", username);
         localStorage.setItem("profileImg", profileImg);
       } else {
         const textData = await response.text();
-        console.log(textData, "확인");
+
         alert(textData);
       }
 
       router.push("/mypage");
     } catch (error) {
       console.error("Error updating profile:", error);
+      alert(error);
       setMessage("프로필 업데이트에 실패했습니다.");
     }
   };
@@ -121,8 +125,8 @@ export default function Edit() {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-2/3 relative max-w-[606px] flex flex-col">
-        <div className="relative mb-1 mt-20 left-0 w-[103px] h-[38px] text-[20px] flex flex-col justify-center">
+      <div className="w-2/3 mb-20 relative max-w-[606px] flex flex-col">
+        <div className="relative mb-1 mt-15 left-0 w-[103px] h-[38px] text-[20px] flex flex-col justify-center">
           회원 정보
         </div>
         <div className="w-full mb-3 h-0 border-[1px] border-solid border-[#000]"></div>
@@ -146,89 +150,45 @@ export default function Edit() {
             프로필사진 수정
           </div>
         </div>
-        <div className="mb-1 w-[112px] text-[20px]">Username</div>
-        <div className="relative w-full h-[70px] flex flex-col">
-          <div className="absolute left-0 w-full h-[70px] bg-[#f8f8f8] border-[1px] border-solid border-[#808080]"></div>
-          <input
-            type="text"
-            className="absolute bg-[#f8f8f8] top-[50%] transform -translate-y-1/2 left-[27px] text-[20px] outline-none"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-              setUsernameMessage("");
-            }}
-          />
-          {usernameMessage && (
-            <div className="absolute left-[27px] top-[70px] text-red-500 text-[10px]">
-              {usernameMessage}
-            </div>
-          )}
-        </div>
-        <div className="mt-4 mb-1 w-[112px] text-[20px]">Email</div>
-        <div className="relative w-full h-[70px] flex flex-col">
-          <div className="absolute left-0 w-full h-[70px] bg-[#f8f8f8] border-[1px] border-solid border-[#808080]"></div>
-          <input
-            type="text"
-            className="absolute bg-[#f8f8f8] top-[50%] transform -translate-y-1/2 left-[27px] text-[20px] outline-none"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            readOnly
-          />
-        </div>
-        <div className="text-[20px] mb-1 mt-4">Password</div>
-        {/* <div className="relative w-full h-[70px] flex flex-col">
-          <div className="absolute left-0 w-full h-[70px] bg-[#f8f8f8] border-[1px] border-solid border-[#808080]"></div>
-          <input
-            type="password"
-            className="absolute bg-[#f8f8f8] top-[50%] transform -translate-y-1/2 left-[27px] text-[20px] outline-none"
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setPasswordMessage("");
-            }}
-          />
-          {passwordMessage && (
-            <div className="absolute left-[27px] top-[70px] text-red-500 text-[10px]">
-              {passwordMessage}
-            </div>
-          )}
-        </div>
-        <div className="mt-4 mb-1 w-[200px] text-[20px]">Confirm Password</div>
-        <div className="relative w-full h-[70px] flex flex-col">
-          <div className="absolute left-0 w-full h-[70px] bg-[#f8f8f8] border-[1px] border-solid border-[#808080]"></div>
-          <input
-            type="password"
-            className="absolute bg-[#f8f8f8] top-[50%] transform -translate-y-1/2 left-[27px] text-[20px] outline-none"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => {
-              setConfirmPassword(e.target.value);
-              setMessage("");
-            }}
-          />
-        </div> */}
-        {/* {message && (
-          <div className="text-red-500 mb-3 text-[10px]">{message}</div>
-        )} */}
-        <div className="flex mt-20">
-          <div
-            className="flex items-center justify-center w-1/2 mr-2 h-[70px] bg-[#fb5e67] rounded-[5px] cursor-pointer"
+
+        <Input
+          title="Username"
+          type="text"
+          value={username}
+          onChange={(e) => {
+            setUsername(e.target.value);
+            setUsernameMessage("");
+          }}
+        />
+
+        {usernameMessage && (
+          <div className="absolute left-[27px] top-[70px] text-red-500 text-[10px]">
+            {usernameMessage}
+          </div>
+        )}
+
+        <Input
+          title="Email"
+          type="text"
+          value={email}
+          readOnly
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <div className="flex gap-2 mt-20 mb-2">
+          <Button
+            text="회원정보 수정"
+            className="bg-[#fb5e67] w-full py-5 text-white"
             onClick={handleUpdateProfile}
-          >
-            <div className=" text-[20px] text-[#fff] text-center whitespace-nowrap">
-              회원정보 수정
-            </div>
-          </div>
-          <div className="w-1/2 ml-2 h-[70px] flex items-center justify-center bg-[#fff] border-[1px] border-solid border-[#808080] rounded-[5px]">
-            <div className="text-[20px] text-center">탈퇴</div>
-          </div>
+          />
+
+          <Button text="탈퇴" className="py-5 border-[#808080] border w-full" />
         </div>
-        <Link href="/mypage">
-          <div className="mt-4 mb-10 center1 w-full h-[70px] bg-[#fff] border-[1px] border-solid border-[#808080] rounded-[5px]">
-            <div className=" text-[20px]">취소</div>
-          </div>
-        </Link>
+        <Button
+          text="취소"
+          onClick={handleCancel}
+          className="border py-5 border-[#808080]"
+        />
       </div>
     </div>
   );
