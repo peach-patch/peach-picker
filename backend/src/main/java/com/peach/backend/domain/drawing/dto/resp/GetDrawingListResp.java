@@ -15,6 +15,7 @@ public class GetDrawingListResp {
     private Long winner;
     private String drawingType;
     private String organizer;
+    private String thumbnailPath; //추가
 
     public static GetDrawingListResp of(Drawing drawing) {
         return GetDrawingListResp.builder()
@@ -24,6 +25,7 @@ public class GetDrawingListResp {
                 .winner(drawing.getWinner())
                 .organizer(drawing.getOwner().getName())
                 .drawingType(drawing.getDrawingType().getName())
+                 .thumbnailPath(drawing.getThumbnailPath()) //추가
                 .build();
     }
 }
