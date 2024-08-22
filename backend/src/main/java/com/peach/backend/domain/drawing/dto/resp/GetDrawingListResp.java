@@ -16,6 +16,7 @@ public class GetDrawingListResp {
     private String drawingType;
     private String organizer;
     private String thumbnailPath; //추가
+    private int viewCount;  // 조회수
 
     public static GetDrawingListResp of(Drawing drawing) {
         return GetDrawingListResp.builder()
@@ -25,7 +26,8 @@ public class GetDrawingListResp {
                 .winner(drawing.getWinner())
                 .organizer(drawing.getOwner().getName())
                 .drawingType(drawing.getDrawingType().getName())
-                 .thumbnailPath(drawing.getThumbnailPath()) //추가
+                .thumbnailPath(drawing.getThumbnailPath()) //추가
+                 .viewCount(drawing.getViewCount()) // 조회수
                 .build();
     }
 }

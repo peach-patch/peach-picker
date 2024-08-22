@@ -37,6 +37,9 @@ public List<GetDrawingListResp> getAllDrawings() {
     public GetDrawingDetailsResp getDrawingDetails(final Long id) {
         Drawing drawing = drawingRepository.findById(id).orElseThrow(() -> DrawingNotFoundException.EXCEPTION);
 
+        drawing.incrementViewCount();
+        drawingRepository.save(drawing); // 조회수 저장
+
         return GetDrawingDetailsResp.builder()
                 .title(drawing.getTitle())
                 .winner(drawing.getWinner())
