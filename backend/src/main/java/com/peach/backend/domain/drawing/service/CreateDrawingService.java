@@ -28,21 +28,23 @@ public class CreateDrawingService {
     private final CsvUtil csvUtil;
 
     public void createDrawing(DrawingReq req, User user) {
-        
+
         Drawing drawing = drawingRepository.save(req.toEntity(user));
 
         saveParticipants(req.getParticipants(), drawing);
         saveThumbnail(req.getThumbnail(), drawing);
-        
+
     }
 
     private void saveParticipants(MultipartFile participants, Drawing drawing) {
-        if(participants != null) {
-            List<Participant> participantList = csvUtil.readCsv(participants, ParticipantsCsvDto.class).stream().map(dto -> dto.toEntity(drawing)).collect(Collectors.toList());
+        if (participants != null) {
+            List<Participant> participantList = csvUtil.readCsv(participants, ParticipantsCsvDto.class).stream()
+                    .map(dto -> dto.toEntity(drawing)).collect(Collectors.toList());
 
             participantRepository.saveAll(participantList);
 
-            String participantPath = "drawing/" + drawing.getOwner().getEmail() + "/participants/" + drawing.getId() + "/" + participants.getOriginalFilename();
+            String participantPath = "drawing/" + drawing.getOwner().getEmail() + "/participants/" + drawing.getId()
+                    + "/" + participants.getOriginalFilename();
 
             drawing.updateParticipants(participantPath);
             minioUtil.putObjectToMinio(participants, participantPath);
@@ -51,11 +53,13 @@ public class CreateDrawingService {
     }
 
     private void saveThumbnail(MultipartFile thumbnail, Drawing drawing) {
-        if(thumbnail != null) {
-            String thumbnailPath = "drawing/" + drawing.getOwner().getEmail() + "/thumbnail/" + drawing.getId() + "/" + thumbnail.getOriginalFilename();
+        if (thumbnail != null) {
+            String thumbnailPath = "drawing/" + drawing.getOwner().getEmail() + "/thumbnail/" + drawing.getId() + "/"
+                    + thumbnail.getOriginalFilename();
             drawing.updateThumbnail(thumbnailPath);
             minioUtil.putObjectToMinio(thumbnail, thumbnailPath);
             drawingRepository.save(drawing); // 썸네일 추가
         }
+
     }
 }

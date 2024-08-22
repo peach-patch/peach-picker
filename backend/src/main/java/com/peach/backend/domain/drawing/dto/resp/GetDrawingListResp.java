@@ -30,8 +30,8 @@ public class GetDrawingListResp {
                 .build();
     }
 
-    public GetDrawingListResp withThumbnailPath(String thumbnailPath) {
-        this.thumbnailPath = thumbnailPath;
+    public GetDrawingListResp withThumbnailPath(String thumbnailUrl) {
+        this.thumbnailPath = thumbnailUrl;
         return this; // 추가
     }
 }
