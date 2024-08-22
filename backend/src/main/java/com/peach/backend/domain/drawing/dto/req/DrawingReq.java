@@ -38,7 +38,7 @@ public class DrawingReq {
     @CsvFileOnly
     private MultipartFile participants;
 
-    public Drawing toEntity(User user) {
+    public Drawing toEntity(User user) { 
         drawingAt = drawingAt.withSecond(0).withNano(0);
 
         return Drawing.builder()
@@ -47,7 +47,7 @@ public class DrawingReq {
                 .drawingAt(drawingAt)
                 .owner(user)
                 .winner(winner)
-                .drawingStatus(DrawingStatus.STANDBY)
+                .drawingStatus(DrawingStatus.STANDBY)           
                 .build();
     }
 }

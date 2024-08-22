@@ -28,10 +28,12 @@ public class CreateDrawingService {
     private final CsvUtil csvUtil;
 
     public void createDrawing(DrawingReq req, User user) {
+        
         Drawing drawing = drawingRepository.save(req.toEntity(user));
 
         saveParticipants(req.getParticipants(), drawing);
         saveThumbnail(req.getThumbnail(), drawing);
+        
     }
 
     private void saveParticipants(MultipartFile participants, Drawing drawing) {
@@ -53,6 +55,7 @@ public class CreateDrawingService {
             String thumbnailPath = "drawing/" + drawing.getOwner().getEmail() + "/thumbnail/" + drawing.getId() + "/" + thumbnail.getOriginalFilename();
             drawing.updateThumbnail(thumbnailPath);
             minioUtil.putObjectToMinio(thumbnail, thumbnailPath);
+            drawingRepository.save(drawing); // 썸네일 추가
         }
     }
 }
