@@ -30,6 +30,7 @@ public class Drawing extends BaseTimeEntity {
     private String title;
     private Long winner;
     private LocalDateTime drawingAt;
+    private int viewCount; // 조회수
 
     @Enumerated(EnumType.STRING)
     private DrawingStatus drawingStatus;
@@ -47,7 +48,12 @@ public class Drawing extends BaseTimeEntity {
         this.drawingAt = drawingAt;
         this.drawingStatus = drawingStatus;
         this.owner = owner;
+        this.viewCount = 0; // 조회수
     }
+
+    public void incrementViewCount() {
+        this.viewCount++;
+    } // 조회수
 
     public void updateThumbnail(String thumbnailPath) {
         this.thumbnailPath = thumbnailPath;
