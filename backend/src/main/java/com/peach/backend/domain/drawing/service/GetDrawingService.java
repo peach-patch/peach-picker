@@ -7,6 +7,8 @@ import com.peach.backend.domain.drawing.entity.Drawing;
 import com.peach.backend.domain.drawing.entity.repository.DrawingRepository;
 import com.peach.backend.domain.drawing.entity.repository.ParticipantRepository;
 import com.peach.backend.domain.drawing.exception.DrawingNotFoundException;
+import com.peach.backend.global.util.minio.MinioUtil;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +21,22 @@ import java.util.stream.Collectors;
 public class GetDrawingService {
 
     private final DrawingRepository drawingRepository;
+    private final MinioUtil minioUtil; // 추가
     private final ParticipantRepository participantRepository;
 
     public List<GetDrawingListResp> getDrawingListByConditions(final GetDrawingListReq req) {
         return drawingRepository.findAllByConditions(req.getTitle(), req.getOwner(), req.getStartDate().atStartOfDay(), req.getEndDate().atTime(LocalTime.MAX))
-                .stream().map(GetDrawingListResp::of).collect(Collectors.toList());
+                .stream()
+                // .map(GetDrawingListResp::of).collect(Collectors.toList());
+             .map(drawing -> {
+                    GetDrawingListResp resp = GetDrawingListResp.of(drawing);
+                    String thumbnailPath = minioUtil.getUrlFromMinioObject(drawing.getThumbnailPath());
+                    return resp.withThumbnailPath(thumbnailPath); // 썸네일 추가
+                })
+                .collect(Collectors.toList());
     }
+
+    
 
 
 public List<GetDrawingListResp> getAllDrawings() {
@@ -50,3 +62,4 @@ public List<GetDrawingListResp> getAllDrawings() {
     }
 
 }
+
