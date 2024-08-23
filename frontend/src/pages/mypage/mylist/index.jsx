@@ -4,7 +4,6 @@ import { usePagination, useTable } from "react-table";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import base64font from "../../../fonts/base64font";
-import ShortWhite from "@/components/button/ShortWhite";
 
 export default function mylist() {
   const columns = React.useMemo(
