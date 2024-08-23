@@ -5,7 +5,6 @@ import kakao from "../../images/kakao.png";
 import google from "../../images/google.png";
 import naver from "../../images/naver.png";
 import Image from "next/image";
-import BasicBtn from "@/components/button/BasicBtn";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import KakaoLogin from "@/components/login/KakaoLogin";
