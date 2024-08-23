@@ -38,22 +38,26 @@ public class Drawing extends BaseTimeEntity {
     @ManyToOne
     private User owner;
 
-    private int viewCount; // 조회수
+    private int viewCount; // 조회수 추가
 
     @Builder
-    public Drawing(DrawingType drawingType, String thumbnailPath, String participantPath, String title, Long winner, LocalDateTime drawingAt, int viewCount, DrawingStatus drawingStatus, User owner) {
+    public Drawing(DrawingType drawingType, int viewCount, String thumbnailPath, String participantPath, String title,
+            Long winner, LocalDateTime drawingAt, DrawingStatus drawingStatus, User owner) {
         this.drawingType = drawingType;
         this.thumbnailPath = thumbnailPath;
         this.participantPath = participantPath;
         this.title = title;
         this.winner = winner;
         this.drawingAt = drawingAt;
+        this.viewCount = viewCount; // 전달된 값
         this.drawingStatus = drawingStatus;
         this.owner = owner;
-        this.viewCount = viewCount; // 조회수
+
+    }
+        public void incrementViewCount() {
+        this.viewCount++;
     }
 
-   
 
     public void updateThumbnail(String thumbnailPath) {
         this.thumbnailPath = thumbnailPath;

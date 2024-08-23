@@ -45,6 +45,7 @@ public class DrawingReq {
                 .title(title)
                 .drawingType(drawingType)
                 .drawingAt(drawingAt)
+                .viewCount(0) // 초기 조회수
                 .owner(user)
                 .winner(winner)
                 .drawingStatus(DrawingStatus.STANDBY)           
