@@ -46,8 +46,9 @@ public List<GetDrawingListResp> getAllDrawings() {
 
     @Transactional
     public GetDrawingDetailsResp getDrawingDetails(final Long id) {
+        drawingRepository.incrementViewCount(id); // 조회수 증가
         Drawing drawing = drawingRepository.findById(id).orElseThrow(() -> DrawingNotFoundException.EXCEPTION);
-        drawingRepository.incrementViewCount(id);
+        
         
         String thumbnailPath = drawing.getThumbnailPath();
         String thumbnailUrl = (thumbnailPath != null) 
@@ -60,7 +61,7 @@ public List<GetDrawingListResp> getAllDrawings() {
                 .winner(drawing.getWinner())
                 .organizer(drawing.getOwner().getName())
                 .drawingAt(drawing.getDrawingAt())
-                .viewCount(drawing.getViewCount() + 1) // 조회수 추가
+                .viewCount(drawing.getViewCount()) // 조회수
                 .thumbnailUrl(thumbnailUrl)
                 .participants(participantRepository.findAllByDrawing(drawing).stream().map(GetDrawingDetailsResp.Participants::ofForUser).collect(Collectors.toList()))
                 .build();
