@@ -46,7 +46,7 @@ public List<GetDrawingListResp> getAllDrawings() {
 
     @Transactional
     public GetDrawingDetailsResp getDrawingDetails(final Long id) {
-        drawingRepository.incrementViewCount(id); // 조회수 증가
+
         Drawing drawing = drawingRepository.findById(id).orElseThrow(() -> DrawingNotFoundException.EXCEPTION);
         
         
@@ -54,14 +54,15 @@ public List<GetDrawingListResp> getAllDrawings() {
         String thumbnailUrl = (thumbnailPath != null) 
                 ? minioUtil.getUrlFromMinioObject(thumbnailPath) 
                 : null; // 썸네일
-
+        drawing.incrementViewCount();
+        drawingRepository.save(drawing); // 조회수 증가
 
         return GetDrawingDetailsResp.builder()
                 .title(drawing.getTitle())
                 .winner(drawing.getWinner())
                 .organizer(drawing.getOwner().getName())
                 .drawingAt(drawing.getDrawingAt())
-                .viewCount(drawing.getViewCount()) // 조회수
+                .viewCount(drawing.getViewCount())
                 .thumbnailUrl(thumbnailUrl)
                 .participants(participantRepository.findAllByDrawing(drawing).stream().map(GetDrawingDetailsResp.Participants::ofForUser).collect(Collectors.toList()))
                 .build();
