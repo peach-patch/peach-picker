@@ -74,4 +74,8 @@ public class Drawing extends BaseTimeEntity {
     public void updateWinner(Long winner) {
         this.winner = winner;
     }
+
+    public void updateViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
 }
