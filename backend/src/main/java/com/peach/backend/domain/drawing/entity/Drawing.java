@@ -39,7 +39,7 @@ public class Drawing extends BaseTimeEntity {
     private User owner;
 
     @Builder
-    public Drawing(DrawingType drawingType, String thumbnailPath, String participantPath, String title, Long winner, LocalDateTime drawingAt, DrawingStatus drawingStatus, User owner) {
+    public Drawing(DrawingType drawingType, String thumbnailPath, String participantPath, String title, Long winner, LocalDateTime drawingAt, int viewCount, DrawingStatus drawingStatus, User owner) {
         this.drawingType = drawingType;
         this.thumbnailPath = thumbnailPath;
         this.participantPath = participantPath;
