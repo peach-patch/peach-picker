@@ -54,8 +54,9 @@ public List<GetDrawingListResp> getAllDrawings() {
         String thumbnailUrl = (thumbnailPath != null) 
                 ? minioUtil.getUrlFromMinioObject(thumbnailPath) 
                 : null; // 썸네일
-        drawing.incrementViewCount();
-        drawingRepository.save(drawing); // 조회수 증가
+        
+        int updatedViewCount = drawing.getViewCount() + 1;
+        drawing.updateViewCount(updatedViewCount);
 
         return GetDrawingDetailsResp.builder()
                 .title(drawing.getTitle())
