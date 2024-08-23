@@ -16,7 +16,7 @@ public class GetDrawingDetailsResp {
     private Long winner;
     private String organizer;
     private List<Participants> participants;
-    private int viewCount; // 조회수 추가
+    private int viewCount;
     private String thumbnailUrl; // 썸네일 추가
 
     @Data
