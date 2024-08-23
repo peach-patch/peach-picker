@@ -63,13 +63,21 @@ export default function index() {
                   className="absolute inset-0 rounded"
                 />
               </div>
-              <h2 className="mb-2 text-xl font-semibold">{data.title}</h2>
-              <p className="text-gray-700">추첨자: {data.organizer}</p>
-              <p className="text-gray-700">당첨자 수: {data.winner}</p>
-              <p className="text-gray-700">
-                추첨 일시: {new Date(data.drawingAt).toLocaleString()}
+              <h2 className="mb-2 ml-4 text-xl font-semibold">{data.title}</h2>
+              <p className="ml-2 text-gray-700">주최자: {data.organizer}</p>
+              <p className="ml-2 text-gray-700">당첨자 수: {data.winner}명</p>
+              <p className="ml-2 text-gray-700">
+                추첨 일시:{" "}
+                {new Date(data.drawingAt).toLocaleString("ko-KR", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                })}
               </p>
-              <p className="text-gray-700">조회: {data.viewCount}</p>
+              <p className="ml-2 text-gray-700">조회: {data.viewCount}</p>
             </div>
           </Link>
         ))}
