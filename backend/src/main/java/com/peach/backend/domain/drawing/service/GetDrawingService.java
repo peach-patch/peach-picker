@@ -8,6 +8,8 @@ import com.peach.backend.domain.drawing.entity.repository.DrawingRepository;
 import com.peach.backend.domain.drawing.entity.repository.ParticipantRepository;
 import com.peach.backend.domain.drawing.exception.DrawingNotFoundException;
 import com.peach.backend.global.util.minio.MinioUtil;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,14 +44,13 @@ public List<GetDrawingListResp> getAllDrawings() {
             .collect(Collectors.toList());
 }
 
-
+    @Transactional
     public GetDrawingDetailsResp getDrawingDetails(final Long id) {
         Drawing drawing = drawingRepository.findById(id).orElseThrow(() -> DrawingNotFoundException.EXCEPTION);
-
         drawing.incrementViewCount(); //조회수 증가
+        
         drawingRepository.save(drawing); // 조회수 저장
-
-         String thumbnailPath = drawing.getThumbnailPath();
+        String thumbnailPath = drawing.getThumbnailPath();
         String thumbnailUrl = (thumbnailPath != null) 
                 ? minioUtil.getUrlFromMinioObject(thumbnailPath) 
                 : null; // 썸네일
