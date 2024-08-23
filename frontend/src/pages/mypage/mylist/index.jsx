@@ -56,7 +56,14 @@ export default function Index() {
         accessor: "title",
         Header: "이벤트 명",
         Cell: ({ value, row }) => (
-          <Link href={`/drawings/${row.original.id}`}>{value}</Link>
+          <Link
+            href={{
+              pathname: `/drawings/${row.original.id}`,
+              query: { from: "mylist" },
+            }}
+          >
+            {value}
+          </Link>
         ),
       },
       {
@@ -116,8 +123,7 @@ export default function Index() {
   } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <Search />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
       <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
         <div className="flex items-center justify-between mb-4">
           <div className="text-xl font-bold text-gray-800">추첨 목록</div>
@@ -129,7 +135,7 @@ export default function Index() {
               <tr
                 key={headerGroup.id}
                 {...headerGroup.getHeaderGroupProps()}
-                className="bg-white bg-opacity-40"
+                className="bg-white border-t-2 border-b-2 border-black bg-opacity-40"
               >
                 {headerGroup.headers.map((column) => (
                   <th
@@ -150,7 +156,7 @@ export default function Index() {
                 <tr
                   key={row.id}
                   {...row.getRowProps()}
-                  className="transition bg-white bg-opacity-60 hover:bg-opacity-80"
+                  className="transition bg-white bg-opacity-60 hover:bg-gray-200 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
                 >
                   {row.cells.map((cell) => (
                     <td

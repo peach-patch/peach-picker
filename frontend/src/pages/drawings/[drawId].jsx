@@ -7,14 +7,18 @@ import present from "../../images/present.png";
 export default function DrawId() {
   const [data, setData] = useState(null);
   const router = useRouter();
-  const { drawId } = router.query;
-
+  const { drawId, from } = router.query;
   const handleBackToList = () => {
-    router.push("/drawings");
+    if (from === "mylist") {
+      router.push("/mypage/mylist");
+    } else {
+      router.push("/drawings");
+    }
   };
 
   useEffect(() => {
     if (drawId) {
+      console.log(router.query.from);
       const fetchData = async () => {
         try {
           const response = await fetch(
@@ -36,7 +40,7 @@ export default function DrawId() {
 
           const result = await response.json();
           setData(result);
-          console.log(result);
+          console.log(result, from);
         } catch (error) {
           console.error("Error fetching data:", error);
         }

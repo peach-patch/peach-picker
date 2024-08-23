@@ -3,9 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-export default function index() {
+export default function Index() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+
   const fetchData = async () => {
     try {
       const response = await fetch(
@@ -46,13 +47,13 @@ export default function index() {
           <Link
             href={{
               pathname: "/drawings/[id]",
-              query: { id: data.id },
+              query: { id: data.id, from: "drawings" },
             }}
             key={data.id}
           >
             <div
               key={data.id}
-              className="relative p-4 overflow-hidden bg-gray-100 rounded-lg shadow-md"
+              className="relative p-4 overflow-hidden bg-gray-100 rounded-lg shadow-md transition transform hover:bg-gray-200 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
             >
               <div className="relative w-full h-0 pb-[100%] mb-4">
                 <Image
