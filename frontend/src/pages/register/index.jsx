@@ -6,7 +6,9 @@ import "react-day-picker/dist/style.css";
 import Time from "../../components/register/Time";
 import ImgUpload from "@/components/register/ImgUpload";
 import useAuthStore from "../../store/authStore";
+import useDrawingStore from "../../store/drawingStore"; // 스토어 import
 import Button from "@/components/button/Button";
+import axios from "axios";
 
 export default function Register() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +22,7 @@ export default function Register() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const { token } = useAuthStore();
+  const { addNewDrawing } = useDrawingStore(); // addNewDrawing 액션 가져오기
   const router = useRouter();
 
   const dropDown = () => {
@@ -107,24 +110,22 @@ export default function Register() {
     if (thumbnail) {
       formData.append("thumbnail", thumbnail, "thumbnail.png");
     }
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value, "확인");
-    }
+
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/drawing/register`,
+        formData,
         {
-          method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          body: formData,
         }
       );
 
-      if (response.ok) {
-        const result = await response.text();
-        alert(result);
+      if (response.status === 200) {
+        const newDrawing = response.data; // 새로 생성된 데이터를 가져옴
+        addNewDrawing(newDrawing); // 새로운 데이터를 Zustand 스토어에 추가
+        alert("추첨이 성공적으로 등록되었습니다.");
         router.push("/mypage/mylist");
       } else {
         console.error("Error:", response.statusText);

@@ -2,48 +2,33 @@ import Search from "@/components/list/Search";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import useDrawingStore from "@/store/drawingStore";
 
 export default function Index() {
-  const [data, setData] = useState([]);
+  const { data, fetchData } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/drawing`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Network response was not ok: ${response.status} - ${errorText}`
-        );
-      }
-
-      const result = await response.json();
-      setData(result);
-      setFilteredData(result); // 초기 필터링
-      console.log(result);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
-    fetchData(); // 초기 렌더링
-  }, []);
+    const now = new Date();
+    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+
+    const upcomingDrawings = data.filter(
+      (item) => new Date(item.drawingAt) > fiveMinutesAgo
+    );
+
+    const sortedDrawings = upcomingDrawings.sort((a, b) => b.id - a.id);
+    setFilteredData(sortedDrawings);
+  }, [data]);
 
   return (
     <>
       <Search />
       <div className="grid grid-cols-1 gap-6 m-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {data.map((data) => (
+        {filteredData.map((data) => (
           <Link
             href={{
               pathname: "/drawings/[id]",
