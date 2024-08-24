@@ -1,8 +1,9 @@
-import Button from "@/components/button/Button";
 import React, { useState, useEffect } from "react";
 import { usePagination, useTable } from "react-table";
+import Button from "@/components/button/Button";
+import { getDrawings } from "@/api/listApi"; // Axios 서비스 파일 import
 
-export default function MyList() {
+export default function index() {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [filterInput, setFilterInput] = useState("");
@@ -11,25 +12,7 @@ export default function MyList() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/drawing`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Network response was not ok: ${response.status} - ${errorText}`
-        );
-      }
-
-      const result = await response.json();
-
+      const result = await getDrawings(); // Axios로 데이터 가져오기
       const now = new Date();
       const filtered = result
         .filter((item) => new Date(item.drawingAt) < now)
@@ -69,7 +52,7 @@ export default function MyList() {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData(); // 컴포넌트 마운트 시 데이터 가져오기
   }, []);
 
   const inputClassName = inputError
