@@ -1,60 +1,59 @@
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { usePagination, useTable } from "react-table";
 import Search from "@/components/list/Search";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import useDrawingStore from "@/store/drawingStore";
+import GridView from "@/components/list/GridView"; // Grid View 컴포넌트 import
+import grid from "../../../images/001.png";
+import table from "../../../images/002.png";
+import { usePagination, useTable } from "react-table";
+import Link from "next/link";
 
 export default function Index() {
-  const [data, setData] = useState([]);
+  const { data, fetchData } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
+  const [viewType, setViewType] = useState("table");
+  const [sortOrder, setSortOrder] = useState("등록일순");
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     const userName = localStorage.getItem("userName");
+    const now = new Date();
+    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/drawing`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+    let userDrawings = data.filter((item) => item.organizer === userName);
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(
-            `Network response was not ok: ${response.status} - ${errorText}`
-          );
-        }
+    userDrawings = userDrawings.map((item) => ({
+      ...item,
+      state: new Date(item.drawingAt) > now ? "예정" : "완료",
+    }));
 
-        const result = await response.json();
+    if (sortOrder === "등록일순") {
+      userDrawings = userDrawings.sort((a, b) => b.id - a.id);
+    } else if (sortOrder === "추첨일시순") {
+      userDrawings = userDrawings.sort(
+        (a, b) => new Date(b.drawingAt) - new Date(a.drawingAt)
+      );
+    }
 
-        const now = new Date();
-        const filtered = result
-          .filter((item) => item.organizer === userName)
-          .map((item) => ({
-            ...item,
-            state: new Date(item.drawingAt) > now ? "예정" : "완료",
-          }));
+    setFilteredData(userDrawings);
+  }, [data, sortOrder]);
 
-        setData(filtered);
-        setFilteredData(filtered);
-        console.log(filtered);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const handleViewChange = (type) => {
+    setViewType(type);
+  };
 
-    fetchData();
-  }, []);
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value);
+  };
 
   const columns = React.useMemo(
     () => [
       {
         accessor: "title",
-        Header: "이벤트 명",
+        Header: <div className="text-center">이벤트명</div>,
         Cell: ({ value, row }) => (
           <Link
             href={{
@@ -68,7 +67,7 @@ export default function Index() {
       },
       {
         accessor: "drawingAt",
-        Header: "추첨 일시",
+        Header: <div className="text-center">추첨 일시</div>,
         Cell: ({ value }) => (
           <span>
             {new Date(value).toLocaleString("ko-KR", {
@@ -89,7 +88,7 @@ export default function Index() {
       },
       {
         accessor: "state",
-        Header: "상태",
+        Header: <div className="text-center">상태</div>,
         Cell: ({ value }) => (
           <div className={`${value === "예정" ? "text-red-500" : ""}`}>
             {value}
@@ -123,102 +122,126 @@ export default function Index() {
   } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
-        <div className="flex items-center justify-between mb-4">
-          <div className="text-xl font-bold text-gray-800">추첨 목록</div>
-        </div>
-
-        <table {...getTableProps()} className="w-full text-gray-800">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr
-                key={headerGroup.id}
-                {...headerGroup.getHeaderGroupProps()}
-                className="bg-white border-t-2 border-b-2 border-black bg-opacity-40"
-              >
-                {headerGroup.headers.map((column) => (
-                  <th
-                    key={column.id}
-                    {...column.getHeaderProps()}
-                    className="px-4 py-2 text-left text-gray-800"
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row, rowIndex) => {
-              prepareRow(row);
-              return (
-                <tr
-                  key={row.id}
-                  {...row.getRowProps()}
-                  className="transition bg-white bg-opacity-60 hover:bg-gray-200 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
-                >
-                  {row.cells.map((cell) => (
-                    <td
-                      key={cell.id}
-                      {...cell.getCellProps()}
-                      className="px-4 py-2 text-center text-gray-800"
-                    >
-                      {cell.render("Cell")}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        <div className="flex items-center justify-between mt-4">
-          <div className="text-sm text-gray-600">
-            Page {pageIndex + 1} of {pageOptions.length}
-          </div>
-          <div>
-            <button
-              onClick={() => gotoPage(0)}
-              disabled={!canPreviousPage}
-              className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
-            >
-              {"<<"}
-            </button>
-            <button
-              onClick={() => previousPage()}
-              disabled={!canPreviousPage}
-              className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
-            >
-              {"<"}
-            </button>
-            <button
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-              className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
-            >
-              {">"}
-            </button>
-            <button
-              onClick={() => gotoPage(pageCount - 1)}
-              disabled={!canNextPage}
-              className="px-2 py-1 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
-            >
-              {">>"}
-            </button>
-          </div>
+    <div className="center1">
+      <div className="flex justify-end w-4/5 px-16 mt-14 ">
+        <div className="flex items-center space-x-2">
           <select
-            value={pageSize}
-            onChange={(e) => setPageSize(Number(e.target.value))}
-            className="p-1 text-gray-800 bg-white rounded bg-opacity-40"
+            value={sortOrder}
+            onChange={handleSortChange}
+            className="p-2 text-gray-800 border rounded"
           >
-            {[5, 10, 20].map((size) => (
-              <option key={size} value={size}>
-                {size}개씩 보기
-              </option>
-            ))}
+            <option value="등록일순">등록일순</option>
+            <option value="추첨일시순">추첨일시순</option>
           </select>
+          <button
+            onClick={() => handleViewChange("grid")}
+            className="text-gray-800"
+          >
+            <Image src={grid} alt="Grid View" width={24} height={24} />
+          </button>
+          <button
+            onClick={() => handleViewChange("table")}
+            className="text-gray-800"
+          >
+            <Image src={table} alt="Table View" width={24} height={24} />
+          </button>
         </div>
       </div>
+      {viewType === "grid" ? (
+        <GridView data={filteredData} showOrganizer={false} showState={true} />
+      ) : (
+        <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
+          <table {...getTableProps()} className="w-full text-gray-800">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr
+                  key={headerGroup.id}
+                  {...headerGroup.getHeaderGroupProps()}
+                  className="bg-white border-t-2 border-b-2 border-black bg-opacity-40"
+                >
+                  {headerGroup.headers.map((column) => (
+                    <th
+                      key={column.id}
+                      {...column.getHeaderProps()}
+                      className="px-4 py-2 text-left text-gray-800"
+                    >
+                      {column.render("Header")}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row, rowIndex) => {
+                prepareRow(row);
+                return (
+                  <tr
+                    key={row.id}
+                    {...row.getRowProps()}
+                    className="transition bg-white bg-opacity-60 hover:bg-gray-200 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
+                  >
+                    {row.cells.map((cell) => (
+                      <td
+                        key={cell.id}
+                        {...cell.getCellProps()}
+                        className="px-4 py-2 text-center text-gray-800"
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <div className="flex items-center justify-between mt-4">
+            <div className="text-sm text-gray-600">
+              Page {pageIndex + 1} of {pageOptions.length}
+            </div>
+            <div>
+              <button
+                onClick={() => gotoPage(0)}
+                disabled={!canPreviousPage}
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+              >
+                {"<<"}
+              </button>
+              <button
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+              >
+                {"<"}
+              </button>
+              <button
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+              >
+                {">"}
+              </button>
+              <button
+                onClick={() => gotoPage(pageCount - 1)}
+                disabled={!canNextPage}
+                className="px-2 py-1 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+              >
+                {">>"}
+              </button>
+            </div>
+            <select
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+              className="p-1 text-gray-800 bg-white rounded bg-opacity-40"
+            >
+              {[5, 10, 20].map((size) => (
+                <option key={size} value={size}>
+                  {size}개씩 보기
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
