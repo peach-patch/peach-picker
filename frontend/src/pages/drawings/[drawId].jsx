@@ -11,6 +11,8 @@ export default function DrawId() {
   const handleBackToList = () => {
     if (from === "mylist") {
       router.push("/mypage/mylist");
+    } else if (from === "completedDrawings") {
+      router.push("/completedDrawings");
     } else {
       router.push("/drawings");
     }

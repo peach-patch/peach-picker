@@ -1,12 +1,19 @@
-import Search from "@/components/list/Search";
-import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { usePagination, useTable } from "react-table";
+import Button from "@/components/button/Button";
 import useDrawingStore from "@/store/drawingStore";
+import GridView from "@/components/list/GridView";
+import SortSelector from "@/components/list/SortSelector";
+import ViewSelector from "@/components/list/ViewSelector";
 
 export default function Index() {
   const { data, fetchData } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
+  const [filterInput, setFilterInput] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState("title");
+  const [inputError, setInputError] = useState(false);
+  const [viewType, setViewType] = useState("table");
+  const [sortOrder, setSortOrder] = useState("등록일순");
 
   useEffect(() => {
     fetchData();
@@ -20,54 +27,251 @@ export default function Index() {
       (item) => new Date(item.drawingAt) > fiveMinutesAgo
     );
 
-    const sortedDrawings = upcomingDrawings.sort((a, b) => b.id - a.id);
+    let sortedDrawings = upcomingDrawings;
+    if (sortOrder === "등록일순") {
+      sortedDrawings = upcomingDrawings.sort((a, b) => b.id - a.id);
+    } else if (sortOrder === "추첨일시순") {
+      sortedDrawings = upcomingDrawings.sort(
+        (a, b) => new Date(b.drawingAt) - new Date(a.drawingAt)
+      );
+    }
+
     setFilteredData(sortedDrawings);
-  }, [data]);
+  }, [data, sortOrder]);
+  const handleSortChange = (event) => {
+    console.log("Selected sort order:", event.target.value); // 선택된 값 확인
+    setSortOrder(event.target.value); // 상태 업데이트
+  };
+  const handleSearch = () => {
+    if (filterInput.trim() === "") {
+      setInputError(true);
+      setTimeout(() => {
+        setInputError(false);
+      }, 1000);
+      return;
+    }
+
+    let filtered = filteredData;
+
+    if (selectedFilter === "title") {
+      filtered = filteredData.filter((item) =>
+        item.title.toLowerCase().includes(filterInput.toLowerCase())
+      );
+    } else if (selectedFilter === "owner") {
+      filtered = filteredData.filter((item) =>
+        item.organizer.toLowerCase().includes(filterInput.toLowerCase())
+      );
+    }
+
+    setFilteredData(filtered);
+  };
+
+  const columns = React.useMemo(
+    () => [
+      {
+        accessor: "id",
+        Header: <div className="text-center">NO</div>,
+        Cell: ({ value }) => <div>{value}</div>,
+      },
+      {
+        accessor: "title",
+        Header: <div className="text-center">제목</div>,
+        Cell: ({ value }) => <div>{value}</div>,
+      },
+      {
+        accessor: "drawingAt",
+        Header: <div className="text-center">추첨 일시</div>,
+        Cell: ({ value }) => (
+          <div>
+            {new Date(value).toLocaleString("ko-KR", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            })}
+          </div>
+        ),
+      },
+      {
+        accessor: "winner",
+        Header: <div className="text-center">당첨자 수</div>,
+        Cell: ({ value }) => <div>{value}명</div>,
+      },
+      {
+        accessor: "drawingType",
+        Header: <div className="text-center">추첨 유형</div>,
+        Cell: ({ value }) => <div>{value}</div>,
+      },
+      {
+        accessor: "organizer",
+        Header: <div className="text-center">주최자</div>,
+        Cell: ({ value }) => <div>{value}</div>,
+      },
+    ],
+    []
+  );
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <>
-      <Search />
-      <div className="grid grid-cols-1 gap-6 m-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {filteredData.map((data) => (
-          <Link
-            href={{
-              pathname: "/drawings/[id]",
-              query: { id: data.id, from: "drawings" },
-            }}
-            key={data.id}
-          >
-            <div
-              key={data.id}
-              className="relative p-4 overflow-hidden bg-gray-100 rounded-lg shadow-md transition transform hover:bg-gray-200 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
-            >
-              <div className="relative w-full h-0 pb-[100%] mb-4">
-                <Image
-                  src={data.thumbnailPath}
-                  alt={data.title}
-                  layout="fill"
-                  objectFit="cover"
-                  className="absolute inset-0 rounded"
-                />
-              </div>
-              <h2 className="mb-2 ml-4 text-xl font-semibold">{data.title}</h2>
-              <p className="ml-2 text-gray-700">주최자: {data.organizer}</p>
-              <p className="ml-2 text-gray-700">당첨자 수: {data.winner}명</p>
-              <p className="ml-2 text-gray-700">
-                추첨 일시:{" "}
-                {new Date(data.drawingAt).toLocaleString("ko-KR", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                  hour12: true,
-                })}
-              </p>
-              <p className="ml-2 text-gray-700">조회: {data.viewCount}</p>
-            </div>
-          </Link>
-        ))}
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex mb-4">
+        <select
+          className="p-2 mr-4 border border-gray-300 rounded"
+          value={selectedFilter}
+          onChange={(e) => setSelectedFilter(e.target.value)}
+        >
+          <option value="title">제목</option>
+          <option value="owner">추첨 회사</option>
+        </select>
+
+        <input
+          className={
+            inputError
+              ? "p-2 mr-4 border border-red-500 rounded"
+              : "p-2 mr-4 border border-gray-300 rounded"
+          }
+          value={filterInput}
+          onChange={(e) => setFilterInput(e.target.value)}
+          placeholder="검색어 입력"
+        />
+        <Button
+          text="검색"
+          onClick={handleSearch}
+          className="text-white px-4 bg-[#fb5e67]"
+        />
       </div>
-    </>
+      <div className="flex justify-end w-4/5 gap-2 px-16 mt-2">
+        <SortSelector
+          sortOrder={sortOrder}
+          handleSortChange={handleSortChange}
+        />
+        <ViewSelector viewType={viewType} handleViewChange={setViewType} />
+      </div>
+      {viewType === "grid" ? (
+        <GridView
+          data={filteredData}
+          showOrganizer={true}
+          from="completedDrawings"
+        />
+      ) : (
+        <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-xl font-bold text-gray-800">
+              완료된 추첨 내역
+            </div>
+          </div>
+
+          <table {...getTableProps()} className="w-full text-gray-800">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr
+                  key={headerGroup.id}
+                  {...headerGroup.getHeaderGroupProps()}
+                  className="bg-white border-t-2 border-b-2 border-black bg-opacity-40"
+                >
+                  {headerGroup.headers.map((column) => (
+                    <th
+                      key={column.id}
+                      {...column.getHeaderProps()}
+                      className="px-4 py-2 text-left text-gray-800"
+                    >
+                      {column.render("Header")}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row, rowIndex) => {
+                prepareRow(row);
+                return (
+                  <tr
+                    key={row.id}
+                    {...row.getRowProps()}
+                    className="transition bg-white bg-opacity-60 hover:bg-gray-100 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
+                  >
+                    {row.cells.map((cell) => (
+                      <td
+                        key={cell.id}
+                        {...cell.getCellProps()}
+                        className="px-4 py-2 text-center text-gray-800"
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {/* 페이지 네비게이션 */}
+          <div className="flex items-center justify-between mt-4">
+            <div className="text-sm text-gray-600">
+              Page {pageIndex + 1} of {pageOptions.length}
+            </div>
+            <div>
+              <button
+                onClick={() => gotoPage(0)}
+                disabled={!canPreviousPage}
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+              >
+                {"<<"}
+              </button>
+              <button
+                onClick={() => previousPage()}
+                disabled={!canPreviousPage}
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+              >
+                {"<"}
+              </button>
+              <button
+                onClick={() => nextPage()}
+                disabled={!canNextPage}
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+              >
+                {">"}
+              </button>
+              <button
+                onClick={() => gotoPage(pageCount - 1)}
+                disabled={!canNextPage}
+                className="px-2 py-1 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+              >
+                {">>"}
+              </button>
+            </div>
+            <select
+              value={pageSize}
+              onChange={(e) => setPageSize(Number(e.target.value))}
+              className="p-1 text-gray-800 bg-white rounded bg-opacity-40"
+            >
+              {[5, 10, 20].map((size) => (
+                <option key={size} value={size}>
+                  {size}개씩 보기
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

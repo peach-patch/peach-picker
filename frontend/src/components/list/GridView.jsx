@@ -6,6 +6,7 @@ export default function GridView({
   data,
   showOrganizer = true,
   showState = false,
+  from,
 }) {
   return (
     <div className="grid grid-cols-1 gap-6 m-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -13,7 +14,7 @@ export default function GridView({
         <Link
           href={{
             pathname: "/drawings/[id]",
-            query: { id: data.id, from: "drawings" },
+            query: { id: data.id, from: from },
           }}
           key={data.id}
         >

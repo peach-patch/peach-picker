@@ -3,9 +3,8 @@ import { usePagination, useTable } from "react-table";
 import Button from "@/components/button/Button";
 import useDrawingStore from "@/store/drawingStore";
 import GridView from "@/components/list/GridView";
-import gridIcon from "../../images/001.png";
-import tableIcon from "../../images/002.png";
-import Image from "next/image";
+import SortSelector from "@/components/list/SortSelector";
+import ViewSelector from "@/components/list/ViewSelector";
 
 export default function Index() {
   const { data, fetchData, loading, error } = useDrawingStore();
@@ -35,6 +34,11 @@ export default function Index() {
     setFilteredData(sortedDrawings);
   }, [data, sortOrder]);
 
+  const handleSortChange = (event) => {
+    console.log("Selected sort order:", event.target.value); // 선택된 값 확인
+    setSortOrder(event.target.value); // 상태 업데이트
+  };
+
   const handleSearch = () => {
     if (filterInput.trim() === "") {
       setInputError(true);
@@ -58,18 +62,6 @@ export default function Index() {
 
     setFilteredData(filtered);
   };
-
-  const handleViewChange = (type) => {
-    setViewType(type);
-  };
-
-  const handleSortChange = (event) => {
-    setSortOrder(event.target.value);
-  };
-
-  const inputClassName = inputError
-    ? "p-2 mr-4 border border-red-500 rounded"
-    : "p-2 mr-4 border border-gray-300 rounded";
 
   const columns = React.useMemo(
     () => [
@@ -137,30 +129,6 @@ export default function Index() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <div className="flex justify-end px-16 mb-4 mt-14">
-        <div className="flex items-center space-x-2">
-          <select
-            value={sortOrder}
-            onChange={handleSortChange}
-            className="p-2 text-gray-800 border rounded"
-          >
-            <option value="등록일순">등록일순</option>
-            <option value="추첨일시순">추첨일시순</option>
-          </select>
-          <button
-            onClick={() => handleViewChange("grid")}
-            className="text-gray-800"
-          >
-            <Image src={gridIcon} alt="Grid View" width={24} height={24} />
-          </button>
-          <button
-            onClick={() => handleViewChange("table")}
-            className="text-gray-800"
-          >
-            <Image src={tableIcon} alt="Table View" width={24} height={24} />
-          </button>
-        </div>
-      </div>
       <div className="flex mb-4">
         <select
           className="p-2 mr-4 border border-gray-300 rounded"
@@ -172,7 +140,11 @@ export default function Index() {
         </select>
 
         <input
-          className={inputClassName}
+          className={
+            inputError
+              ? "p-2 mr-4 border border-red-500 rounded"
+              : "p-2 mr-4 border border-gray-300 rounded"
+          }
           value={filterInput}
           onChange={(e) => setFilterInput(e.target.value)}
           placeholder="검색어 입력"
@@ -183,8 +155,19 @@ export default function Index() {
           className="text-white px-4 bg-[#fb5e67]"
         />
       </div>
+      <div className="flex justify-end w-4/5 gap-2 px-16 mt-2">
+        <SortSelector
+          sortOrder={sortOrder}
+          handleSortChange={handleSortChange}
+        />
+        <ViewSelector viewType={viewType} handleViewChange={setViewType} />
+      </div>
       {viewType === "grid" ? (
-        <GridView data={filteredData} showOrganizer={true} />
+        <GridView
+          data={filteredData}
+          showOrganizer={true}
+          from="completedDrawings"
+        />
       ) : (
         <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
           <div className="flex items-center justify-between mb-4">
