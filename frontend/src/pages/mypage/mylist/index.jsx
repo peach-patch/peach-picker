@@ -1,17 +1,17 @@
-import Search from "@/components/list/Search";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import useDrawingStore from "@/store/drawingStore";
-import GridView from "@/components/list/GridView"; // Grid View 컴포넌트 import
-import grid from "../../../images/001.png";
-import table from "../../../images/002.png";
+import GridView from "@/components/list/GridView";
 import { usePagination, useTable } from "react-table";
 import Link from "next/link";
+import SortSelector from "@/components/list/SortSelector";
+import ViewSelector from "@/components/list/ViewSelector";
+import { useRouter } from "next/router";
 
 export default function Index() {
+  const router = useRouter();
   const { data, fetchData } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
-  const [viewType, setViewType] = useState("table");
+  const [viewType, setViewType] = useState(router.query.viewType || "table");
   const [sortOrder, setSortOrder] = useState("등록일순");
 
   useEffect(() => {
@@ -21,7 +21,6 @@ export default function Index() {
   useEffect(() => {
     const userName = localStorage.getItem("userName");
     const now = new Date();
-    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
 
     let userDrawings = data.filter((item) => item.organizer === userName);
 
@@ -41,11 +40,8 @@ export default function Index() {
     setFilteredData(userDrawings);
   }, [data, sortOrder]);
 
-  const handleViewChange = (type) => {
-    setViewType(type);
-  };
-
   const handleSortChange = (event) => {
+    console.log("Selected sort order:", event.target.value);
     setSortOrder(event.target.value);
   };
 
@@ -58,10 +54,10 @@ export default function Index() {
           <Link
             href={{
               pathname: `/drawings/${row.original.id}`,
-              query: { from: "mylist" },
+              query: { from: "mylist", viewType },
             }}
           >
-            {value}
+            <div className="font-semibold hover:underline">{value}</div>
           </Link>
         ),
       },
@@ -101,7 +97,7 @@ export default function Index() {
         Cell: ({ value }) => <div className="pr-4 text-right">{value}</div>,
       },
     ],
-    []
+    [viewType]
   );
 
   const {
@@ -123,34 +119,28 @@ export default function Index() {
 
   return (
     <div className="center1">
-      <div className="flex justify-end w-4/5 px-16 mt-14 ">
-        <div className="flex items-center space-x-2">
-          <select
-            value={sortOrder}
-            onChange={handleSortChange}
-            className="p-2 text-gray-800 border rounded"
-          >
-            <option value="등록일순">등록일순</option>
-            <option value="추첨일시순">추첨일시순</option>
-          </select>
-          <button
-            onClick={() => handleViewChange("grid")}
-            className="text-gray-800"
-          >
-            <Image src={grid} alt="Grid View" width={24} height={24} />
-          </button>
-          <button
-            onClick={() => handleViewChange("table")}
-            className="text-gray-800"
-          >
-            <Image src={table} alt="Table View" width={24} height={24} />
-          </button>
-        </div>
+      <div className="flex justify-end w-4/5 gap-2 px-16 mt-2">
+        <SortSelector
+          sortOrder={sortOrder}
+          handleSortChange={handleSortChange}
+        />
+        <ViewSelector viewType={viewType} handleViewChange={setViewType} />
       </div>
       {viewType === "grid" ? (
-        <GridView data={filteredData} showOrganizer={false} showState={true} />
+        <GridView
+          data={filteredData}
+          showOrganizer={false}
+          showState={true}
+          from="mylist"
+          category="나의 추첨 내역"
+        />
       ) : (
         <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-xl font-bold text-gray-800">
+              나의 추첨 내역
+            </div>
+          </div>
           <table {...getTableProps()} className="w-full text-gray-800">
             <thead>
               {headerGroups.map((headerGroup) => (
@@ -178,7 +168,7 @@ export default function Index() {
                   <tr
                     key={row.id}
                     {...row.getRowProps()}
-                    className="transition bg-white bg-opacity-60 hover:bg-gray-200 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
+                    className="transition bg-white bg-opacity-60 hover:bg-rose-50 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
                   >
                     {row.cells.map((cell) => (
                       <td

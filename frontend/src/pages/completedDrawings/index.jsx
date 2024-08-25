@@ -3,17 +3,19 @@ import { usePagination, useTable } from "react-table";
 import Button from "@/components/button/Button";
 import useDrawingStore from "@/store/drawingStore";
 import GridView from "@/components/list/GridView";
-import gridIcon from "../../images/001.png";
-import tableIcon from "../../images/002.png";
-import Image from "next/image";
+import SortSelector from "@/components/list/SortSelector";
+import ViewSelector from "@/components/list/ViewSelector";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Index() {
+  const router = useRouter();
   const { data, fetchData, loading, error } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
   const [filterInput, setFilterInput] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("title");
   const [inputError, setInputError] = useState(false);
-  const [viewType, setViewType] = useState("table");
+  const [viewType, setViewType] = useState(router.query.viewType || "table");
   const [sortOrder, setSortOrder] = useState("등록일순");
 
   useEffect(() => {
@@ -34,6 +36,11 @@ export default function Index() {
     }
     setFilteredData(sortedDrawings);
   }, [data, sortOrder]);
+
+  const handleSortChange = (event) => {
+    console.log("Selected sort order:", event.target.value);
+    setSortOrder(event.target.value);
+  };
 
   const handleSearch = () => {
     if (filterInput.trim() === "") {
@@ -59,18 +66,6 @@ export default function Index() {
     setFilteredData(filtered);
   };
 
-  const handleViewChange = (type) => {
-    setViewType(type);
-  };
-
-  const handleSortChange = (event) => {
-    setSortOrder(event.target.value);
-  };
-
-  const inputClassName = inputError
-    ? "p-2 mr-4 border border-red-500 rounded"
-    : "p-2 mr-4 border border-gray-300 rounded";
-
   const columns = React.useMemo(
     () => [
       {
@@ -81,7 +76,21 @@ export default function Index() {
       {
         accessor: "title",
         Header: <div className="text-center">제목</div>,
-        Cell: ({ value }) => <div>{value}</div>,
+        Cell: ({ value, row }) => (
+          <Link
+            href={{
+              pathname: "/drawings/[id]",
+              query: {
+                id: row.original.id,
+                from: "completedDrawings",
+                viewType,
+              },
+            }}
+            passHref
+          >
+            <div className="font-bold hover:underline">{value}</div>
+          </Link>
+        ),
       },
       {
         accessor: "drawingAt",
@@ -115,7 +124,7 @@ export default function Index() {
         Cell: ({ value }) => <div>{value}</div>,
       },
     ],
-    []
+    [viewType]
   );
 
   const {
@@ -137,30 +146,6 @@ export default function Index() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <div className="flex justify-end px-16 mb-4 mt-14">
-        <div className="flex items-center space-x-2">
-          <select
-            value={sortOrder}
-            onChange={handleSortChange}
-            className="p-2 text-gray-800 border rounded"
-          >
-            <option value="등록일순">등록일순</option>
-            <option value="추첨일시순">추첨일시순</option>
-          </select>
-          <button
-            onClick={() => handleViewChange("grid")}
-            className="text-gray-800"
-          >
-            <Image src={gridIcon} alt="Grid View" width={24} height={24} />
-          </button>
-          <button
-            onClick={() => handleViewChange("table")}
-            className="text-gray-800"
-          >
-            <Image src={tableIcon} alt="Table View" width={24} height={24} />
-          </button>
-        </div>
-      </div>
       <div className="flex mb-4">
         <select
           className="p-2 mr-4 border border-gray-300 rounded"
@@ -172,7 +157,11 @@ export default function Index() {
         </select>
 
         <input
-          className={inputClassName}
+          className={
+            inputError
+              ? "p-2 mr-4 border border-red-500 rounded"
+              : "p-2 mr-4 border border-gray-300 rounded"
+          }
           value={filterInput}
           onChange={(e) => setFilterInput(e.target.value)}
           placeholder="검색어 입력"
@@ -183,8 +172,20 @@ export default function Index() {
           className="text-white px-4 bg-[#fb5e67]"
         />
       </div>
+      <div className="flex justify-end w-4/5 gap-2 px-16 mt-2">
+        <SortSelector
+          sortOrder={sortOrder}
+          handleSortChange={handleSortChange}
+        />
+        <ViewSelector viewType={viewType} handleViewChange={setViewType} />
+      </div>
       {viewType === "grid" ? (
-        <GridView data={filteredData} showOrganizer={true} />
+        <GridView
+          data={filteredData}
+          showOrganizer={true}
+          from="completedDrawings"
+          category="완료된 추첨 내역"
+        />
       ) : (
         <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
           <div className="flex items-center justify-between mb-4">
@@ -220,7 +221,7 @@ export default function Index() {
                   <tr
                     key={row.id}
                     {...row.getRowProps()}
-                    className="transition bg-white bg-opacity-60 hover:bg-gray-100 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
+                    className="transition bg-white bg-opacity-60 hover:bg-rose-50 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
                   >
                     {row.cells.map((cell) => (
                       <td
