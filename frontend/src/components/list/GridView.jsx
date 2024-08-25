@@ -19,7 +19,7 @@ export default function GridView({
           <Link
             href={{
               pathname: "/drawings/[id]",
-              query: { id: data.id, from: from },
+              query: { id: data.id, from: from, viewType: "grid" },
             }}
             key={data.id}
           >

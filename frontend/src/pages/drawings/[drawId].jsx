@@ -7,14 +7,24 @@ import present from "../../images/present.png";
 export default function DrawId() {
   const [data, setData] = useState(null);
   const router = useRouter();
-  const { drawId, from } = router.query;
+  const { drawId, from, viewType } = router.query;
+  console.log(viewType, "하하");
   const handleBackToList = () => {
     if (from === "mylist") {
-      router.push("/mypage/mylist");
+      router.push({
+        pathname: "/mypage/mylist",
+        query: { viewType: viewType || "table" },
+      });
     } else if (from === "completedDrawings") {
-      router.push("/completedDrawings");
+      router.push({
+        pathname: "/completedDrawings",
+        query: { viewType: viewType || "table" },
+      });
     } else {
-      router.push("/drawings");
+      router.push({
+        pathname: "/drawings",
+        query: { viewType: viewType || "grid" },
+      });
     }
   };
 

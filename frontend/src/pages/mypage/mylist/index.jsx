@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import useDrawingStore from "@/store/drawingStore";
-import GridView from "@/components/list/GridView"; // Grid View 컴포넌트 import
+import GridView from "@/components/list/GridView";
 import { usePagination, useTable } from "react-table";
 import Link from "next/link";
 import SortSelector from "@/components/list/SortSelector";
 import ViewSelector from "@/components/list/ViewSelector";
+import { useRouter } from "next/router";
 
 export default function Index() {
+  const router = useRouter();
   const { data, fetchData } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
-  const [viewType, setViewType] = useState("table");
+  const [viewType, setViewType] = useState(router.query.viewType || "table");
   const [sortOrder, setSortOrder] = useState("등록일순");
 
   useEffect(() => {
@@ -52,7 +54,7 @@ export default function Index() {
           <Link
             href={{
               pathname: `/drawings/${row.original.id}`,
-              query: { from: "mylist" },
+              query: { from: "mylist", viewType },
             }}
           >
             <div className="font-semibold hover:underline">{value}</div>
@@ -95,7 +97,7 @@ export default function Index() {
         Cell: ({ value }) => <div className="pr-4 text-right">{value}</div>,
       },
     ],
-    []
+    [viewType]
   );
 
   const {

@@ -6,14 +6,16 @@ import GridView from "@/components/list/GridView";
 import SortSelector from "@/components/list/SortSelector";
 import ViewSelector from "@/components/list/ViewSelector";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Index() {
+  const router = useRouter();
   const { data, fetchData } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
   const [filterInput, setFilterInput] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("title");
   const [inputError, setInputError] = useState(false);
-  const [viewType, setViewType] = useState("grid");
+  const [viewType, setViewType] = useState(router.query.viewType || "grid");
   const [sortOrder, setSortOrder] = useState("등록일순");
 
   useEffect(() => {
@@ -81,7 +83,7 @@ export default function Index() {
           <Link
             href={{
               pathname: "/drawings/[id]",
-              query: { id: row.original.id, from: "drawings" },
+              query: { id: row.original.id, from: "drawings", viewType },
             }}
             passHref
           >
@@ -121,7 +123,7 @@ export default function Index() {
         Cell: ({ value }) => <div>{value}</div>,
       },
     ],
-    []
+    [viewType]
   );
 
   const {
