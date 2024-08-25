@@ -5,6 +5,7 @@ import useDrawingStore from "@/store/drawingStore";
 import GridView from "@/components/list/GridView";
 import SortSelector from "@/components/list/SortSelector";
 import ViewSelector from "@/components/list/ViewSelector";
+import Link from "next/link";
 
 export default function Index() {
   const { data, fetchData, loading, error } = useDrawingStore();
@@ -73,7 +74,17 @@ export default function Index() {
       {
         accessor: "title",
         Header: <div className="text-center">제목</div>,
-        Cell: ({ value }) => <div>{value}</div>,
+        Cell: ({ value, row }) => (
+          <Link
+            href={{
+              pathname: "/drawings/[id]",
+              query: { id: row.original.id, from: "completedDrawings" },
+            }}
+            passHref
+          >
+            <div className="font-bold hover:underline">{value}</div>
+          </Link>
+        ),
       },
       {
         accessor: "drawingAt",
@@ -167,6 +178,7 @@ export default function Index() {
           data={filteredData}
           showOrganizer={true}
           from="completedDrawings"
+          category="완료된 추첨 내역"
         />
       ) : (
         <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
@@ -203,7 +215,7 @@ export default function Index() {
                   <tr
                     key={row.id}
                     {...row.getRowProps()}
-                    className="transition bg-white bg-opacity-60 hover:bg-gray-100 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
+                    className="transition bg-white bg-opacity-60 hover:bg-rose-50 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
                   >
                     {row.cells.map((cell) => (
                       <td

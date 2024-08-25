@@ -55,7 +55,7 @@ export default function Index() {
               query: { from: "mylist" },
             }}
           >
-            {value}
+            <div className="font-semibold hover:underline">{value}</div>
           </Link>
         ),
       },
@@ -130,9 +130,15 @@ export default function Index() {
           showOrganizer={false}
           showState={true}
           from="mylist"
+          category="나의 추첨 내역"
         />
       ) : (
         <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-xl font-bold text-gray-800">
+              나의 추첨 내역
+            </div>
+          </div>
           <table {...getTableProps()} className="w-full text-gray-800">
             <thead>
               {headerGroups.map((headerGroup) => (
@@ -160,7 +166,7 @@ export default function Index() {
                   <tr
                     key={row.id}
                     {...row.getRowProps()}
-                    className="transition bg-white bg-opacity-60 hover:bg-gray-200 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
+                    className="transition bg-white bg-opacity-60 hover:bg-rose-50 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
                   >
                     {row.cells.map((cell) => (
                       <td

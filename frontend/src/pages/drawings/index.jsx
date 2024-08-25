@@ -5,6 +5,7 @@ import useDrawingStore from "@/store/drawingStore";
 import GridView from "@/components/list/GridView";
 import SortSelector from "@/components/list/SortSelector";
 import ViewSelector from "@/components/list/ViewSelector";
+import Link from "next/link";
 
 export default function Index() {
   const { data, fetchData } = useDrawingStore();
@@ -12,7 +13,7 @@ export default function Index() {
   const [filterInput, setFilterInput] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("title");
   const [inputError, setInputError] = useState(false);
-  const [viewType, setViewType] = useState("table");
+  const [viewType, setViewType] = useState("grid");
   const [sortOrder, setSortOrder] = useState("등록일순");
 
   useEffect(() => {
@@ -39,8 +40,8 @@ export default function Index() {
     setFilteredData(sortedDrawings);
   }, [data, sortOrder]);
   const handleSortChange = (event) => {
-    console.log("Selected sort order:", event.target.value); // 선택된 값 확인
-    setSortOrder(event.target.value); // 상태 업데이트
+    console.log("Selected sort order:", event.target.value);
+    setSortOrder(event.target.value);
   };
   const handleSearch = () => {
     if (filterInput.trim() === "") {
@@ -76,7 +77,17 @@ export default function Index() {
       {
         accessor: "title",
         Header: <div className="text-center">제목</div>,
-        Cell: ({ value }) => <div>{value}</div>,
+        Cell: ({ value, row }) => (
+          <Link
+            href={{
+              pathname: "/drawings/[id]",
+              query: { id: row.original.id, from: "drawings" },
+            }}
+            passHref
+          >
+            <div className="font-bold hover:underline">{value}</div>
+          </Link>
+        ),
       },
       {
         accessor: "drawingAt",
@@ -169,13 +180,14 @@ export default function Index() {
         <GridView
           data={filteredData}
           showOrganizer={true}
-          from="completedDrawings"
+          from="drawings"
+          category="실시간 추첨 및 추첨 예정"
         />
       ) : (
         <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
           <div className="flex items-center justify-between mb-4">
             <div className="text-xl font-bold text-gray-800">
-              완료된 추첨 내역
+              실시간 추첨 및 추첨 예정
             </div>
           </div>
 
@@ -206,7 +218,7 @@ export default function Index() {
                   <tr
                     key={row.id}
                     {...row.getRowProps()}
-                    className="transition bg-white bg-opacity-60 hover:bg-gray-100 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
+                    className="transition bg-white bg-opacity-60 hover:bg-rose-50 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
                   >
                     {row.cells.map((cell) => (
                       <td
@@ -223,7 +235,6 @@ export default function Index() {
             </tbody>
           </table>
 
-          {/* 페이지 네비게이션 */}
           <div className="flex items-center justify-between mt-4">
             <div className="text-sm text-gray-600">
               Page {pageIndex + 1} of {pageOptions.length}
