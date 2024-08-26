@@ -1,19 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import pick_line from "../../images/pick_line.png";
 import Image from "next/image";
 import Link from "next/link";
 import MemberInfo from "../../components/login/MemberInfo";
+import { getDrawings } from "@/api/listApi";
 
 const MyPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [profileImg, setProfileImg] = useState("");
+  const [completedDrawings, setCompletedDrawings] = useState(0);
+  const [upcomingDrawings, setUpcomingDrawings] = useState(0);
   const router = useRouter();
 
-  console.log("회원정보 시작");
-  console.log(profileImg, "이미지");
+  useEffect(() => {
+    const userNameFromStorage = localStorage.getItem("userName");
+    console.log("Fetched userName from localStorage:", userNameFromStorage);
+    setUsername(userNameFromStorage);
+
+    const fetchDrawings = async () => {
+      try {
+        const drawings = await getDrawings();
+        console.log("Fetched drawings:", drawings);
+        const now = new Date();
+
+        const userDrawings = drawings.filter(
+          (drawing) => drawing.organizer === userNameFromStorage
+        );
+
+        console.log("Filtered userDrawings:", userDrawings);
+        const completed = userDrawings.filter(
+          (drawing) => new Date(drawing.drawingAt) < now
+        ).length;
+        const upcoming = userDrawings.filter(
+          (drawing) => new Date(drawing.drawingAt) >= now
+        ).length;
+
+        setCompletedDrawings(completed);
+        setUpcomingDrawings(upcoming);
+      } catch (error) {
+        console.error("Error fetching drawings:", error);
+      }
+    };
+
+    if (userNameFromStorage) {
+      fetchDrawings();
+    }
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center mt-10 mb-20">
@@ -21,7 +56,7 @@ const MyPage = () => {
         setUsername={setUsername}
         setEmail={setEmail}
         setProfileImg={setProfileImg}
-      />{" "}
+      />
       {message && (
         <div className="flex flex-col items-center justify-center mt-10 mb-20">
           {message}
@@ -47,10 +82,10 @@ const MyPage = () => {
             추첨 예정
           </div>
           <div className="absolute left-[60px] top-[56px] w-[78px] h-[51px] text-[32px] text-center flex flex-col justify-center">
-            0
+            {upcomingDrawings}
           </div>
           <div className="absolute left-[250px] top-[56px] w-[78px] h-[51px] text-[32px] text-center flex flex-col justify-center">
-            2
+            {completedDrawings}
           </div>
           <div className="absolute left-[250px] top-0 w-[90px] h-[51px] text-[18px] flex flex-col justify-center">
             추첨 완료

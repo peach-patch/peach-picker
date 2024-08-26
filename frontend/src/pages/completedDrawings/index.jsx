@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import DarkModeToggle from "@/components/button/DarkModeToggle";
 import SearchComponent from "@/components/list/Search";
+import darkModeStore from "@/store/darkModeStore";
 
 export default function Index() {
   const router = useRouter();
@@ -20,6 +21,7 @@ export default function Index() {
   const [viewType, setViewType] = useState(router.query.viewType || "table");
   const [sortOrder, setSortOrder] = useState("등록일순");
   const [searchTerm, setSearchTerm] = useState("");
+  const { darkMode } = darkModeStore();
 
   useEffect(() => {
     fetchData();
@@ -34,7 +36,7 @@ export default function Index() {
       sortedDrawings = sortedDrawings.sort((a, b) => b.id - a.id);
     } else if (sortOrder === "추첨일시순") {
       sortedDrawings = sortedDrawings.sort(
-        (a, b) => new Date(b.drawingAt) - new Date(a.drawingAt)
+        (a, b) => new Date(a.drawingAt) - new Date(b.drawingAt)
       );
     }
 
@@ -128,19 +130,19 @@ export default function Index() {
         Cell: ({ value }) => <div>{value}명</div>,
       },
       {
-        accessor: "drawingType",
+        accessor: "organizer",
         Header: (
           <div className="text-center text-gray-800 dark:text-gray-100">
-            추첨 유형
+            주최자
           </div>
         ),
         Cell: ({ value }) => <div>{value}</div>,
       },
       {
-        accessor: "organizer",
+        accessor: "viewCount",
         Header: (
           <div className="text-center text-gray-800 dark:text-gray-100">
-            주최자
+            조회
           </div>
         ),
         Cell: ({ value }) => <div>{value}</div>,

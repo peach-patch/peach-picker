@@ -23,12 +23,11 @@ const MemberInfo = ({ setUsername, setEmail, setProfileImg }) => {
       const storedUserName = localStorage.getItem("userName");
       const storedEmail = localStorage.getItem("email");
       const storedProfileImg = localStorage.getItem("profileImg");
-
+      console.log(storedProfileImg, "확인");
       if (storedUserName) {
         setUsername(storedUserName);
         setEmail(storedEmail);
         setProfileImg(storedProfileImg);
-        console.log("이게되어서는안돼");
       } else {
         const fetchProfile = async () => {
           try {

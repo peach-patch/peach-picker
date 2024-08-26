@@ -22,10 +22,10 @@ export default function Index() {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedTerm(searchTerm);
-    }, 500); // 500ms 지연
+    }, 500);
 
     return () => {
-      clearTimeout(handler); // 이전 타이머 클리어
+      clearTimeout(handler);
     };
   }, [searchTerm]);
 
@@ -50,11 +50,11 @@ export default function Index() {
       userDrawings = userDrawings.sort((a, b) => b.id - a.id);
     } else if (sortOrder === "추첨일시순") {
       userDrawings = userDrawings.sort(
-        (a, b) => new Date(b.drawingAt) - new Date(a.drawingAt)
+        (a, b) => new Date(a.drawingAt) - new Date(b.drawingAt)
       );
     }
 
-    setFilteredData(userDrawings); // 필터링된 데이터 상태 업데이트
+    setFilteredData(userDrawings);
   }, [data, sortOrder, debouncedTerm]);
 
   const handleSortChange = (event) => {
@@ -175,7 +175,7 @@ export default function Index() {
   } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <div className="center1 bg-gray-50 dark:bg-gray-900">
+    <div className="center1 bg-gray-50 h-screen dark:bg-gray-900">
       <div className="center1 mt-10 w-2/5">
         <input
           type="text"
