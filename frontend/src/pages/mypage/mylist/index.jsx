@@ -6,6 +6,7 @@ import Link from "next/link";
 import SortSelector from "@/components/list/SortSelector";
 import ViewSelector from "@/components/list/ViewSelector";
 import { useRouter } from "next/router";
+import DarkModeToggle from "@/components/button/DarkModeToggle";
 
 export default function Index() {
   const router = useRouter();
@@ -13,10 +14,20 @@ export default function Index() {
   const [filteredData, setFilteredData] = useState([]);
   const [viewType, setViewType] = useState(router.query.viewType || "table");
   const [sortOrder, setSortOrder] = useState("등록일순");
-
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedTerm, setDebouncedTerm] = useState(searchTerm);
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedTerm(searchTerm);
+    }, 500); // 500ms 지연
+
+    return () => {
+      clearTimeout(handler); // 이전 타이머 클리어
+    };
+  }, [searchTerm]);
 
   useEffect(() => {
     const userName = localStorage.getItem("userName");
@@ -29,6 +40,12 @@ export default function Index() {
       state: new Date(item.drawingAt) > now ? "예정" : "완료",
     }));
 
+    if (debouncedTerm) {
+      userDrawings = userDrawings.filter((item) =>
+        item.title.toLowerCase().includes(debouncedTerm.toLowerCase())
+      );
+    }
+
     if (sortOrder === "등록일순") {
       userDrawings = userDrawings.sort((a, b) => b.id - a.id);
     } else if (sortOrder === "추첨일시순") {
@@ -37,19 +54,26 @@ export default function Index() {
       );
     }
 
-    setFilteredData(userDrawings);
-  }, [data, sortOrder]);
+    setFilteredData(userDrawings); // 필터링된 데이터 상태 업데이트
+  }, [data, sortOrder, debouncedTerm]);
 
   const handleSortChange = (event) => {
-    console.log("Selected sort order:", event.target.value);
     setSortOrder(event.target.value);
+  };
+
+  const handleSearchChange = (event) => {
+    debouncedSearch(event.target.value);
   };
 
   const columns = React.useMemo(
     () => [
       {
         accessor: "title",
-        Header: <div className="text-center">이벤트명</div>,
+        Header: (
+          <div className="text-center text-gray-800 dark:text-gray-100">
+            이벤트명
+          </div>
+        ),
         Cell: ({ value, row }) => (
           <Link
             href={{
@@ -57,15 +81,22 @@ export default function Index() {
               query: { from: "mylist", viewType },
             }}
           >
-            <div className="font-semibold hover:underline">{value}</div>
+            <div className="font-semibold hover:underline text-gray-900 dark:text-gray-200">
+              {value}
+            </div>{" "}
           </Link>
         ),
       },
       {
         accessor: "drawingAt",
-        Header: <div className="text-center">추첨 일시</div>,
+        Header: (
+          <div className="text-center text-gray-800 dark:text-gray-100">
+            추첨 일시
+          </div>
+        ),
         Cell: ({ value }) => (
-          <span>
+          <span className="text-gray-800 dark:text-gray-100">
+            {" "}
             {new Date(value).toLocaleString("ko-KR", {
               year: "numeric",
               month: "long",
@@ -79,22 +110,48 @@ export default function Index() {
       },
       {
         accessor: "winner",
-        Header: () => <div className="text-right">당첨자 수</div>,
-        Cell: ({ value }) => <div className="pr-4 text-right">{value}명</div>,
+        Header: () => (
+          <div className="text-right text-gray-800 dark:text-gray-100">
+            당첨자 수
+          </div>
+        ),
+        Cell: ({ value }) => (
+          <div className="pr-4 text-right text-gray-800 dark:text-gray-100">
+            {value}명
+          </div>
+        ),
       },
       {
         accessor: "state",
-        Header: <div className="text-center">상태</div>,
+        Header: (
+          <div className="text-center text-gray-800 dark:text-gray-100">
+            상태
+          </div>
+        ),
         Cell: ({ value }) => (
-          <div className={`${value === "예정" ? "text-red-500" : ""}`}>
+          <div
+            className={`${
+              value === "예정"
+                ? "text-red-500"
+                : "text-gray-800 dark:text-gray-100"
+            }`}
+          >
             {value}
           </div>
         ),
       },
       {
         accessor: "viewCount",
-        Header: () => <div className="text-right">조회수</div>,
-        Cell: ({ value }) => <div className="pr-4 text-right">{value}</div>,
+        Header: () => (
+          <div className="text-right text-gray-800 dark:text-gray-100">
+            조회수
+          </div>
+        ),
+        Cell: ({ value }) => (
+          <div className="pr-4 text-right text-gray-800 dark:text-gray-100">
+            {value}
+          </div>
+        ),
       },
     ],
     [viewType]
@@ -118,13 +175,23 @@ export default function Index() {
   } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <div className="center1">
+    <div className="center1 bg-gray-50 dark:bg-gray-900">
+      <div className="center1 mt-10 w-2/5">
+        <input
+          type="text"
+          placeholder="제목 검색"
+          className="p-2 border border-gray-300 rounded w-1/2 dark:border-gray-600"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
       <div className="flex justify-end w-4/5 gap-2 px-16 mt-2">
         <SortSelector
           sortOrder={sortOrder}
           handleSortChange={handleSortChange}
         />
         <ViewSelector viewType={viewType} handleViewChange={setViewType} />
+        <DarkModeToggle />
       </div>
       {viewType === "grid" ? (
         <GridView
@@ -135,25 +202,28 @@ export default function Index() {
           category="나의 추첨 내역"
         />
       ) : (
-        <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
+        <div className="w-4/5 p-6 mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
           <div className="flex items-center justify-between mb-4">
-            <div className="text-xl font-bold text-gray-800">
+            <div className="text-xl font-bold text-gray-800 dark:text-gray-100">
               나의 추첨 내역
             </div>
           </div>
-          <table {...getTableProps()} className="w-full text-gray-800">
+          <table
+            {...getTableProps()}
+            className="w-full text-gray-800 dark:text-gray-100"
+          >
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr
                   key={headerGroup.id}
                   {...headerGroup.getHeaderGroupProps()}
-                  className="bg-white border-t-2 border-b-2 border-black bg-opacity-40"
+                  className="bg-white dark:bg-gray-700 border-t-2 border-b-2 border-black bg-opacity-40 dark:bg-opacity-60"
                 >
                   {headerGroup.headers.map((column) => (
                     <th
                       key={column.id}
                       {...column.getHeaderProps()}
-                      className="px-4 py-2 text-left text-gray-800"
+                      className="px-4 py-2 text-left text-gray-800 dark:text-gray-100"
                     >
                       {column.render("Header")}
                     </th>
@@ -168,13 +238,13 @@ export default function Index() {
                   <tr
                     key={row.id}
                     {...row.getRowProps()}
-                    className="transition bg-white bg-opacity-60 hover:bg-rose-50 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
+                    className="transition bg-white dark:bg-gray-800 bg-opacity-60 hover:bg-rose-50 dark:hover:bg-rose-400 hover:shadow-lg hover:translate-y-[-2px] hover:scale-105"
                   >
                     {row.cells.map((cell) => (
                       <td
                         key={cell.id}
                         {...cell.getCellProps()}
-                        className="px-4 py-2 text-center text-gray-800"
+                        className="px-4 py-2 text-center text-gray-800 dark:text-gray-100"
                       >
                         {cell.render("Cell")}
                       </td>
@@ -185,35 +255,35 @@ export default function Index() {
             </tbody>
           </table>
           <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-300">
               Page {pageIndex + 1} of {pageOptions.length}
             </div>
             <div>
               <button
                 onClick={() => gotoPage(0)}
                 disabled={!canPreviousPage}
-                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+                className="px-2 py-1 mr-2 text-gray-800 dark:text-gray-300 transition bg-white dark:bg-gray-700 rounded bg-opacity-40 hover:bg-opacity-80"
               >
                 {"<<"}
               </button>
               <button
                 onClick={() => previousPage()}
                 disabled={!canPreviousPage}
-                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+                className="px-2 py-1 mr-2 text-gray-800 dark:text-gray-300 transition bg-white dark:bg-gray-700 rounded bg-opacity-40 hover:bg-opacity-80"
               >
                 {"<"}
               </button>
               <button
                 onClick={() => nextPage()}
                 disabled={!canNextPage}
-                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+                className="px-2 py-1 mr-2 text-gray-800 dark:text-gray-300 transition bg-white dark:bg-gray-700 rounded bg-opacity-40 hover:bg-opacity-80"
               >
                 {">"}
               </button>
               <button
                 onClick={() => gotoPage(pageCount - 1)}
                 disabled={!canNextPage}
-                className="px-2 py-1 text-gray-800 transition bg-white rounded bg-opacity-40 hover:bg-opacity-80"
+                className="px-2 py-1 text-gray-800 dark:text-gray-300 transition bg-white dark:bg-gray-700 rounded bg-opacity-40 hover:bg-opacity-80"
               >
                 {">>"}
               </button>
@@ -221,7 +291,7 @@ export default function Index() {
             <select
               value={pageSize}
               onChange={(e) => setPageSize(Number(e.target.value))}
-              className="p-1 text-gray-800 bg-white rounded bg-opacity-40"
+              className="p-1 text-gray-800 dark:text-gray-300 bg-white dark:bg-gray-700 rounded bg-opacity-40 dark:bg-opacity-80"
             >
               {[5, 10, 20].map((size) => (
                 <option key={size} value={size}>
