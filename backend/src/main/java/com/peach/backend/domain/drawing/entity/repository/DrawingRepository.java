@@ -17,5 +17,7 @@ public interface DrawingRepository extends JpaRepository<Drawing, Long> {
 
     List<Drawing> findAllByDrawingAt(LocalDateTime drawingAt);
 
- 
+    @Modifying
+    @Query("UPDATE Drawing d SET d.viewCount = d.viewCount + 1 WHERE d.id = :id")
+    void incrementViewCount(@Param("id") Long id);
 }

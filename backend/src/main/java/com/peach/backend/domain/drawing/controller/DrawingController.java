@@ -36,10 +36,16 @@ public class DrawingController {
     // public List<GetDrawingListResp> getDrawingListByConditions(@RequestBody GetDrawingListReq req) {
     //     return drawingFacade.getDrawingListByConditions(req);
     // }
-  @GetMapping
-    public List<GetDrawingListResp> getAllDrawings() {
-        return drawingFacade.getAllDrawings();
-    }
+    @GetMapping
+        public List<GetDrawingListResp> getAllDrawings() {
+            return drawingFacade.getAllDrawings();
+        }
+
+    @PostMapping("{id}/increment-view")
+        public ResponseEntity<Void> incrementViewCount(@PathVariable("id") Long id) {
+            drawingFacade.incrementViewCount(id);
+            return ResponseEntity.ok().build();
+    } // 조회수
 
 
     @GetMapping("{id}")

@@ -53,6 +53,10 @@ export default function DrawId() {
           const result = await response.json();
           setData(result);
           console.log(result, from);
+
+          await axios.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}/increment-view`
+          );
         } catch (error) {
           console.error("Error fetching data:", error);
         }

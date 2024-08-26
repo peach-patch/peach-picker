@@ -68,5 +68,5 @@ public List<GetDrawingListResp> getAllDrawings() {
                 .participants(participantRepository.findAllByDrawing(drawing).stream().map(GetDrawingDetailsResp.Participants::ofForUser).collect(Collectors.toList()))
                 .build();
     }
-
+    
 }
