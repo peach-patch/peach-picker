@@ -54,9 +54,7 @@ public class Drawing extends BaseTimeEntity {
         this.owner = owner;
 
     }
-        public void incrementViewCount() {
-        this.viewCount++;
-    }
+       
 
 
     public void updateThumbnail(String thumbnailPath) {

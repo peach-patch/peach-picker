@@ -5,6 +5,9 @@ import com.peach.backend.domain.drawing.dto.req.GetDrawingListReq;
 import com.peach.backend.domain.drawing.dto.req.StartDrawingReq;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingDetailsResp;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingListResp;
+import com.peach.backend.domain.drawing.entity.Drawing;
+import com.peach.backend.domain.drawing.entity.repository.DrawingRepository;
+import com.peach.backend.domain.drawing.exception.DrawingNotFoundException;
 import com.peach.backend.domain.drawing.service.CreateDrawingSeedService;
 import com.peach.backend.domain.drawing.service.CreateDrawingService;
 import com.peach.backend.domain.drawing.service.GetDrawingService;
@@ -25,6 +28,7 @@ public class DrawingFacade {
     private final GetDrawingService getDrawingService;
     private final CreateDrawingSeedService createDrawingSeedService;
     private final StartDrawingService startDrawingService;
+    private final DrawingRepository drawingRepository;
 
 
     @Transactional
@@ -36,10 +40,10 @@ public class DrawingFacade {
     // public List<GetDrawingListResp> getDrawingListByConditions(GetDrawingListReq req) {
     //     return getDrawingService.getDrawingListByConditions(req);
     // }
-@Transactional(readOnly = true)
-public List<GetDrawingListResp> getAllDrawings() {
-    return getDrawingService.getAllDrawings();
-}
+    @Transactional(readOnly = true)
+    public List<GetDrawingListResp> getAllDrawings() {
+        return getDrawingService.getAllDrawings();
+    }
 
 
     @Transactional(readOnly = true)
@@ -54,7 +58,12 @@ public List<GetDrawingListResp> getAllDrawings() {
     }
 
     @Transactional
-    public int startDrawing(StartDrawingReq req){
+    public int startDrawing(StartDrawingReq req) {
         return startDrawingService.startDrawing(req);
     }
+    
+    @Transactional
+    public void incrementViewCount(Long id) {
+        drawingRepository.incrementViewCount(id);
+    } //조회수
 }
