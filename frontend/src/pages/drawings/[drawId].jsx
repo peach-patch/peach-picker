@@ -3,12 +3,16 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import present from "../../images/present.png";
+import axios from "axios";
+import darkModeStore from "@/store/darkModeStore";
+import DarkModeToggle from "@/components/button/DarkModeToggle";
 
 export default function DrawId() {
   const [data, setData] = useState(null);
   const router = useRouter();
+  const { darkMode } = darkModeStore();
   const { drawId, from, viewType } = router.query;
-  console.log(viewType, "하하");
+
   const handleBackToList = () => {
     if (from === "mylist") {
       router.push({
@@ -30,35 +34,29 @@ export default function DrawId() {
 
   useEffect(() => {
     if (drawId) {
-      console.log(router.query.from);
       const fetchData = async () => {
         try {
-          const response = await fetch(
+          const response = await axios.get(
             `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}`,
             {
-              method: "GET",
               headers: {
                 "Content-Type": "application/json",
               },
             }
           );
 
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(
-              `Network response was not ok: ${response.status} - ${errorText}`
-            );
-          }
-
-          const result = await response.json();
+          const result = response.data;
           setData(result);
-          console.log(result, from);
 
+          // Increment view count
           await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}/increment-view`
           );
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error(
+            "Error fetching data or incrementing view count:",
+            error
+          );
         }
       };
 
@@ -69,13 +67,16 @@ export default function DrawId() {
   if (!data) {
     return <p>Loading...</p>;
   }
-  console.log(data);
 
   return (
-    <div className="flex flex-col items-center center1">
+    <div
+      className={`flex flex-col h-screen items-center dark:bg-gray-900 center1 ${
+        darkMode ? "dark" : ""
+      }`}
+    >
       <div
         key={data.id}
-        className="relative flex w-full max-w-4xl p-6 overflow-hidden bg-gray-100 rounded-lg shadow-md"
+        className="relative flex w-full max-w-4xl p-6 overflow-hidden bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md"
         style={{ height: "75vh" }}
       >
         <div className="relative w-1/2 h-full">
@@ -93,12 +94,17 @@ export default function DrawId() {
         </div>
         <section className="flex flex-col justify-center w-1/2 pl-8">
           <div>
-            <div className="flex mb-2 ml-4 text-2xl font-bold">
-              <Image src={present} height={30} width={30} className="mr-2" />
-              {data.title}
+            <div className="flex mb-2 ml-4 text-2xl font-bold dark:text-gray-100 justify-between">
+              <div className="flex">
+                <Image src={present} height={30} width={30} className="mr-2" />
+                <div className="mt-2">{data.title}</div>
+              </div>
+              <DarkModeToggle />
             </div>
-            <p className="mb-2 ml-2 text-lg">주최자: {data.organizer}</p>
-            <p className="ml-2 text-lg">
+            <p className="mb-2 ml-2 dark:text-gray-100 text-lg">
+              주최자: {data.organizer}
+            </p>
+            <p className="ml-2 dark:text-gray-100 text-lg">
               추첨 일시:{" "}
               {new Date(data.drawingAt).toLocaleString("ko-KR", {
                 year: "numeric",
@@ -109,15 +115,24 @@ export default function DrawId() {
                 hour12: true,
               })}
             </p>
-            <p className="mb-2 ml-2 text-lg">당첨자 수: {data.winner}명</p>
-            <p className="mb-2 ml-2 text-lg">조회수: {data.viewCount}</p>
+            <p className="mb-2 ml-2 text-lg dark:text-gray-100">
+              당첨자 수: {data.winner}명
+            </p>
+            <p className="mb-2 ml-2 text-lg dark:text-gray-100">
+              조회수: {data.viewCount}
+            </p>
           </div>
 
-          <article className="w-full p-4 overflow-y-auto bg-white border-2 border-gray-400 rounded-lg max-h-40">
-            <dt className="mb-2 text-xl font-semibold">&lt;응모자 목록&gt;</dt>
+          <article className="w-full p-4 overflow-y-auto bg-white border-2 border-gray-400 dark:bg-gray-700 dark:border-gray-600 rounded-lg max-h-40">
+            <dt className="mb-2 text-xl font-semibold dark:text-gray-100">
+              &lt;응모자 목록&gt;
+            </dt>
             {data.participants && data.participants.length > 0 ? (
               data.participants.map((participant, index) => (
-                <dd key={index} className="m-2 text-gray-700 ">
+                <dd
+                  key={index}
+                  className="m-2 text-gray-700 dark:text-gray-300"
+                >
                   {participant.name} ({participant.phone})
                 </dd>
               ))

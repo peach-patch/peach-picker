@@ -9,9 +9,11 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import DarkModeToggle from "@/components/button/DarkModeToggle";
 import Search from "@/components/list/Search";
+import darkModeStore from "@/store/darkModeStore";
 
 export default function Index() {
   const router = useRouter();
+  const { darkMode } = darkModeStore();
   const { data, fetchData } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
   const [filterInput, setFilterInput] = useState("");
@@ -125,19 +127,19 @@ export default function Index() {
         Cell: ({ value }) => <div>{value}명</div>,
       },
       {
-        accessor: "drawingType",
+        accessor: "organizer",
         Header: (
           <div className="text-center text-gray-800 dark:text-gray-100">
-            추첨 유형
+            주최자
           </div>
         ),
         Cell: ({ value }) => <div>{value}</div>,
       },
       {
-        accessor: "organizer",
+        accessor: "viewCount",
         Header: (
           <div className="text-center text-gray-800 dark:text-gray-100">
-            주최자
+            조회
           </div>
         ),
         Cell: ({ value }) => <div>{value}</div>,
