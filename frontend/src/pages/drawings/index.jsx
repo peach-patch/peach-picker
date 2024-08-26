@@ -40,7 +40,7 @@ export default function Index() {
       sortedDrawings = upcomingDrawings.sort((a, b) => b.id - a.id);
     } else if (sortOrder === "추첨일시순") {
       sortedDrawings = upcomingDrawings.sort(
-        (a, b) => new Date(b.drawingAt) - new Date(a.drawingAt)
+        (a, b) => new Date(a.drawingAt) - new Date(b.drawingAt)
       );
     }
     if (searchTerm.trim()) {

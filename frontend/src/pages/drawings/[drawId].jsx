@@ -65,7 +65,15 @@ export default function DrawId() {
   }, [drawId]);
 
   if (!data) {
-    return <p>Loading...</p>;
+    return (
+      <div
+        className={`flex items-center justify-center h-screen ${
+          darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+        }`}
+      >
+        <p>Loading...</p>
+      </div>
+    );
   }
 
   return (

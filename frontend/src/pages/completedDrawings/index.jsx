@@ -36,7 +36,7 @@ export default function Index() {
       sortedDrawings = sortedDrawings.sort((a, b) => b.id - a.id);
     } else if (sortOrder === "추첨일시순") {
       sortedDrawings = sortedDrawings.sort(
-        (a, b) => new Date(b.drawingAt) - new Date(a.drawingAt)
+        (a, b) => new Date(a.drawingAt) - new Date(b.drawingAt)
       );
     }
 
