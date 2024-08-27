@@ -20,9 +20,10 @@ export default function GridView({
         {data.map((data) => (
           <Link
             href={{
-              pathname: "/drawings/[id]",
+              pathname: "/drawings/[drawId]",
               query: { id: data.id, from: from, viewType: "grid" },
             }}
+            as={`/drawings/${data.id}`}
             key={data.id}
           >
             <div

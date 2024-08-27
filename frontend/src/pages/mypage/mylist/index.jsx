@@ -7,18 +7,22 @@ import SortSelector from "@/components/list/SortSelector";
 import ViewSelector from "@/components/list/ViewSelector";
 import { useRouter } from "next/router";
 import DarkModeToggle from "@/components/button/DarkModeToggle";
+import darkModeStore from "@/store/darkModeStore";
 
 export default function Index() {
   const router = useRouter();
   const { data, fetchData } = useDrawingStore();
+  const { darkMode } = darkModeStore();
   const [filteredData, setFilteredData] = useState([]);
   const [viewType, setViewType] = useState(router.query.viewType || "table");
   const [sortOrder, setSortOrder] = useState("등록일순");
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedTerm, setDebouncedTerm] = useState(searchTerm);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedTerm(searchTerm);
@@ -56,15 +60,9 @@ export default function Index() {
 
     setFilteredData(userDrawings);
   }, [data, sortOrder, debouncedTerm]);
-
   const handleSortChange = (event) => {
     setSortOrder(event.target.value);
   };
-
-  const handleSearchChange = (event) => {
-    debouncedSearch(event.target.value);
-  };
-
   const columns = React.useMemo(
     () => [
       {
@@ -83,7 +81,7 @@ export default function Index() {
           >
             <div className="font-semibold hover:underline text-gray-900 dark:text-gray-200">
               {value}
-            </div>{" "}
+            </div>
           </Link>
         ),
       },
@@ -96,7 +94,6 @@ export default function Index() {
         ),
         Cell: ({ value }) => (
           <span className="text-gray-800 dark:text-gray-100">
-            {" "}
             {new Date(value).toLocaleString("ko-KR", {
               year: "numeric",
               month: "long",

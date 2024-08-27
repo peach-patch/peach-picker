@@ -11,6 +11,7 @@ export default function DrawId() {
   const [data, setData] = useState(null);
   const router = useRouter();
   const { darkMode } = darkModeStore();
+  console.log(darkMode, "상세에서 확인");
   const { drawId, from, viewType } = router.query;
 
   const handleBackToList = () => {
@@ -78,8 +79,8 @@ export default function DrawId() {
 
   return (
     <div
-      className={`flex flex-col h-screen items-center dark:bg-gray-900 center1 ${
-        darkMode ? "dark" : ""
+      className={`flex flex-col h-screen items-center ${
+        darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
       }`}
     >
       <div

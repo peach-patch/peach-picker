@@ -14,7 +14,7 @@ export default function Home() {
   const [isGrowing, setIsGrowing] = useState(false);
   const [showLogo, setShowLogo] = useState(false);
   const [visibleLetters, setVisibleLetters] = useState([]);
-
+  console.log("첫번째");
   return (
     <div className="flex flex-col w-screen h-screen bg-[#FFF8F2]">
       <Head>

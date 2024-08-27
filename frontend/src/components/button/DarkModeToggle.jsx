@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FiSun, FiMoon } from "react-icons/fi";
 import darkModeStore from "@/store/darkModeStore";
+
 function DarkModeToggle() {
-  const { darkMode, toggleDarkMode, initializeDarkMode } = darkModeStore();
-  useEffect(() => {
-    initializeDarkMode(); // 초기 로드 시 상태 초기화
-  }, [initializeDarkMode]);
+  const { darkMode, toggleDarkMode } = darkModeStore();
+
   return (
     <button
       onClick={toggleDarkMode}

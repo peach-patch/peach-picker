@@ -16,12 +16,10 @@ export default function Index() {
   const { darkMode } = darkModeStore();
   const { data, fetchData } = useDrawingStore();
   const [filteredData, setFilteredData] = useState([]);
-  const [filterInput, setFilterInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("title");
-  const [inputError, setInputError] = useState(false);
-  const [viewType, setViewType] = useState(router.query.viewType || "grid");
   const [sortOrder, setSortOrder] = useState("등록일순");
+  const [viewType, setViewType] = useState(router.query.viewType || "grid");
 
   useEffect(() => {
     fetchData();
@@ -31,36 +29,28 @@ export default function Index() {
     const now = new Date();
     const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
 
-    const upcomingDrawings = data.filter(
+    let sortedDrawings = data.filter(
       (item) => new Date(item.drawingAt) > fiveMinutesAgo
     );
 
-    let sortedDrawings = upcomingDrawings;
     if (sortOrder === "등록일순") {
-      sortedDrawings = upcomingDrawings.sort((a, b) => b.id - a.id);
+      sortedDrawings = sortedDrawings.sort((a, b) => b.id - a.id);
     } else if (sortOrder === "추첨일시순") {
-      sortedDrawings = upcomingDrawings.sort(
+      sortedDrawings = sortedDrawings.sort(
         (a, b) => new Date(a.drawingAt) - new Date(b.drawingAt)
       );
     }
+
     if (searchTerm.trim()) {
-      if (selectedFilter === "title") {
-        sortedDrawings = sortedDrawings.filter((item) =>
-          item.title.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      } else if (selectedFilter === "owner") {
-        sortedDrawings = sortedDrawings.filter((item) =>
-          item.organizer.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      }
+      sortedDrawings = sortedDrawings.filter((item) =>
+        selectedFilter === "title"
+          ? item.title.toLowerCase().includes(searchTerm.toLowerCase())
+          : item.organizer.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
+
     setFilteredData(sortedDrawings);
   }, [data, sortOrder, searchTerm, selectedFilter]);
-
-  const handleSortChange = (event) => {
-    console.log("Selected sort order:", event.target.value);
-    setSortOrder(event.target.value);
-  };
 
   const handleSearch = (term, filter) => {
     setSearchTerm(term);
@@ -86,7 +76,7 @@ export default function Index() {
         Cell: ({ value, row }) => (
           <Link
             href={{
-              pathname: "/drawings/[id]",
+              pathname: "/drawings/[drawId]",
               query: { id: row.original.id, from: "drawings", viewType },
             }}
             passHref
@@ -147,6 +137,7 @@ export default function Index() {
     ],
     [viewType]
   );
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -165,7 +156,11 @@ export default function Index() {
   } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div
+      className={`flex flex-col items-center justify-center min-h-screen ${
+        darkMode ? "bg-gray-900" : "bg-gray-50"
+      }`}
+    >
       <div className="flex mb-2 mt-10 w-full center1">
         <Search onSearch={handleSearch} />
       </div>
@@ -173,7 +168,7 @@ export default function Index() {
       <div className="flex justify-end w-4/5 gap-2 px-16 mt-2">
         <SortSelector
           sortOrder={sortOrder}
-          handleSortChange={handleSortChange}
+          handleSortChange={(e) => setSortOrder(e.target.value)}
         />
         <ViewSelector viewType={viewType} handleViewChange={setViewType} />
         <DarkModeToggle />
@@ -186,7 +181,11 @@ export default function Index() {
           category="실시간 추첨 및 추첨 예정"
         />
       ) : (
-        <div className="w-4/5 p-6 mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
+        <div
+          className={`w-4/5 p-6 mt-8 rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}
+        >
           <div className="flex items-center justify-between mb-4">
             <div className="text-xl font-bold text-gray-800 dark:text-gray-100">
               실시간 추첨 및 추첨 예정
