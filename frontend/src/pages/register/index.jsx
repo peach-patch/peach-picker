@@ -22,7 +22,7 @@ export default function Register() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const { token } = useAuthStore();
-  const { addNewDrawing } = useDrawingStore(); // addNewDrawing 액션 가져오기
+  const { addNewDrawing } = useDrawingStore();
   const router = useRouter();
 
   const dropDown = () => {
@@ -111,20 +111,41 @@ export default function Register() {
       formData.append("thumbnail", thumbnail, "thumbnail.png");
     }
 
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/drawing/register`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    //   try {
+    //     const response = await axios.post(
+    //       `${process.env.NEXT_PUBLIC_API_URL}/drawing/register`,
+    //       formData,
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${token}`,
+    //         },
+    //       }
+    //     );
 
-      if (response.status === 200) {
-        const newDrawing = response.data; // 새로 생성된 데이터를 가져옴
-        addNewDrawing(newDrawing); // 새로운 데이터를 Zustand 스토어에 추가
+    //     if (response.status === 200) {
+    //       const newDrawing = response.data;
+    //       addNewDrawing(newDrawing);
+    //       alert("추첨이 성공적으로 등록되었습니다.");
+    //       router.push("/mypage/mylist");
+    //     } else {
+    //       console.error("Error:", response.statusText);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error:", error);
+    //   }
+    // };
+    try {
+      const response = await fetch(`/api/drawing/register`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Success:", data);
         alert("추첨이 성공적으로 등록되었습니다.");
         router.push("/mypage/mylist");
       } else {
@@ -134,18 +155,15 @@ export default function Register() {
       console.error("Error:", error);
     }
   };
-
   return (
     <div
       className="mt-20 flex flex-col items-center min-w-[1000px] justify-center w-full"
       style={{ height: "calc(100vh - 100px)" }}
     >
-      {/* 이미지 업로드 섹션 */}
       <div className="w-1/5 mt-20">
         <ImgUpload onImageSelect={handleImageSelect} />
       </div>
 
-      {/* 일시 선택 섹션 */}
       <div className="flex items-center justify-center w-1/2">
         <div className="text-right mr-2 w-[150px] font-bold">일시 :</div>
         <div className="relative w-3/5 h-[40px]">
@@ -173,7 +191,6 @@ export default function Register() {
         <Time onTimeChange={setSelectedTime} />
       </div>
 
-      {/* 이벤트 명 입력 섹션 */}
       <div className="flex items-center justify-center w-1/2 m-4">
         <div className="text-right mr-2 w-[150px] font-bold">이벤트 명 :</div>
         <div className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
@@ -186,7 +203,6 @@ export default function Register() {
         </div>
       </div>
 
-      {/* 당첨자 수 입력 섹션 */}
       <div className="flex items-center justify-center w-1/2 mb-4">
         <div className="text-right mr-2 w-[150px] font-bold">당첨자 수 :</div>
         <div className="w-full h-[40px] flex flex-row items-center justify-start py-[8px] px-[16px] bg-[#fff] border-[1px] border-solid border-[#e0e0e0] rounded-[8px]">
@@ -199,7 +215,6 @@ export default function Register() {
         </div>
       </div>
 
-      {/* 추첨 방법 선택 섹션 */}
       <div className="relative flex items-center justify-center w-1/2 mb-4 z-1">
         <div className="text-right mr-2 w-[150px] font-bold">추첨 방법 :</div>
         <div
@@ -235,7 +250,6 @@ export default function Register() {
         </div>
       </div>
 
-      {/* 명단 CSV 파일 업로드 섹션 */}
       <div className="flex items-center justify-center w-1/2 mb-10">
         <div className="text-right mr-2 mt-6 w-[150px] font-bold">명단 :</div>
         <div className="w-full text-[12px] whitespace-nowrap">

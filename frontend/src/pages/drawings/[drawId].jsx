@@ -9,6 +9,7 @@ import DarkModeToggle from "@/components/button/DarkModeToggle";
 
 export default function DrawId() {
   const [data, setData] = useState(null);
+  const [winners, setWinners] = useState([]);
   const router = useRouter();
   const { darkMode } = darkModeStore();
   console.log(darkMode, "상세에서 확인");
@@ -64,6 +65,61 @@ export default function DrawId() {
       fetchData();
     }
   }, [drawId]);
+
+  useEffect(() => {
+    if (data && data.drawingAt) {
+      const now = new Date();
+      const drawingTime = new Date(data.drawingAt);
+
+      const timeUntilDrawing = drawingTime - now;
+
+      if (timeUntilDrawing > 0) {
+        // 추첨 시간이 될 때까지 기다렸다가 요청을 보냄
+        const timer = setTimeout(() => {
+          startDrawing();
+        }, timeUntilDrawing);
+
+        return () => clearTimeout(timer);
+      } else {
+        // 이미 추첨 시간이 지난 경우 즉시 추첨 시작
+        startDrawing();
+      }
+    }
+  }, [data]);
+
+  const startDrawing = async () => {
+    try {
+      // 시드 생성
+      const seedResponse = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/drawing/seed`,
+        {
+          clientTime: new Date(),
+        }
+      );
+      const seed = seedResponse.data;
+      console.log(seed, "시드");
+
+      // 추첨 시작
+      const drawResponse = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/drawing/start`,
+        {
+          seed: seed,
+          drawing_id: drawId,
+        }
+      );
+
+      const drawResult = drawResponse.data;
+      alert(drawResult);
+
+      const updatedData = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}`
+      );
+      setWinners(updatedData.data.winners || []);
+      console.log(winners, "이게 나와라");
+    } catch (error) {
+      console.error("Error starting drawing:", error);
+    }
+  };
 
   if (!data) {
     return (
@@ -136,13 +192,13 @@ export default function DrawId() {
             <dt className="mb-2 text-xl font-semibold dark:text-gray-100">
               &lt;응모자 목록&gt;
             </dt>
-            {data.participants && data.participants.length > 0 ? (
-              data.participants.map((participant, index) => (
+            {winners.length > 0 ? (
+              winners.map((winner, index) => (
                 <dd
                   key={index}
                   className="m-2 text-gray-700 dark:text-gray-300"
                 >
-                  {participant.name} ({participant.phone})
+                  {winner.name} ({winner.phone}) - 당첨자
                 </dd>
               ))
             ) : (
