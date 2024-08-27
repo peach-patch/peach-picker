@@ -40,7 +40,6 @@ export default function Index() {
       );
     }
 
-    // Apply search filtering based on the filtered data
     if (searchTerm.trim()) {
       if (selectedFilter === "title") {
         sortedDrawings = sortedDrawings.filter((item) =>
@@ -85,13 +84,14 @@ export default function Index() {
         Cell: ({ value, row }) => (
           <Link
             href={{
-              pathname: "/drawings/[id]",
+              pathname: "/drawings/[drawId]",
               query: {
                 id: row.original.id,
                 from: "completedDrawings",
                 viewType,
               },
             }}
+            as={`/drawings/${row.original.id}`}
             passHref
           >
             <div className="font-bold hover:underline text-gray-900 dark:text-gray-200">
@@ -169,7 +169,11 @@ export default function Index() {
   } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div
+      className={`flex flex-col items-center justify-center min-h-screen ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
+      }`}
+    >
       <div className="flex mb-4 w-full center1">
         <SearchComponent onSearch={handleSearch} />
       </div>
@@ -189,7 +193,11 @@ export default function Index() {
           category="완료된 추첨 내역"
         />
       ) : (
-        <div className="w-4/5 p-6 mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
+        <div
+          className={`w-4/5 p-6 mt-8 rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}
+        >
           <div className="flex items-center justify-between mb-4">
             <div className="text-xl font-bold text-gray-800 dark:text-gray-100">
               완료된 추첨 내역

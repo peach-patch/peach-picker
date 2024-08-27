@@ -8,7 +8,7 @@ import Carousel from "./Carousel";
 
 export default function SecondView() {
   const images = [register, dailycheck, follow, possible, tips];
-
+  console.log("두번째");
   return (
     <div className="flex flex-col items-center justify-center h-full space-y-6">
       <section className="w-5/6 max-w-full mb-4">

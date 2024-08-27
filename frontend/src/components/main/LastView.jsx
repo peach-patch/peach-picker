@@ -5,7 +5,9 @@ import brandstory from "../../images/brand.png";
 import lottery from "../../images/lottery.png";
 import Image from "next/image";
 import Link from "next/link";
+
 export default function LastView() {
+  console.log("마지막");
   return (
     <div className="flex flex-col min-h-screen">
       <section className="flex">

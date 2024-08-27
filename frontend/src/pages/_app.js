@@ -8,15 +8,15 @@ import { useRouter } from "next/router";
 
 function App({ Component, pageProps }) {
   const initializeAuth = useAuthStore((state) => state.initialize);
-  const { darkMode, initializeDarkMode } = darkModeStore();
+  const { darkMode } = darkModeStore();
   const router = useRouter();
+
   useEffect(() => {
     initializeAuth();
-    initializeDarkMode();
-  }, [initializeAuth, initializeDarkMode]);
+  }, [initializeAuth]);
 
   return (
-    <div className={darkMode ? "dark" : "light"}>
+    <div className={darkMode ? "dark" : ""}>
       {router.pathname === "/" ? (
         <Component {...pageProps} />
       ) : (
