@@ -6,10 +6,13 @@ import present from "../../images/present.png";
 import axios from "axios";
 import darkModeStore from "@/store/darkModeStore";
 import DarkModeToggle from "@/components/button/DarkModeToggle";
+import Confetti from "react-confetti";
 
 export default function DrawId() {
   const [data, setData] = useState(null);
   const [winners, setWinners] = useState([]);
+  const [isConfettiVisible, setIsConfettiVisible] = useState(false);
+  const [recycleConfetti, setRecycleConfetti] = useState(false);
   const router = useRouter();
   const { darkMode } = darkModeStore();
   const { drawId, from, viewType } = router.query;
@@ -57,6 +60,19 @@ export default function DrawId() {
           await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}/increment-view`
           );
+
+          const now = new Date();
+          const drawingTime = new Date(result.drawingAt);
+          if (drawingTime <= now) {
+            setTimeout(() => {
+              setIsConfettiVisible(true);
+              setRecycleConfetti(true);
+
+              setTimeout(() => {
+                setRecycleConfetti(false);
+              }, 15000);
+            }, 30000);
+          }
         } catch (error) {
           console.error(
             "Error fetching data or incrementing view count:",
@@ -87,6 +103,8 @@ export default function DrawId() {
         darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
       }`}
     >
+      {isConfettiVisible && <Confetti recycle={recycleConfetti} />}
+
       <div
         key={data.id}
         className="relative flex w-full max-w-4xl p-6 overflow-hidden bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md"
