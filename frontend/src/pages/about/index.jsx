@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import profile1 from "../../images/choi.png";
-import profile2 from "../../images/kim.png";
+import profile2 from "../../images/Kim.png";
 import profile3 from "../../images/doggy.jpg";
 import { FaGithub } from "react-icons/fa";
 
