@@ -77,7 +77,7 @@ export default function Index() {
           <Link
             href={{
               pathname: "/drawings/[drawId]",
-              query: { id: row.original.id, from: "drawings", viewType },
+              query: { drawId: row.original.id, from: "drawings", viewType },
             }}
             passHref
           >

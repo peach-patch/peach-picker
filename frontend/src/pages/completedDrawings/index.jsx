@@ -86,7 +86,7 @@ export default function Index() {
             href={{
               pathname: "/drawings/[drawId]",
               query: {
-                id: row.original.id,
+                drawId: row.original.id,
                 from: "completedDrawings",
                 viewType,
               },
