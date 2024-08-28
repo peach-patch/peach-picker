@@ -50,7 +50,6 @@ export default function DrawId() {
           const result = response.data;
           setData(result);
 
-          // Increment view count
           await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}/increment-view`
           );
@@ -74,14 +73,12 @@ export default function DrawId() {
       const timeUntilDrawing = drawingTime - now;
 
       if (timeUntilDrawing > 0) {
-        // 추첨 시간이 될 때까지 기다렸다가 요청을 보냄
         const timer = setTimeout(() => {
           startDrawing();
         }, timeUntilDrawing);
 
         return () => clearTimeout(timer);
       } else {
-        // 이미 추첨 시간이 지난 경우 즉시 추첨 시작
         startDrawing();
       }
     }
@@ -89,7 +86,6 @@ export default function DrawId() {
 
   const startDrawing = async () => {
     try {
-      // 시드 생성
       const seedResponse = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/drawing/seed`,
         {
@@ -99,7 +95,6 @@ export default function DrawId() {
       const seed = seedResponse.data;
       console.log(seed, "시드");
 
-      // 추첨 시작
       const drawResponse = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/drawing/start`,
         {

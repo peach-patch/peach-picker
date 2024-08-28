@@ -111,41 +111,16 @@ export default function Register() {
       formData.append("thumbnail", thumbnail, "thumbnail.png");
     }
 
-    //   try {
-    //     const response = await axios.post(
-    //       `${process.env.NEXT_PUBLIC_API_URL}/drawing/register`,
-    //       formData,
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       }
-    //     );
-
-    //     if (response.status === 200) {
-    //       const newDrawing = response.data;
-    //       addNewDrawing(newDrawing);
-    //       alert("추첨이 성공적으로 등록되었습니다.");
-    //       router.push("/mypage/mylist");
-    //     } else {
-    //       console.error("Error:", response.statusText);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error:", error);
-    //   }
-    // };
     try {
-      const response = await fetch(`/api/drawing/register`, {
-        method: "POST",
+      const response = await axios.post(`/api/drawing/register`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: formData,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Success:", data);
+      if (response.status === 200) {
+        const newDrawing = response.data;
+        addNewDrawing(newDrawing);
         alert("추첨이 성공적으로 등록되었습니다.");
         router.push("/mypage/mylist");
       } else {
@@ -155,6 +130,7 @@ export default function Register() {
       console.error("Error:", error);
     }
   };
+
   return (
     <div
       className="mt-20 flex flex-col items-center min-w-[1000px] justify-center w-full"
