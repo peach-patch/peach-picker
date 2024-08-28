@@ -110,23 +110,35 @@ export default function Register() {
     if (thumbnail) {
       formData.append("thumbnail", thumbnail, "thumbnail.png");
     }
-
+    console.log("FormData 확인:");
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+    for (let [key, value] of formData.entries()) {
+      if (value instanceof File) {
+        console.log(key, value.name);
+      } else {
+        console.log(key, value);
+      }
+    }
     try {
       const response = await axios.post(`/api/drawing/register`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      console.log(formData, "확인");
       if (response.status === 200) {
         const newDrawing = response.data;
         addNewDrawing(newDrawing);
         alert("추첨이 성공적으로 등록되었습니다.");
         router.push("/mypage/mylist");
       } else {
+        console.log(formData, "확인");
         console.error("Error:", response.statusText);
       }
     } catch (error) {
+      console.log(formData, "확인");
       console.error("Error:", error);
     }
   };
