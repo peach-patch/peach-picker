@@ -16,6 +16,7 @@
     "cropperjs": "^1.6.2",
     "daisyui": "^4.12.10",
     "date-fns": "^3.6.0",
+    "framer-motion": "^11.3.30",
     "http-proxy-middleware": "^3.0.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
