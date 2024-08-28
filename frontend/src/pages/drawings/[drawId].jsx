@@ -12,7 +12,6 @@ export default function DrawId() {
   const [winners, setWinners] = useState([]);
   const router = useRouter();
   const { darkMode } = darkModeStore();
-  console.log(darkMode, "상세에서 확인");
   const { drawId, from, viewType } = router.query;
 
   const handleBackToList = () => {
@@ -50,6 +49,11 @@ export default function DrawId() {
           const result = response.data;
           setData(result);
 
+          const filteredWinners = result.participants.filter(
+            (participant) => participant.winner
+          );
+          setWinners(filteredWinners);
+
           await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}/increment-view`
           );
@@ -64,58 +68,6 @@ export default function DrawId() {
       fetchData();
     }
   }, [drawId]);
-
-  useEffect(() => {
-    if (data && data.drawingAt) {
-      const now = new Date();
-      const drawingTime = new Date(data.drawingAt);
-
-      const timeUntilDrawing = drawingTime - now;
-
-      if (timeUntilDrawing > 0) {
-        const timer = setTimeout(() => {
-          startDrawing();
-        }, timeUntilDrawing);
-
-        return () => clearTimeout(timer);
-      } else {
-        startDrawing();
-      }
-    }
-  }, [data]);
-
-  const startDrawing = async () => {
-    try {
-      const seedResponse = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/drawing/seed`,
-        {
-          clientTime: new Date(),
-        }
-      );
-      const seed = seedResponse.data;
-      console.log(seed, "시드");
-
-      const drawResponse = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/drawing/start`,
-        {
-          seed: seed,
-          drawing_id: drawId,
-        }
-      );
-
-      const drawResult = drawResponse.data;
-      alert(drawResult);
-
-      const updatedData = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}`
-      );
-      setWinners(updatedData.data.winners || []);
-      console.log(updatedData.data);
-      console.log(winners, "이게 나와라");
-    } catch (error) {
-      console.error("Error starting drawing:", error);
-    }
-  };
 
   if (!data) {
     return (
@@ -185,10 +137,6 @@ export default function DrawId() {
           </div>
 
           <article className="w-full p-4 overflow-y-auto bg-white border-2 border-gray-400 dark:bg-gray-700 dark:border-gray-600 rounded-lg max-h-40">
-            {/* <dt className="mb-2 text-xl font-semibold dark:text-gray-100">
-              &lt;응모자 및 당첨자 목록&gt;
-            </dt> */}
-
             {data.drawingAt && new Date(data.drawingAt) > new Date() ? (
               <>
                 <p className="mb-2 text-lg dark:text-gray-100">
