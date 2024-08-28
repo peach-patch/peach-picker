@@ -25,12 +25,14 @@ public class GetDrawingDetailsResp {
         private String name;
         private String email;
         private String phone;
+        private boolean isWinner;
 
         public static Participants ofForUser(Participant participant) {
             return Participants.builder()
                     .name(getMaskedName(participant.getName()))
                     .email(getMaskedEmail(participant.getEmail()))
                     .phone(getMaskedPhone(participant.getPhone()))
+                    .isWinner(participant.getIsWinner())
                     .build();
         }
 
@@ -39,6 +41,7 @@ public class GetDrawingDetailsResp {
                     .name(participant.getName())
                     .email(participant.getEmail())
                     .phone(participant.getPhone())
+                    .isWinner(participant.getIsWinner())
                     .build();
         }
 
