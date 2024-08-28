@@ -70,8 +70,11 @@ export default function LastView() {
           </article>
           <article className="w-1/6 pt-10">
             <div className="pb-2 font-bold">회사 소개</div>
-            <div>기업 정보</div>
-            <div>윤리</div>
+
+            <Link href="/about">기업 정보</Link>
+            <div>
+              <Link href="/brandstory">브랜드 스토리</Link>
+            </div>
             <div>
               <a
                 href="https://pf.kakao.com/_vxhxixoG"
