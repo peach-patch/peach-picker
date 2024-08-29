@@ -25,6 +25,7 @@
     "react-canvas-confetti": "^2.0.7",
     "react-confetti": "^6.1.0",
     "react-cropper": "^2.3.3",
+    "react-custom-roulette": "^1.4.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
     "react-easy-crop": "^5.0.8",
