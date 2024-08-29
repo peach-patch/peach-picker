@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,6 +40,9 @@ public class Drawing extends BaseTimeEntity {
     private User owner;
 
     private int viewCount; // 조회수 추가
+
+    @OneToMany(mappedBy = "drawing", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participant> participants;
 
     @Builder
     public Drawing(DrawingType drawingType, int viewCount, String thumbnailPath, String participantPath, String title,

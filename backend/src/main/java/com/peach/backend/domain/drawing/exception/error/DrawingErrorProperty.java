@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 public enum DrawingErrorProperty implements ErrorProperty {
     DRAWING_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 추첨을 찾을 수 없습니다."),
     DRAWING_AT_ERROR(HttpStatus.BAD_REQUEST, "추첨 시각이 올바르지 않습니다"),
+    DRAWING_COMPLETED_ERROR(HttpStatus.FORBIDDEN, "추첨이 이미 완료되어 삭제할 수 없습니다."),
     ;
 
     private final HttpStatus status;
