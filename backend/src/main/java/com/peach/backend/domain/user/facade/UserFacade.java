@@ -22,6 +22,7 @@ public class UserFacade {
     private final KakaoLoginService kakaoLoginService;
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailVerificationService emailVerificationService;
+    private final DeleteUserService deleteUserService;
 
     public void signUp(SignUpReq req) {
         createUserService.createUser(req);
@@ -57,4 +58,6 @@ public class UserFacade {
     public void verifyingCode(String email, String code) {
         emailVerificationService.verifyingCode(email, code);
     }
+
+    public void deleteUser(User user) { deleteUserService.deleteUser(user); }
 }

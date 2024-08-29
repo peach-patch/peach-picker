@@ -63,4 +63,11 @@ public class UserController {
 
         return ResponseEntity.ok("인증이 완료되었습니다.");
     }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(@CurrentUser User user) {
+        userFacade.deleteUser(user);
+
+        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
+    }
 }

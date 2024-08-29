@@ -36,7 +36,8 @@ public class Drawing extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private DrawingStatus drawingStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
     private int viewCount; // 조회수 추가
@@ -80,4 +81,6 @@ public class Drawing extends BaseTimeEntity {
     public void updateViewCount(int viewCount) {
         this.viewCount = viewCount;
     }
+
+    public void updateOwnerToNull(){this.owner = null;}
 }
