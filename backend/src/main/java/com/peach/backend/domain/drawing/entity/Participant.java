@@ -22,7 +22,8 @@ public class Participant {
     private Boolean isWinner;
     private long randomNums;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "drawing_id", nullable = false)
     private Drawing drawing;
 
     @Builder

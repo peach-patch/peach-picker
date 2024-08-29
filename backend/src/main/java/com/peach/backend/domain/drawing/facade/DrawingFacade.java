@@ -1,17 +1,11 @@
 package com.peach.backend.domain.drawing.facade;
 
 import com.peach.backend.domain.drawing.dto.req.DrawingReq;
-import com.peach.backend.domain.drawing.dto.req.GetDrawingListReq;
 import com.peach.backend.domain.drawing.dto.req.StartDrawingReq;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingDetailsResp;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingListResp;
-import com.peach.backend.domain.drawing.entity.Drawing;
 import com.peach.backend.domain.drawing.entity.repository.DrawingRepository;
-import com.peach.backend.domain.drawing.exception.DrawingNotFoundException;
-import com.peach.backend.domain.drawing.service.CreateDrawingSeedService;
-import com.peach.backend.domain.drawing.service.CreateDrawingService;
-import com.peach.backend.domain.drawing.service.GetDrawingService;
-import com.peach.backend.domain.drawing.service.StartDrawingService;
+import com.peach.backend.domain.drawing.service.*;
 import com.peach.backend.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,6 +23,7 @@ public class DrawingFacade {
     private final CreateDrawingSeedService createDrawingSeedService;
     private final StartDrawingService startDrawingService;
     private final DrawingRepository drawingRepository;
+    private final DeleteDrawingService deleteDrawingService;
 
 
     @Transactional
@@ -66,4 +61,7 @@ public class DrawingFacade {
     public void incrementViewCount(Long id) {
         drawingRepository.incrementViewCount(id);
     } //조회수
+
+    @Transactional
+    public void deleteDrawing(Long id) { deleteDrawingService.deleteDrawing(id); }
 }

@@ -2,7 +2,6 @@ package com.peach.backend.domain.drawing.controller;
 
 import com.peach.backend.domain.drawing.dto.req.DrawingReq;
 import com.peach.backend.domain.drawing.dto.req.DrawingSeedReq;
-import com.peach.backend.domain.drawing.dto.req.GetDrawingListReq;
 import com.peach.backend.domain.drawing.dto.req.StartDrawingReq;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingDetailsResp;
 import com.peach.backend.domain.drawing.dto.resp.GetDrawingListResp;
@@ -62,6 +61,12 @@ public class DrawingController {
     @PostMapping("start")
     public ResponseEntity<String> StartDrawing(@RequestBody StartDrawingReq req) {
         return ResponseEntity.ok().body(drawingFacade.startDrawing(req) + "명의 당첨자가 추첨되었습니다.");
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteDrawing(@PathVariable("id") Long id, @CurrentUser User user) {
+        drawingFacade.deleteDrawing(id);
+        return ResponseEntity.ok().body("추첨이 삭제되었습니다.");
     }
 
 }
