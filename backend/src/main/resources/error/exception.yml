@@ -36,3 +36,8 @@ minio_can_not_put:
 minio_can_not_get:
   status: 404
   message: 미디어 파일을 가져올 수 없습니다.
+
+### DRAWING ###
+drawing_completed_error:
+  status: 403
+  message: 추첨이 이미 완료되어 삭제할 수 없습니다.

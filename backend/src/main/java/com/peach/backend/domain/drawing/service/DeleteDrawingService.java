@@ -3,8 +3,8 @@ package com.peach.backend.domain.drawing.service;
 import com.peach.backend.domain.drawing.entity.Drawing;
 import com.peach.backend.domain.drawing.entity.repository.DrawingRepository;
 import com.peach.backend.domain.drawing.enums.DrawingStatus;
-import com.peach.backend.domain.drawing.exception.DrawingCompletedErrorException;
 import com.peach.backend.domain.drawing.exception.DrawingNotFoundException;
+import com.woo.exception.util.BizException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class DeleteDrawingService {
         if(drawing.getDrawingStatus().equals(DrawingStatus.STANDBY)){
             drawingRepository.delete(drawing);
         }else{
-            throw DrawingCompletedErrorException.EXCEPTION;
+            throw new BizException("drawing_completed_error");
         }
     }
 }
