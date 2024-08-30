@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        "spin-slow": "spin 10s linear infinite",
+      },
       height: {
         "calc-100vh-64": "calc(100vh - 64px)",
       },

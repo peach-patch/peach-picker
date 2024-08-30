@@ -1,30 +1,20 @@
-import dynamic from "next/dynamic";
+import Button from "@/components/button/Button";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import present from "../../images/present.png";
 import axios from "axios";
 import darkModeStore from "@/store/darkModeStore";
-import Confetti from "react-confetti";
-import Button from "@/components/button/Button";
 import DarkModeToggle from "@/components/button/DarkModeToggle";
-import RouletteComponent from "@/components/drawing/RouletteComponent";
-import ParticipantsList from "@/components/drawing/ParticipantsList";
-import WinnersList from "@/components/drawing/WinnersList";
-import DrawDetails from "@/components/drawing/DrawDetails";
-
-const Roulette = dynamic(
-  () => import("react-custom-roulette").then((mod) => mod.default),
-  { ssr: false }
-);
+import Confetti from "react-confetti";
 
 export default function DrawId() {
   const [data, setData] = useState(null);
   const [winners, setWinners] = useState([]);
   const [isConfettiVisible, setIsConfettiVisible] = useState(false);
   const [recycleConfetti, setRecycleConfetti] = useState(false);
-  const [rouletteData, setRouletteData] = useState([]);
-  const [mustSpin, setMustSpin] = useState(false);
-  const [prizeIndex, setPrizeIndex] = useState(0);
-  const [isDrawingTime, setIsDrawingTime] = useState(false);
+  const [isRouletteRunning, setIsRouletteRunning] = useState(false);
+  const [currentWinner, setCurrentWinner] = useState(null);
   const router = useRouter();
   const { darkMode } = darkModeStore();
   const { drawId, from, viewType } = router.query;
@@ -64,14 +54,6 @@ export default function DrawId() {
           const result = response.data;
           setData(result);
 
-          const participants = result.participants.map(
-            (participant, index) => ({
-              id: index,
-              option: participant.name,
-            })
-          );
-          setRouletteData(participants);
-
           const filteredWinners = result.participants.filter(
             (participant) => participant.winner
           );
@@ -80,6 +62,14 @@ export default function DrawId() {
           await axios.post(
             `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}/increment-view`
           );
+
+          const now = new Date();
+          const drawingTime = new Date(result.drawingAt);
+          if (drawingTime <= now) {
+            setTimeout(() => {
+              startRoulette();
+            }, 3000);
+          }
         } catch (error) {
           console.error(
             "Error fetching data or incrementing view count:",
@@ -92,51 +82,22 @@ export default function DrawId() {
     }
   }, [drawId]);
 
-  useEffect(() => {
-    const checkDrawingTime = () => {
-      if (data) {
-        const now = new Date();
-        const drawingTime = new Date(data.drawingAt);
-        drawingTime.setMinutes(drawingTime.getMinutes() + 5);
+  const startRoulette = () => {
+    setIsRouletteRunning(true);
+    let index = 0;
 
-        if (drawingTime <= now && !isDrawingTime) {
-          setIsDrawingTime(true);
-          handleSpin();
-        }
-      }
-    };
-
-    const interval = setInterval(checkDrawingTime, 1000);
-
-    return () => clearInterval(interval);
-  }, [data, isDrawingTime]);
-
-  const handleSpin = () => {
-    setMustSpin(true);
     const interval = setInterval(() => {
-      const nextIndex = winners.length;
-      if (nextIndex < rouletteData.length) {
-        setPrizeIndex(nextIndex);
-        setMustSpin(true);
-      } else {
+      if (index >= winners.length) {
         clearInterval(interval);
-        handleStopSpinning();
+        setIsRouletteRunning(false);
+        setIsConfettiVisible(true);
+        setRecycleConfetti(true);
+        setTimeout(() => setRecycleConfetti(false), 15000);
+      } else {
+        setCurrentWinner(winners[index]);
+        index++;
       }
-    }, 5000);
-  };
-
-  const handleStopSpinning = () => {
-    setMustSpin(false);
-    const winner = data.participants[prizeIndex];
-    setWinners((prevWinners) => [...prevWinners, winner]);
-
-    if (winners.length + 1 === data.winner) {
-      setIsConfettiVisible(true);
-      setRecycleConfetti(true);
-      setTimeout(() => {
-        setRecycleConfetti(false);
-      }, 15000);
-    }
+    }, 2000); // 2초마다 다음 당첨자
   };
 
   if (!data) {
@@ -158,7 +119,84 @@ export default function DrawId() {
       }`}
     >
       {isConfettiVisible && <Confetti recycle={recycleConfetti} />}
-      <DrawDetails data={data} />
+
+      <div
+        key={data.id}
+        className="relative flex w-full max-w-4xl p-6 overflow-hidden bg-gray-100 rounded-lg shadow-md dark:bg-gray-800"
+        style={{ height: "75vh" }}
+      >
+        <div className="relative w-1/2 h-full">
+          {data.thumbnailUrl ? (
+            <Image
+              src={data.thumbnailUrl}
+              alt={data.title}
+              layout="fill"
+              objectFit="contain"
+              className="absolute inset-0 rounded"
+            />
+          ) : (
+            <p>No Image Available</p>
+          )}
+        </div>
+        <section className="flex flex-col justify-center w-1/2 pl-8">
+          <div>
+            <div className="flex justify-between mb-2 ml-4 text-2xl font-bold dark:text-gray-100">
+              <div className="flex">
+                <Image src={present} height={30} width={30} className="mr-2" />
+                <div className="mt-2">{data.title}</div>
+              </div>
+              <DarkModeToggle />
+            </div>
+            <p className="mb-2 ml-2 text-lg dark:text-gray-100">
+              주최자: {data.organizer}
+            </p>
+            <p className="ml-2 text-lg dark:text-gray-100">
+              추첨 일시:{" "}
+              {new Date(data.drawingAt).toLocaleString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              })}
+            </p>
+            <p className="mb-2 ml-2 text-lg dark:text-gray-100">
+              당첨자 수: {data.winner}명
+            </p>
+            <p className="mb-2 ml-2 text-lg dark:text-gray-100">
+              조회수: {data.viewCount}
+            </p>
+          </div>
+
+          <article className="w-full p-4 overflow-y-auto bg-white border-2 border-gray-400 rounded-lg dark:bg-gray-700 dark:border-gray-600 max-h-40">
+            {isRouletteRunning ? (
+              <p className="mb-2 text-lg text-center dark:text-gray-100 animate-spin">
+                룰렛이 돌아갑니다...{" "}
+                {currentWinner && `${currentWinner.name}님 축하합니다!`}
+              </p>
+            ) : (
+              <>
+                <p className="mb-2 text-lg dark:text-gray-100">
+                  &lt;당첨자 목록&gt;
+                </p>
+                {winners.length > 0 ? (
+                  winners.map((winner, index) => (
+                    <dd
+                      key={index}
+                      className="m-2 text-gray-700 dark:text-gray-300"
+                    >
+                      {winner.name} ({winner.phone}) - 당첨자
+                    </dd>
+                  ))
+                ) : (
+                  <p>당첨자 정보가 없습니다.</p>
+                )}
+              </>
+            )}
+          </article>
+        </section>
+      </div>
       <div className="flex justify-end w-2/3 mt-6 mr-48">
         <Button
           text="목록"
@@ -166,19 +204,6 @@ export default function DrawId() {
           className="px-4 text-white bg-black"
         />
       </div>
-      {isDrawingTime ? (
-        <WinnersList winners={winners} />
-      ) : (
-        <ParticipantsList participants={data.participants} />
-      )}
-      {isDrawingTime && (
-        <RouletteComponent
-          mustSpin={mustSpin}
-          prizeIndex={prizeIndex}
-          data={rouletteData}
-          onStopSpinning={handleStopSpinning}
-        />
-      )}
     </div>
   );
 }
