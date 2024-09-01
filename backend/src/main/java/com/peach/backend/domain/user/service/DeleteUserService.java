@@ -8,6 +8,7 @@ import com.peach.backend.domain.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,15 +23,14 @@ public class DeleteUserService {
         List<Drawing> drawings = drawingRepository.findAllByOwner(user);
 
         for (Drawing drawing : drawings) {
-            if(drawing.getDrawingStatus().equals(DrawingStatus.COMPLETE)){ // 이미 완료된 이벤트는 남겨두고,
-                drawing.updateOwnerToNull();
-                drawingRepository.save(drawing);
-            }else{
-                drawingRepository.delete(drawing); // 나머지는 삭제
+            if(!drawing.getDrawingStatus().equals(DrawingStatus.COMPLETE)){
+              drawingRepository.delete(drawing); // 이미 완료된 이벤트는 남겨두고 나머지는 삭제
             }
         }
 
-        userRepository.delete(user);
+        user.updateIsDeleted(true);
+        user.updateDeletedAt(LocalDateTime.now());
+        userRepository.save(user);
     }
 
 }
