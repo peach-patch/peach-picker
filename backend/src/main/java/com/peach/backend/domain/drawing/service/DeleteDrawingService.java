@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +26,14 @@ public class DeleteDrawingService {
             drawingRepository.delete(drawing);
         }else{
             throw new BizException("drawing_completed_error");
+        }
+    }
+
+    @Transactional
+    public void deleteDrawings(List<Long> drawingIds) {
+        for (Long drawingId : drawingIds) {
+            Drawing drawing = drawingRepository.findById(drawingId).orElseThrow(()-> DrawingNotFoundException.EXCEPTION);
+            drawingRepository.delete(drawing);
         }
     }
 }

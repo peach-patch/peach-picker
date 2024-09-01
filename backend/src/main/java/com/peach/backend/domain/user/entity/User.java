@@ -33,6 +33,8 @@ public class User extends BaseTimeEntity {
     private LocalDateTime recentLoggedIn;
     private String provider;
     private String providerId;
+    private boolean isDeleted;
+    private LocalDateTime deletedAt;
 
     @Builder
     public User(String email, String password, String name, Role role, Boolean kakaoSignUp, String profileImgUrl, LocalDateTime RecentLoggedIn, String provider, String providerId) {
@@ -45,18 +47,19 @@ public class User extends BaseTimeEntity {
         this.recentLoggedIn = RecentLoggedIn;
         this.provider = provider;
         this.providerId = providerId;
+        this.isDeleted = false;
     }
 
     public void updateRecentLoggedIn(){
         recentLoggedIn = LocalDateTime.now();
     }
-
     public void updateUserName(String name){
         this.name = name;
     }
     public void updateProfileImgUrl(String profileImgUrl) {this.profileImgUrl = profileImgUrl;}
-
     public void updatePassword(String password){
         this.password = password;
     }
+    public void updateIsDeleted(Boolean isDeleted){ this.isDeleted = isDeleted;}
+    public void updateDeletedAt(LocalDateTime deletedAt){ this.deletedAt = deletedAt;}
 }

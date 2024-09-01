@@ -44,11 +44,8 @@ public class KakaoLoginService {
 
         // 기존 회원이면
         if (userRepository.existsByEmail(kakaoProfile.getKakao_account().email)) {
-            User user = userRepository.findUserByEmail(kakaoProfile.getKakao_account().email)
+            User user = userRepository.findUserByEmailAndIsDeletedFalse(kakaoProfile.getKakao_account().email)
                     .orElseThrow(() -> new BizException("user_not_found"));
-
-            user.updateRecentLoggedIn();
-            userRepository.save(user);
 
             return user;
         } else {

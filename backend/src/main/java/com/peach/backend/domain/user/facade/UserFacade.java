@@ -7,6 +7,7 @@ import com.peach.backend.domain.user.dto.req.SignUpReq;
 import com.peach.backend.domain.user.dto.resp.ProfileResp;
 import com.peach.backend.domain.user.dto.resp.SignInResp;
 import com.peach.backend.domain.user.entity.User;
+import com.peach.backend.domain.user.entity.repository.UserRepository;
 import com.peach.backend.domain.user.service.*;
 import com.peach.backend.global.security.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class UserFacade {
     private final JwtTokenProvider jwtTokenProvider;
     private final EmailVerificationService emailVerificationService;
     private final DeleteUserService deleteUserService;
+    private final UserRepository userRepository;
 
     public void signUp(SignUpReq req) {
         createUserService.createUser(req);
@@ -30,7 +32,8 @@ public class UserFacade {
 
     public SignInResp signIn(SignInReq req) {
         User user = getUserService.findUserByEmailAndPassword(req);
-
+        user.updateRecentLoggedIn();
+        userRepository.save(user);
         return SignInResp.builder()
                 .accessToken(jwtTokenProvider.generateAccessToken(user.getEmail()))
                 .build();
@@ -46,6 +49,8 @@ public class UserFacade {
 
     public SignInResp KakaoLogin(KakaoCodeReq req) {
         User user = kakaoLoginService.kakaoLogin(req);
+        user.updateRecentLoggedIn();
+        userRepository.save(user);
         return SignInResp.builder()
                 .accessToken(jwtTokenProvider.generateAccessToken(user.getEmail()))
                 .build();

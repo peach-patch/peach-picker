@@ -14,7 +14,7 @@ public class CustomUserUtil {
 
 //    @Cacheable(cacheNames = USER_CACHE, key = "'user:' + #p0")
     public User getUser(final String email) {
-        return userRepository.findUserByEmail(email).orElseThrow(() -> new BizException("user_not_found"));
+        return userRepository.findUserByEmailAndIsDeletedFalse(email).orElseThrow(() -> new BizException("user_not_found"));
     }
 
 }

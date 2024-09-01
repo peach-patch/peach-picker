@@ -23,7 +23,7 @@ public class GetUserService {
     }
 
     public User findUserByEmailAndPassword(SignInReq req) {
-        User user = userRepository.findUserByEmail(req.getEmail()).orElseThrow(() -> new BizException("login_fail"));
+        User user = userRepository.findUserByEmailAndIsDeletedFalse(req.getEmail()).orElseThrow(() -> new BizException("login_fail"));
         if(!passwordEncoder.matches(req.getPassword(), user.getPassword())) throw new BizException("login_fail");
 
         return user;
