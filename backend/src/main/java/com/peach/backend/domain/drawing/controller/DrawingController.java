@@ -69,4 +69,10 @@ public class DrawingController {
         return ResponseEntity.ok().body("추첨이 삭제되었습니다.");
     }
 
+    @DeleteMapping()
+    public ResponseEntity<String> deleteDrawings(@RequestBody List<Long> ids, @CurrentUser User user) {
+        drawingFacade.deleteDrawings(ids);
+        return ResponseEntity.ok().body("추첨이 모두 삭제되었습니다.");
+    }
+
 }

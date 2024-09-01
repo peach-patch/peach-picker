@@ -64,4 +64,7 @@ public class DrawingFacade {
 
     @Transactional
     public void deleteDrawing(Long id) { deleteDrawingService.deleteDrawing(id); }
+
+    @Transactional
+    public void deleteDrawings(List<Long> ids) { deleteDrawingService.deleteDrawings(ids); }
 }
