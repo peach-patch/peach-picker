@@ -32,13 +32,18 @@ const Menu = () => {
         <div className="flex items-center ml-5">
           <Link href="/">
             <div className="text-3xl font-Radio text-rose-500">피치피커</div>
-            {/* <Image src={menu_logo} width={90} height={50} alt="메뉴 로고" /> */}
           </Link>
           <div className="items-center justify-center p-2 ml-5">
             <Link href="/drawings">실시간 추첨</Link>
           </div>
           <div className="p-2">
             <Link href="/completedDrawings">추첨 기록실</Link>
+          </div>
+          <div className="p-2">
+            <Link href="/about">기업 정보</Link>
+          </div>
+          <div className="p-2">
+            <Link href="/brandstory">브랜드 스토리</Link>
           </div>
         </div>
         <div className="flex items-center">
