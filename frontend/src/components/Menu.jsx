@@ -31,7 +31,8 @@ const Menu = () => {
       <div className="flex justify-between h-16 p-2 bg-white sm:flex">
         <div className="flex items-center ml-5">
           <Link href="/">
-            <Image src={menu_logo} width={90} height={50} alt="메뉴 로고" />
+            <div className="text-3xl font-Radio text-rose-500">피치피커</div>
+            {/* <Image src={menu_logo} width={90} height={50} alt="메뉴 로고" /> */}
           </Link>
           <div className="items-center justify-center p-2 ml-5">
             <Link href="/drawings">실시간 추첨</Link>

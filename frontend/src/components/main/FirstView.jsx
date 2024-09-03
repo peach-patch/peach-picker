@@ -26,7 +26,9 @@ export default function Home() {
       <Menu />
       <div className="flex flex-col justify-between flex-grow">
         <section className="w-2/3 mt-5 ml-10">
-          <Image src={main_letter} alt="main" layout="responsive" width={100} />
+          <div className="text-9xl font-Remboy">Peach Picker</div>
+          <div className="text-7xl font-Remboy">WE CAN MAKE A DIFFERENCE</div>
+          {/* <Image src={main_letter} alt="main" layout="responsive" width={100} /> */}
         </section>
         <div className="flex flex-col justify-end flex-grow">
           <section className="flex">

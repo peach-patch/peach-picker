@@ -1,209 +1,90 @@
-import Button from "@/components/button/Button";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import present from "../../images/present.png";
-import axios from "axios";
-import darkModeStore from "@/store/darkModeStore";
-import DarkModeToggle from "@/components/button/DarkModeToggle";
-import Confetti from "react-confetti";
 
-export default function DrawId() {
-  const [data, setData] = useState(null);
-  const [winners, setWinners] = useState([]);
-  const [isConfettiVisible, setIsConfettiVisible] = useState(false);
-  const [recycleConfetti, setRecycleConfetti] = useState(false);
-  const [isRouletteRunning, setIsRouletteRunning] = useState(false);
-  const [currentWinner, setCurrentWinner] = useState(null);
-  const router = useRouter();
-  const { darkMode } = darkModeStore();
-  const { drawId, from, viewType } = router.query;
-
-  const handleBackToList = () => {
-    if (from === "mylist") {
-      router.push({
-        pathname: "/mypage/mylist",
-        query: { viewType: viewType || "table" },
-      });
-    } else if (from === "completedDrawings") {
-      router.push({
-        pathname: "/completedDrawings",
-        query: { viewType: viewType || "table" },
-      });
-    } else {
-      router.push({
-        pathname: "/drawings",
-        query: { viewType: viewType || "grid" },
-      });
-    }
-  };
+export default function Wheel() {
+  const [names, setNames] = useState([
+    "김철수",
+    "이영희",
+    "박준호",
+    "최미라",
+    "홍길동",
+  ]); // 초기 이름 설정
+  const [rotation, setRotation] = useState(0);
+  const [selectedWinner, setSelectedWinner] = useState("박준호"); // 미리 정해진 당첨자 설정
+  const segmentAngle = 360 / names.length;
 
   useEffect(() => {
-    if (drawId) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
+    drawWheel(); // 페이지가 로드될 때 휠을 그립니다.
+  }, [names]);
 
-          const result = response.data;
-          setData(result);
+  const drawWheel = () => {
+    const canvas = document.getElementById("wheelCanvas");
+    const ctx = canvas.getContext("2d");
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = centerX - 10; // 캔버스 중심 기준 반지름 설정
 
-          const filteredWinners = result.participants.filter(
-            (participant) => participant.winner
-          );
-          setWinners(filteredWinners);
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // 이전 그리기 내용 지우기
 
-          await axios.post(
-            `${process.env.NEXT_PUBLIC_API_URL}/drawing/${drawId}/increment-view`
-          );
+    names.forEach((name, i) => {
+      const startAngle = (segmentAngle * i * Math.PI) / 180; // 시작 각도
+      const endAngle = (segmentAngle * (i + 1) * Math.PI) / 180; // 끝 각도
 
-          const now = new Date();
-          const drawingTime = new Date(result.drawingAt);
-          if (drawingTime <= now) {
-            setTimeout(() => {
-              startRoulette();
-            }, 3000);
-          }
-        } catch (error) {
-          console.error(
-            "Error fetching data or incrementing view count:",
-            error
-          );
-        }
-      };
+      // 룰렛 색상 설정
+      ctx.fillStyle = ["#f94144", "#f3722c", "#f8961e", "#f9c74f", "#43aa8b"][
+        i % 5
+      ];
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.closePath();
+      ctx.fill();
 
-      fetchData();
-    }
-  }, [drawId]);
-
-  const startRoulette = () => {
-    setIsRouletteRunning(true);
-    let index = 0;
-
-    const interval = setInterval(() => {
-      if (index >= winners.length) {
-        clearInterval(interval);
-        setIsRouletteRunning(false);
-        setIsConfettiVisible(true);
-        setRecycleConfetti(true);
-        setTimeout(() => setRecycleConfetti(false), 15000);
-      } else {
-        setCurrentWinner(winners[index]);
-        index++;
-      }
-    }, 2000); // 2초마다 다음 당첨자
+      // 텍스트 설정
+      ctx.save();
+      ctx.translate(
+        centerX + Math.cos((startAngle + endAngle) / 2) * (radius / 2),
+        centerY + Math.sin((startAngle + endAngle) / 2) * (radius / 2)
+      );
+      ctx.rotate((startAngle + endAngle) / 2 + Math.PI / 2); // 텍스트 회전
+      ctx.fillStyle = "white";
+      ctx.font = "bold 15px Arial";
+      ctx.textAlign = "center";
+      ctx.fillText(name, 0, 0); // 이름 그리기
+      ctx.restore();
+    });
   };
 
-  if (!data) {
-    return (
-      <div
-        className={`flex items-center justify-center h-screen ${
-          darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
-        }`}
-      >
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  const spinWheel = () => {
+    const winnerIndex = names.indexOf(selectedWinner); // 미리 정해진 당첨자의 인덱스
+    const winnerStartAngle = segmentAngle * winnerIndex; // 해당 인덱스의 시작 각도
+    const randomOffset = Math.random() * (segmentAngle / 2) - segmentAngle / 4; // 섹션의 중앙에 멈추도록 오프셋 조정
+    const spinAngle = 360 * 5 + (360 - winnerStartAngle + randomOffset); // 회전 각도 계산 (5회전 후 해당 각도에 멈춤)
+
+    setRotation(spinAngle); // 회전 설정
+  };
 
   return (
-    <div
-      className={`flex flex-col h-screen items-center ${
-        darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-900"
-      }`}
-    >
-      {isConfettiVisible && <Confetti recycle={recycleConfetti} />}
-
-      <div
-        key={data.id}
-        className="relative flex w-full max-w-4xl p-6 overflow-hidden bg-gray-100 rounded-lg shadow-md dark:bg-gray-800"
-        style={{ height: "75vh" }}
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <div className="relative">
+        <canvas
+          id="wheelCanvas"
+          width="300"
+          height="300"
+          className="border-4 border-gray-800 rounded-full"
+          style={{
+            transform: `rotate(${rotation}deg)`,
+            transition: "transform 3s ease-out",
+          }}
+        ></canvas>
+        {/* 화살표 */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-2 w-0 h-0 border-l-[10px] border-r-[10px] border-b-[20px] border-l-transparent border-r-transparent border-b-red-500 z-10"></div>
+      </div>
+      <button
+        onClick={spinWheel}
+        className="px-4 py-2 mt-8 text-white bg-blue-500 rounded hover:bg-blue-600"
       >
-        <div className="relative w-1/2 h-full">
-          {data.thumbnailUrl ? (
-            <Image
-              src={data.thumbnailUrl}
-              alt={data.title}
-              layout="fill"
-              objectFit="contain"
-              className="absolute inset-0 rounded"
-            />
-          ) : (
-            <p>No Image Available</p>
-          )}
-        </div>
-        <section className="flex flex-col justify-center w-1/2 pl-8">
-          <div>
-            <div className="flex justify-between mb-2 ml-4 text-2xl font-bold dark:text-gray-100">
-              <div className="flex">
-                <Image src={present} height={30} width={30} className="mr-2" />
-                <div className="mt-2">{data.title}</div>
-              </div>
-              <DarkModeToggle />
-            </div>
-            <p className="mb-2 ml-2 text-lg dark:text-gray-100">
-              주최자: {data.organizer}
-            </p>
-            <p className="ml-2 text-lg dark:text-gray-100">
-              추첨 일시:{" "}
-              {new Date(data.drawingAt).toLocaleString("ko-KR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                hour12: true,
-              })}
-            </p>
-            <p className="mb-2 ml-2 text-lg dark:text-gray-100">
-              당첨자 수: {data.winner}명
-            </p>
-            <p className="mb-2 ml-2 text-lg dark:text-gray-100">
-              조회수: {data.viewCount}
-            </p>
-          </div>
-
-          <article className="w-full p-4 overflow-y-auto bg-white border-2 border-gray-400 rounded-lg dark:bg-gray-700 dark:border-gray-600 max-h-40">
-            {isRouletteRunning ? (
-              <p className="mb-2 text-lg text-center dark:text-gray-100 animate-spin">
-                룰렛이 돌아갑니다...{" "}
-                {currentWinner && `${currentWinner.name}님 축하합니다!`}
-              </p>
-            ) : (
-              <>
-                <p className="mb-2 text-lg dark:text-gray-100">
-                  &lt;당첨자 목록&gt;
-                </p>
-                {winners.length > 0 ? (
-                  winners.map((winner, index) => (
-                    <dd
-                      key={index}
-                      className="m-2 text-gray-700 dark:text-gray-300"
-                    >
-                      {winner.name} ({winner.phone}) - 당첨자
-                    </dd>
-                  ))
-                ) : (
-                  <p>당첨자 정보가 없습니다.</p>
-                )}
-              </>
-            )}
-          </article>
-        </section>
-      </div>
-      <div className="flex justify-end w-2/3 mt-6 mr-48">
-        <Button
-          text="목록"
-          onClick={handleBackToList}
-          className="px-4 text-white bg-black"
-        />
-      </div>
+        룰렛 돌리기
+      </button>
     </div>
   );
 }

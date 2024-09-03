@@ -23,11 +23,23 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Radio";
+  font-weight: 200;
+  src: url("/fonts/radio.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Remboy";
+  font-weight: 200;
+  src: url("/fonts/Remboy.ttf") format("truetype");
+}
+
 /* * {
   margin-top: 0 !important;
 } */
 body {
-  @apply font-sans;
+  font-family: lsRg, lsTh, lsBd, Radio, Remboy;
 }
 
 * {

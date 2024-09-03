@@ -84,12 +84,13 @@ const Index = () => {
 
   return (
     <div className="center1">
-      <Image
+      <div className="text-6xl font-Radio">피치피커</div>
+      {/* <Image
         src={peach_logo}
         width={200}
         alt="Peach Logo"
         className="hidden sm:flex"
-      />
+      /> */}
       <form className="w-1/5 mt-10 min-w-60" onSubmit={handleLogin}>
         <div className="flex items-center">
           <input
