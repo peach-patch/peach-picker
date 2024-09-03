@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import kakao from "../../images/kakao.png";
+import kakao from "../../images/kakaologin.png";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
@@ -30,7 +30,7 @@ const KakaoLogin = () => {
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     console.log(isMobile);
-    //모바일 화면인 경우
+
     if (isMobile) {
       window.Kakao.Auth.authorize({
         redirectUri: REDIRECT_URL,
@@ -48,8 +48,11 @@ const KakaoLogin = () => {
   };
 
   return (
-    <div onClick={handleKakaoLogin}>
-      <Image src={kakao} width={40} className="m-3" alt="kakao login" />
+    <div
+      className="relative w-full h-20 cursor-pointer"
+      onClick={handleKakaoLogin}
+    >
+      <Image src={kakao} layout="fill" objectFit="contain" alt="kakao login" />
     </div>
   );
 };

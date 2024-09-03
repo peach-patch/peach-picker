@@ -1,4 +1,3 @@
-// src/pages/login/index.js
 import React, { useState, useEffect } from "react";
 import peach_logo from "../../../public/peach_logo.png";
 import kakao from "../../images/kakao.png";
@@ -83,71 +82,67 @@ const Index = () => {
   };
 
   return (
-    <div className="center1">
-      <div className="text-6xl font-Radio">피치피커</div>
-      {/* <Image
-        src={peach_logo}
-        width={200}
-        alt="Peach Logo"
-        className="hidden sm:flex"
-      /> */}
-      <form className="w-1/5 mt-10 min-w-60" onSubmit={handleLogin}>
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            className="w-5 h-5 text-gray form-checkbox"
-            checked={keepLoggedIn}
-            onChange={(e) => setKeepLoggedIn(e.target.checked)}
-          />
-          <span className="ml-2 mr-3 text-sm">로그인 유지</span>
-          <input
-            type="checkbox"
-            className="w-5 h-5 text-gray form-checkbox"
-            checked={rememberMe}
-            onChange={(e) => setRememberMe(e.target.checked)}
-          />
-          <span className="ml-2 text-sm">아이디 저장</span>
-        </div>
-        <Input
-          type="text"
-          value={email}
-          placeholder="아이디"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+    <div className="flex flex-col mt-20 overflow-hidden">
+      <div className="flex items-center justify-center flex-grow">
+        <div className="flex flex-col items-center center1">
+          <div className="text-6xl font-Radio">피치피커</div>
 
-        <Input
-          type="password"
-          value={password}
-          placeholder="비밀번호"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <form className="w-1/5 mt-10 min-w-60" onSubmit={handleLogin}>
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                className="w-5 h-5 text-gray form-checkbox"
+                checked={keepLoggedIn}
+                onChange={(e) => setKeepLoggedIn(e.target.checked)}
+              />
+              <span className="ml-2 mr-3 text-sm">로그인 유지</span>
+              <input
+                type="checkbox"
+                className="w-5 h-5 text-gray form-checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <span className="ml-2 text-sm">아이디 저장</span>
+            </div>
+            <Input
+              type="text"
+              value={email}
+              placeholder="아이디"
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-4/6"
+            />
 
-        <div className="text-red-500 mb-5 text-[10px]">{message}</div>
-        <Button
-          type="submit"
-          text="로그인"
-          className="text-white w-full py-4 bg-[#fb5e67] "
-        />
+            <Input
+              type="password"
+              value={password}
+              placeholder="비밀번호"
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-        <div className="flex m-1 mt-4">
-          <div className="text-sm font-bold">
-            <Link href={"/login/signup"}>회원가입 |</Link>
+            <div className="text-red-500 mb-5 text-[10px]">{message}</div>
+            <Button
+              type="submit"
+              text="로그인"
+              className="text-white w-full py-4 bg-[#fb5e67]"
+            />
+
+            <div className="flex m-1 mt-4">
+              <div className="text-sm font-bold">
+                <Link href={"/login/signup"}>회원가입 |</Link>
+              </div>
+              <div className="ml-1 text-sm">아이디/비밀번호 찾기</div>
+            </div>
+          </form>
+          <div className="w-1/5 mt-4 center1">
+            <div className="flex items-center w-full min-w-60">
+              <div className="w-2/12 border-[1px] border-[#808080]"></div>
+              <div className="w-10/12 text-sm text-center text-gray-500">
+                소셜 계정으로 간편 로그인
+              </div>
+              <div className="w-2/12 border-[1px] border-[#808080]"></div>
+            </div>
           </div>
-          <div className="ml-1 text-sm">아이디/비밀번호 찾기</div>
-        </div>
-      </form>
-      <div className="w-1/5 m-4 center1">
-        <div className="flex items-center w-full min-w-60">
-          <div className="w-2/12 border-[1px] border-[#808080]"></div>
-          <div className="w-10/12 text-sm text-center text-gray-500">
-            소셜 계정으로 간편 로그인
-          </div>
-          <div className="w-2/12 border-[1px] border-[#808080]"></div>
-        </div>
-        <div className="flex justify-center">
           <KakaoLogin />
-          <Image src={google} width={40} className="m-3" alt="Google" />
-          <Image src={naver} width={40} className="m-3" alt="Naver" />
         </div>
       </div>
     </div>
