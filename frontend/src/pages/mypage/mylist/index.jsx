@@ -56,6 +56,8 @@ export default function Index() {
       userDrawings = userDrawings.sort(
         (a, b) => new Date(a.drawingAt) - new Date(b.drawingAt)
       );
+    } else if (sortOrder === "조회수순") {
+      userDrawings = userDrawings.sort((a, b) => b.viewCount - a.viewCount);
     }
 
     setFilteredData(userDrawings);
@@ -79,7 +81,7 @@ export default function Index() {
               query: { from: "mylist", viewType },
             }}
           >
-            <div className="font-semibold hover:underline text-gray-900 dark:text-gray-200">
+            <div className="font-semibold text-gray-900 hover:underline dark:text-gray-200">
               {value}
             </div>
           </Link>
@@ -172,12 +174,12 @@ export default function Index() {
   } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <div className="center1  bg-gray-50 h-screen dark:bg-gray-900">
-      <div className="center1 mt-10 w-2/5">
+    <div className="h-screen center1 bg-gray-50 dark:bg-gray-900">
+      <div className="w-2/5 mt-10 center1">
         <input
           type="text"
           placeholder="제목 검색"
-          className="p-2 border border-gray-300 rounded w-1/2 dark:border-gray-600"
+          className="w-1/2 p-2 border border-gray-300 rounded dark:border-gray-600"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -199,7 +201,7 @@ export default function Index() {
           category="나의 추첨 내역"
         />
       ) : (
-        <div className="w-4/5 p-6 mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg bg-opacity-30 backdrop-blur-md">
+        <div className="w-4/5 p-6 mt-8 bg-white rounded-lg shadow-lg dark:bg-gray-800 bg-opacity-30 backdrop-blur-md">
           <div className="flex items-center justify-between mb-4">
             <div className="text-xl font-bold text-gray-800 dark:text-gray-100">
               나의 추첨 내역
@@ -214,7 +216,7 @@ export default function Index() {
                 <tr
                   key={headerGroup.id}
                   {...headerGroup.getHeaderGroupProps()}
-                  className="bg-white dark:bg-gray-700 border-t-2 border-b-2 border-black bg-opacity-40 dark:bg-opacity-60"
+                  className="bg-white border-t-2 border-b-2 border-black dark:bg-gray-700 bg-opacity-40 dark:bg-opacity-60"
                 >
                   {headerGroup.headers.map((column) => (
                     <th
@@ -259,28 +261,28 @@ export default function Index() {
               <button
                 onClick={() => gotoPage(0)}
                 disabled={!canPreviousPage}
-                className="px-2 py-1 mr-2 text-gray-800 dark:text-gray-300 transition bg-white dark:bg-gray-700 rounded bg-opacity-40 hover:bg-opacity-80"
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded dark:text-gray-300 dark:bg-gray-700 bg-opacity-40 hover:bg-opacity-80"
               >
                 {"<<"}
               </button>
               <button
                 onClick={() => previousPage()}
                 disabled={!canPreviousPage}
-                className="px-2 py-1 mr-2 text-gray-800 dark:text-gray-300 transition bg-white dark:bg-gray-700 rounded bg-opacity-40 hover:bg-opacity-80"
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded dark:text-gray-300 dark:bg-gray-700 bg-opacity-40 hover:bg-opacity-80"
               >
                 {"<"}
               </button>
               <button
                 onClick={() => nextPage()}
                 disabled={!canNextPage}
-                className="px-2 py-1 mr-2 text-gray-800 dark:text-gray-300 transition bg-white dark:bg-gray-700 rounded bg-opacity-40 hover:bg-opacity-80"
+                className="px-2 py-1 mr-2 text-gray-800 transition bg-white rounded dark:text-gray-300 dark:bg-gray-700 bg-opacity-40 hover:bg-opacity-80"
               >
                 {">"}
               </button>
               <button
                 onClick={() => gotoPage(pageCount - 1)}
                 disabled={!canNextPage}
-                className="px-2 py-1 text-gray-800 dark:text-gray-300 transition bg-white dark:bg-gray-700 rounded bg-opacity-40 hover:bg-opacity-80"
+                className="px-2 py-1 text-gray-800 transition bg-white rounded dark:text-gray-300 dark:bg-gray-700 bg-opacity-40 hover:bg-opacity-80"
               >
                 {">>"}
               </button>
@@ -288,7 +290,7 @@ export default function Index() {
             <select
               value={pageSize}
               onChange={(e) => setPageSize(Number(e.target.value))}
-              className="p-1 text-gray-800 dark:text-gray-300 bg-white dark:bg-gray-700 rounded bg-opacity-40 dark:bg-opacity-80"
+              className="p-1 text-gray-800 bg-white rounded dark:text-gray-300 dark:bg-gray-700 bg-opacity-40 dark:bg-opacity-80"
             >
               {[5, 10, 20].map((size) => (
                 <option key={size} value={size}>

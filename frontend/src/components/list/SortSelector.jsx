@@ -9,6 +9,7 @@ export default function SortSelector({ sortOrder, handleSortChange }) {
     >
       <option value="등록일순">등록일순</option>
       <option value="추첨일시순">추첨일시순</option>
+      <option value="조회수순">조회수순</option>
     </select>
   );
 }

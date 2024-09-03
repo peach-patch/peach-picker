@@ -14,7 +14,7 @@ const Input = ({
       <div className="mb-1 w-full flex items-center py-3 bg-[#f8f8f8] border-[1px] border-solid border-[#808080]">
         <input
           type={type}
-          className="bg-[#f8f8f8] ml-3 text-[20px] outline-none"
+          className="bg-[#f8f8f8] ml-3 text-[20px] w-5/6 outline-none"
           placeholder={placeholder}
           value={value}
           readOnly={readOnly}

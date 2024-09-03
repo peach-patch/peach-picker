@@ -7,9 +7,7 @@ import logo from "../../images/thirdLogo.png";
 import to from "../../images/to.png";
 import registernow from "../../images/registernow.png";
 
-// 첫 번째 섹션 컴포넌트
 const Section1 = memo(() => {
-  console.log("11111");
   const images = [paper];
   const [index, setIndex] = useState(0);
 
@@ -22,7 +20,7 @@ const Section1 = memo(() => {
   }, [images.length]);
 
   return (
-    <div className="w-full pt-4 pr-20 h-2/3">
+    <div className="w-full pr-20 h-2/3">
       <Image
         src={images[index]}
         layout="responsive"
@@ -33,10 +31,10 @@ const Section1 = memo(() => {
         src={registernow}
         alt="register now"
         layout="responsive"
-        className="mt-10"
+        className=""
       />
-      <div className="flex items-center justify-end mt-10">
-        <div className="flex items-center w-1/2 mt-10">
+      <div className="flex items-center justify-end ">
+        <div className="flex items-center w-1/2">
           기분 좋은 해결책을 얻으세요.
           <br /> That brings you back to life.
           <div className="w-1/5">
@@ -48,7 +46,6 @@ const Section1 = memo(() => {
   );
 });
 
-// 두 번째 섹션 컴포넌트
 const Section2 = memo(() => {
   console.log("22222");
   const images = [waterpeach, drypeach];
@@ -64,7 +61,7 @@ const Section2 = memo(() => {
 
   return (
     <div className="relative flex-shrink-0 w-1/3 pt-4">
-      <div className="pb-10 mr-8">
+      <div className="pb-4 mr-8">
         확인하세요. 음미하세요. 차단하세요. Peach Picker는 힘들고 무거운 세상
         속에서 순간에 몰입하고 싶은 사람들을 위해 작은 경험들을 고양시켜 줍니다.
       </div>
@@ -82,7 +79,7 @@ const ThirdView = () => {
   console.log("3번째");
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-2/3 pt-10 mt-10 min-w-[800px] bg-amber-50">
+    <div className="relative flex flex-col items-center justify-center w-2/3 pt-10  min-w-[800px]">
       <div className="w-1/6 mt-10">
         <Image src={logo} layout="responsive" alt="logo" />
       </div>

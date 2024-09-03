@@ -35,13 +35,14 @@ export default function LastView() {
         <div className="flex ">
           <div className="flex items-center justify-center w-1/6 ">
             <div className="w-3/4 ">
-              <Image
+              <div className="text-5xl font-Radio text-rose-400">피치피커</div>
+              {/* <Image
                 src={peach_logo}
                 width={100}
                 height={100}
                 layout="responsive"
                 alt="logo"
-              />
+              /> */}
             </div>
           </div>
           <article className="w-1/6 pt-10">
@@ -95,7 +96,7 @@ export default function LastView() {
               </a>
             </div>
           </article>
-          <article className="items-end">
+          <article className="w-2/6 pt-20 text-right pr-14 ">
             <div>피치피커 고객상담</div>
             <div>월~금 08:30~17:00</div>
           </article>

@@ -38,6 +38,8 @@ export default function Index() {
       sortedDrawings = sortedDrawings.sort(
         (a, b) => new Date(a.drawingAt) - new Date(b.drawingAt)
       );
+    } else if (sortOrder === "조회수순") {
+      sortedDrawings = sortedDrawings.sort((a, b) => b.viewCount - a.viewCount);
     }
 
     if (searchTerm.trim()) {
@@ -94,7 +96,7 @@ export default function Index() {
             as={`/drawings/${row.original.id}`}
             passHref
           >
-            <div className="font-bold hover:underline text-gray-900 dark:text-gray-200">
+            <div className="font-bold text-gray-900 hover:underline dark:text-gray-200">
               {value}
             </div>
           </Link>
@@ -174,7 +176,7 @@ export default function Index() {
         darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
       }`}
     >
-      <div className="flex mb-4 w-full center1">
+      <div className="flex w-full mb-4 center1">
         <SearchComponent onSearch={handleSearch} />
       </div>
       <div className="flex justify-end w-4/5 gap-2 px-16 mt-2">
@@ -213,7 +215,7 @@ export default function Index() {
                 <tr
                   key={headerGroup.id}
                   {...headerGroup.getHeaderGroupProps()}
-                  className="bg-white dark:bg-gray-700 border-t-2 border-b-2 border-black bg-opacity-40 dark:bg-opacity-60"
+                  className="bg-white border-t-2 border-b-2 border-black dark:bg-gray-700 bg-opacity-40 dark:bg-opacity-60"
                 >
                   {headerGroup.headers.map((column) => (
                     <th

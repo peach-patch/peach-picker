@@ -18,6 +18,8 @@ module.exports = {
         sans: ["lsRg"],
         lsBd: ["lsBd"],
         lsTh: ["lsTh"],
+        Radio: ["Radio"],
+        Remboy: ["Remboy"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
