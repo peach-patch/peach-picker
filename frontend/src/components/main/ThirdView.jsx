@@ -79,7 +79,7 @@ const ThirdView = () => {
   console.log("3번째");
 
   return (
-    <div className="relative flex flex-col items-center justify-center w-2/3 pt-10  min-w-[800px] bg-amber-50">
+    <div className="relative flex flex-col items-center justify-center w-2/3 pt-10  min-w-[800px]">
       <div className="w-1/6 mt-10">
         <Image src={logo} layout="responsive" alt="logo" />
       </div>
