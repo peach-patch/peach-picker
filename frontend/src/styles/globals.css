@@ -208,3 +208,38 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 } */
+@keyframes fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.emoji {
+  position: fixed;
+  top: -50px; /* 화면 상단에서 시작 */
+  font-size: 2rem; /* 이모지 크기 */
+  animation: fall 5s linear infinite; /* 5초 동안 떨어지는 애니메이션 */
+  z-index: 9999; /* 가장 앞에 오도록 설정 */
+}
+
+.emoji-1 {
+  left: 20%;
+  animation-duration: 4s;
+}
+.emoji-2 {
+  left: 40%;
+  animation-duration: 6s;
+}
+.emoji-3 {
+  left: 60%;
+  animation-duration: 5s;
+}
+.emoji-4 {
+  left: 80%;
+  animation-duration: 7s;
+}
