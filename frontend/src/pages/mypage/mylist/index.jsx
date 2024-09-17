@@ -174,7 +174,7 @@ export default function Index() {
   } = useTable({ columns, data: filteredData }, usePagination);
 
   return (
-    <div className="h-screen center1 bg-gray-50 dark:bg-gray-900">
+    <div className=" center1 bg-gray-50 dark:bg-gray-900 mt-10">
       <div className="w-2/5 mt-10 center1">
         <input
           type="text"
@@ -192,6 +192,7 @@ export default function Index() {
         <ViewSelector viewType={viewType} handleViewChange={setViewType} />
         <DarkModeToggle />
       </div>
+
       {viewType === "grid" ? (
         <GridView
           data={filteredData}

@@ -99,9 +99,8 @@ export default function DrawId() {
 
       setTimeout(() => {
         setIsConfettiVisible(false);
-      }, 30000); // 30초 후 폭죽 효과 제거
+      }, 30000);
 
-      // EmojiRain 애니메이션 시작
       document.querySelector(".emoji-rain-container").classList.add("show");
     }
   };
@@ -148,11 +147,6 @@ export default function DrawId() {
           )}
         </div>
         <section className="flex-col w-1/2 center1">
-          <DrawDetails
-            data={data}
-            darkMode={darkMode}
-            DarkModeToggle={DarkModeToggle}
-          />
           {showRoulette && winners.length > 0 ? (
             <div className="flex flex-col items-center justify-center w-full mt-10">
               <Wheel
@@ -166,13 +160,20 @@ export default function DrawId() {
               />
             </div>
           ) : (
-            <ParticipantList
-              isRouletteFinished={isRouletteFinished}
-              isDrawingPassed={isDrawingPassed}
-              showRoulette={showRoulette}
-              winners={winners}
-              participants={data.participants}
-            />
+            <>
+              <DrawDetails
+                data={data}
+                darkMode={darkMode}
+                DarkModeToggle={DarkModeToggle}
+              />
+              <ParticipantList
+                isRouletteFinished={isRouletteFinished}
+                isDrawingPassed={isDrawingPassed}
+                showRoulette={showRoulette}
+                winners={winners}
+                participants={data.participants}
+              />
+            </>
           )}
         </section>
       </div>
