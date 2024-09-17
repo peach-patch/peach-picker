@@ -12,11 +12,11 @@ export default function GridView({
   return (
     <>
       <div className="w-4/5">
-        <div className="mb-4 text-xl font-bold text-gray-800 dark:text-gray-100">
+        <div className="pl-20 mb-4 text-xl font-bold text-gray-800 dark:text-gray-100">
           {category}
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-6 mx-16 mb-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className=" grid grid-cols-1 gap-6 mx-16 mb-16 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {data.map((data) => (
           <Link
             href={{
