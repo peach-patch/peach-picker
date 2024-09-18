@@ -7,12 +7,14 @@ import CropProfileImg from "@/components/login/CropProfileImg";
 import Modal from "@/components/common/Modal"; // 모달 컴포넌트
 
 export default function Edit() {
-  const { isLoggedIn, token, isInitialized, initialize } = useAuthStore();
+  const { isLoggedIn, token, isInitialized, initialize, logout } =
+    useAuthStore(); // 로그아웃 추가
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [profileImg, setProfileImg] = useState(null);
   const [message, setMessage] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+  const [isModalOpen, setIsModalOpen] = useState(false); // 회원정보 수정 모달
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // 탈퇴 모달 상태
   const router = useRouter();
 
   useEffect(() => {
@@ -32,6 +34,8 @@ export default function Edit() {
       setUsername(storedName || "");
     }
   }, [isInitialized, isLoggedIn, token, router]);
+
+  // 회원정보 수정
   const handleUpdateProfile = async () => {
     if (!username) {
       setMessage("사용자 이름을 입력해야 합니다.");
@@ -58,26 +62,47 @@ export default function Edit() {
       }
 
       const contentType = response.headers.get("content-type");
-
       if (contentType && contentType.includes("application/json")) {
-        // JSON 응답 처리
         const data = await response.json();
         localStorage.setItem("email", data.email);
         localStorage.setItem("userName", data.name);
         localStorage.setItem("profileImg", data.profileUrl);
-      } else {
-        const textData = await response.text();
-        console.log("서버에서 온 텍스트 응답:", textData);
       }
 
-      setIsModalOpen(true);
+      setMessage("프로필이 성공적으로 업데이트되었습니다.");
+      setIsModalOpen(true); // 수정 성공 모달 열기
     } catch (error) {
-      console.error("확인", error);
+      console.error("Error:", error);
       setMessage("프로필 업데이트에 실패했습니다.");
     }
   };
 
-  const handleConfirm = () => {
+  // 탈퇴 처리
+  const handleDeleteAccount = async () => {
+    try {
+      const response = await fetch("/api/users/profile", {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("탈퇴에 실패했습니다.");
+      }
+
+      setMessage("탈퇴가 성공적으로 완료되었습니다.");
+      logout(); // 로그아웃 처리
+      setIsDeleteModalOpen(false); // 탈퇴 모달 닫기
+      router.push("/"); // 메인 페이지로 리다이렉트
+    } catch (error) {
+      console.error("탈퇴 오류:", error);
+      setMessage("탈퇴에 실패했습니다.");
+    }
+  };
+
+  // 모달 닫기 및 페이지 이동
+  const handleCloseModal = () => {
     setIsModalOpen(false);
     router.push("/mypage");
   };
@@ -108,7 +133,11 @@ export default function Edit() {
             className="bg-[#fb5e67] w-full py-5 text-white"
             onClick={handleUpdateProfile}
           />
-          <Button text="탈퇴" className="py-5 border-[#808080] border w-full" />
+          <Button
+            text="탈퇴"
+            className="py-5 border-[#808080] border w-full"
+            onClick={() => setIsDeleteModalOpen(true)} // 탈퇴 모달 열기
+          />
         </div>
         <Button
           text="취소"
@@ -117,9 +146,25 @@ export default function Edit() {
         />
       </div>
 
-      <Modal isOpen={isModalOpen} onClose={handleConfirm}>
-        <div className="text-center">
-          <p className="text-xl">회원정보 수정이 완료되었습니다.</p>
+      {/* 회원정보 수정 모달 */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        message={message}
+      />
+
+      {/* 탈퇴 모달 */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)} // 탈퇴 취소
+        message="정말로 탈퇴하시겠습니까?"
+      >
+        <div className="flex w-full justify-end mt-4">
+          <Button
+            text="네"
+            className="bg-white border w-full border-gray-500 text-gray-500"
+            onClick={handleDeleteAccount}
+          />
         </div>
       </Modal>
     </div>

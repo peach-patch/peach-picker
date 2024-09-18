@@ -45,7 +45,7 @@ export default function CropProfileImg({ onImageSelect }) {
         <img
           src={croppedImage || storedProfileImg}
           alt="Profile Image"
-          style={{ width: "100%", height: "auto", cursor: "pointer" }}
+          style={{ width: "300px", height: "300px", cursor: "pointer" }}
           onClick={triggerImageUpload}
         />
       ) : (
