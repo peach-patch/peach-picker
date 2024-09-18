@@ -23,7 +23,6 @@ export default function ImageUploadAndCrop({ onImageSelect }) {
     setCroppedImage(croppedImageDataUrl);
     setIsModalOpen(false);
 
-    // 크롭된 이미지를 상위 컴포넌트로 전달
     onImageSelect(croppedImageDataUrl);
   };
 
