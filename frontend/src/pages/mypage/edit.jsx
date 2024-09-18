@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useAuthStore from "../../store/authStore";
-import Image from "next/image";
 import Input from "@/components/login/Input";
 import Button from "@/components/button/Button";
 import ImageUploadAndCrop from "@/components/register/ImgUpload";
@@ -12,11 +11,8 @@ export default function Edit() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [profileImg, setProfileImg] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [usernameMessage, setUsernameMessage] = useState("");
-  const [passwordMessage, setPasswordMessage] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -39,6 +35,18 @@ export default function Edit() {
     }
   }, [isInitialized, isLoggedIn, token, router]);
 
+  const dataURLtoBlob = (dataurl) => {
+    const arr = dataurl.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  };
+
   const handleUpdateProfile = async () => {
     if (!username) {
       setUsernameMessage("사용자 이름을 입력해야 합니다.");
@@ -50,8 +58,10 @@ export default function Edit() {
     try {
       const formData = new FormData();
       formData.append("name", username);
+
       if (profileImg) {
-        formData.append("profileImg", profileImg);
+        const blob = dataURLtoBlob(profileImg);
+        formData.append("profileImg", blob, "profileImg.png");
       }
 
       const response = await fetch("/api/users/profile", {
@@ -82,12 +92,10 @@ export default function Edit() {
         setMessage("프로필이 성공적으로 업데이트되었습니다.");
       } else if (contentType.includes("text/plain")) {
         const textData = await response.text();
-
         localStorage.setItem("userName", username);
         localStorage.setItem("profileImg", profileImg);
       } else {
         const textData = await response.text();
-
         alert(textData);
       }
 
@@ -107,7 +115,6 @@ export default function Edit() {
         </div>
         <div className="w-full mb-3 h-0 border-[1px] border-solid border-[#000]"></div>
         <div className="w-full center1">
-          {/* 새로운 이미지 업로드 및 크롭 컴포넌트 사용 */}
           <ImageUploadAndCrop
             onImageSelect={(croppedImage) => setProfileImg(croppedImage)}
           />
