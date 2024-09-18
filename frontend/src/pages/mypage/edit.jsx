@@ -4,17 +4,17 @@ import useAuthStore from "../../store/authStore";
 import Input from "@/components/login/Input";
 import Button from "@/components/button/Button";
 import CropProfileImg from "@/components/login/CropProfileImg";
-import Modal from "@/components/common/Modal"; // 모달 컴포넌트
+import Modal from "@/components/common/Modal";
 
 export default function Edit() {
   const { isLoggedIn, token, isInitialized, initialize, logout } =
-    useAuthStore(); // 로그아웃 추가
+    useAuthStore();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [profileImg, setProfileImg] = useState(null);
   const [message, setMessage] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false); // 회원정보 수정 모달
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // 탈퇴 모달 상태
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -35,7 +35,6 @@ export default function Edit() {
     }
   }, [isInitialized, isLoggedIn, token, router]);
 
-  // 회원정보 수정
   const handleUpdateProfile = async () => {
     if (!username) {
       setMessage("사용자 이름을 입력해야 합니다.");
@@ -70,17 +69,17 @@ export default function Edit() {
       }
 
       setMessage("프로필이 성공적으로 업데이트되었습니다.");
-      setIsModalOpen(true); // 수정 성공 모달 열기
+      setIsModalOpen(true);
     } catch (error) {
       console.error("Error:", error);
       setMessage("프로필 업데이트에 실패했습니다.");
     }
   };
 
-  // 탈퇴 처리
+  // 탈퇴
   const handleDeleteAccount = async () => {
     try {
-      const response = await fetch("/api/users/profile", {
+      const response = await fetch("/api/users", {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -92,16 +91,15 @@ export default function Edit() {
       }
 
       setMessage("탈퇴가 성공적으로 완료되었습니다.");
-      logout(); // 로그아웃 처리
-      setIsDeleteModalOpen(false); // 탈퇴 모달 닫기
-      router.push("/"); // 메인 페이지로 리다이렉트
+      logout();
+      setIsDeleteModalOpen(false);
+      router.push("/");
     } catch (error) {
       console.error("탈퇴 오류:", error);
       setMessage("탈퇴에 실패했습니다.");
     }
   };
 
-  // 모달 닫기 및 페이지 이동
   const handleCloseModal = () => {
     setIsModalOpen(false);
     router.push("/mypage");
@@ -136,7 +134,7 @@ export default function Edit() {
           <Button
             text="탈퇴"
             className="py-5 border-[#808080] border w-full"
-            onClick={() => setIsDeleteModalOpen(true)} // 탈퇴 모달 열기
+            onClick={() => setIsDeleteModalOpen(true)}
           />
         </div>
         <Button
@@ -146,17 +144,15 @@ export default function Edit() {
         />
       </div>
 
-      {/* 회원정보 수정 모달 */}
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         message={message}
       />
 
-      {/* 탈퇴 모달 */}
       <Modal
         isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)} // 탈퇴 취소
+        onClose={() => setIsDeleteModalOpen(false)}
         message="정말로 탈퇴하시겠습니까?"
       >
         <div className="flex w-full justify-end mt-4">
