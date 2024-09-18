@@ -5,6 +5,7 @@ import useAuthStore from "../../store/authStore";
 import Image from "next/image";
 import Input from "@/components/login/Input";
 import Button from "@/components/button/Button";
+import ImageUploadAndCrop from "@/components/register/ImgUpload";
 
 export default function Edit() {
   const { isLoggedIn, token, isInitialized, initialize } = useAuthStore();
@@ -17,10 +18,6 @@ export default function Edit() {
   const [usernameMessage, setUsernameMessage] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
   const router = useRouter();
-  const fileInputRef = useRef(null);
-  const handleCancel = () => {
-    router.push("/mypage");
-  };
 
   useEffect(() => {
     if (!isInitialized) {
@@ -43,8 +40,6 @@ export default function Edit() {
   }, [isInitialized, isLoggedIn, token, router]);
 
   const handleUpdateProfile = async () => {
-    console.log("왜?", username);
-    console.log("왜?", profileImg);
     if (!username) {
       setUsernameMessage("사용자 이름을 입력해야 합니다.");
       return;
@@ -57,10 +52,6 @@ export default function Edit() {
       formData.append("name", username);
       if (profileImg) {
         formData.append("profileImg", profileImg);
-      }
-      console.log(formData.get("name"));
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
       }
 
       const response = await fetch("/api/users/profile", {
@@ -108,21 +99,6 @@ export default function Edit() {
     }
   };
 
-  const handleProfilePicClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleProfilePicChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setProfileImg(file);
-    }
-  };
-
-  if (!isInitialized) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="w-2/3 mb-20 relative max-w-[606px] flex flex-col">
@@ -131,24 +107,10 @@ export default function Edit() {
         </div>
         <div className="w-full mb-3 h-0 border-[1px] border-solid border-[#000]"></div>
         <div className="w-full center1">
-          <section className="relative mt-10 mb-5 overflow-hidden rounded-full w-60 h-60">
-            <Image
-              src={profileImg}
-              layout="fill"
-              objectFit="cover"
-              alt="Profile Image"
-            />
-          </section>
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleProfilePicChange}
-            accept="image/*"
+          {/* 새로운 이미지 업로드 및 크롭 컴포넌트 사용 */}
+          <ImageUploadAndCrop
+            onImageSelect={(croppedImage) => setProfileImg(croppedImage)}
           />
-          <div className="mb-10 cursor-pointer" onClick={handleProfilePicClick}>
-            프로필사진 수정
-          </div>
         </div>
 
         <Input
@@ -186,7 +148,7 @@ export default function Edit() {
         </div>
         <Button
           text="취소"
-          onClick={handleCancel}
+          onClick={() => router.push("/mypage")}
           className="border py-5 border-[#808080]"
         />
       </div>
