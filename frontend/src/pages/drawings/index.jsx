@@ -175,7 +175,11 @@ export default function Index() {
         <ViewSelector viewType={viewType} handleViewChange={setViewType} />
         <DarkModeToggle />
       </div>
-      {viewType === "grid" ? (
+      {filteredData.length === 0 ? (
+        <div className="flex items-center justify-center w-4/5 h-32 mt-20 text-xl font-bold text-gray-600 bg-gray-100 rounded-md dark:text-white dark:bg-gray-500">
+          진행중인 이벤트가 없습니다.
+        </div>
+      ) : viewType === "grid" ? (
         <GridView
           data={filteredData}
           showOrganizer={true}
