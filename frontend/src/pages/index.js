@@ -10,13 +10,18 @@ function App() {
 
   useEffect(() => {
     const sections = document.querySelectorAll(".section");
+    if (sections.length === 0) return;
+
     let startY = 0;
 
     const scrollToSection = (index) => {
-      sections[index].scrollIntoView({ behavior: "smooth" });
+      if (index >= 0 && index < sections.length) {
+        sections[index].scrollIntoView({ behavior: "smooth" });
+      }
     };
 
     scrollToSection(currentSection);
+
     const handleScroll = (event) => {
       if (event.deltaY > 0 && currentSection < sections.length - 1) {
         setCurrentSection((prev) => prev + 1);
