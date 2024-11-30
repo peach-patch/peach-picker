@@ -18,6 +18,10 @@ v1.1.1 에러 수정(2024.11)
 
 ### ▪BE
 
+![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)
+
+
 ### ▪협업툴
 
 ![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)
